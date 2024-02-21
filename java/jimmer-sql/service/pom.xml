@@ -21,9 +21,7 @@
         </dependencies>
     </dependencyManagement>
 
-
     <artifactId>service</artifactId>
-    <version>0.8.95</version>
 
     <properties>
         <jimmer.version>0.8.95</jimmer.version>
