@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.babyfish.jimmer.example.save.OneToManyTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2024-02-08T13:25:10" hostname="chentaodeMBP" time="0.061">
+  <properties/>
+  <testcase name="testDetachChildByDeletingChild()" classname="org.babyfish.jimmer.example.save.OneToManyTest" time="0.014"/>
+  <testcase name="testDetachChildFailed()" classname="org.babyfish.jimmer.example.save.OneToManyTest" time="0.007"/>
+  <testcase name="testAttachChild()" classname="org.babyfish.jimmer.example.save.OneToManyTest" time="0.007"/>
+  <testcase name="testDetachChildByClearingForeignKey()" classname="org.babyfish.jimmer.example.save.OneToManyTest" time="0.007"/>
+  <testcase name="testAttachChildByShortAssociation()" classname="org.babyfish.jimmer.example.save.OneToManyTest" time="0.007"/>
+  <testcase name="testUpdateWithAssociation()" classname="org.babyfish.jimmer.example.save.OneToManyTest" time="0.006"/>
+  <testcase name="testAttachChildByAssociationBasedOnKey()" classname="org.babyfish.jimmer.example.save.OneToManyTest" time="0.008"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

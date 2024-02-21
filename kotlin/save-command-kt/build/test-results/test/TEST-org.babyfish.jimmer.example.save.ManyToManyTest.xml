@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.babyfish.jimmer.example.save.ManyToManyTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2024-02-08T13:25:10" hostname="chentaodeMBP" time="0.131">
+  <properties/>
+  <testcase name="testAttachAuthor()" classname="org.babyfish.jimmer.example.save.ManyToManyTest" time="0.078"/>
+  <testcase name="testIllegalShortAssociation()" classname="org.babyfish.jimmer.example.save.ManyToManyTest" time="0.027"/>
+  <testcase name="deleteMiddleTable()" classname="org.babyfish.jimmer.example.save.ManyToManyTest" time="0.013"/>
+  <testcase name="testInsertMiddleTableByShortAssociation()" classname="org.babyfish.jimmer.example.save.ManyToManyTest" time="0.011"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

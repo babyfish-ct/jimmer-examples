@@ -1,0 +1,4 @@
+org.babyfish.jimmer.example.save.model.Author
+org.babyfish.jimmer.example.save.model.Book
+org.babyfish.jimmer.example.save.model.BookStore
+org.babyfish.jimmer.example.save.model.TreeNode

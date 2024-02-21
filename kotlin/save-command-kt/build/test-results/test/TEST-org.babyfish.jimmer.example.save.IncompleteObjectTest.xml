@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.babyfish.jimmer.example.save.IncompleteObjectTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2024-02-08T13:25:09" hostname="chentaodeMBP" time="0.496">
+  <properties/>
+  <testcase name="testCompleteObject()" classname="org.babyfish.jimmer.example.save.IncompleteObjectTest" time="0.483"/>
+  <testcase name="testIncompleteObject()" classname="org.babyfish.jimmer.example.save.IncompleteObjectTest" time="0.012"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+]]></system-err>
+</testsuite>
