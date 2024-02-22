@@ -1,0 +1,10 @@
+ext {
+    jimmerVersion = "0.8.98"
+    springBootVersion = "2.7.0"
+    springCloudVersion = "2021.0.6"
+}
+
+allprojects {
+    group = "org.babyfish.jimmer.example.cloud"
+    version = jimmerVersion
+}

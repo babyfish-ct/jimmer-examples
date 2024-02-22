@@ -1,5 +1,7 @@
 package org.babyfish.jimmer.sql.example.kt.service
 
+import graphql.schema.DataFetchingEnvironment
+import org.babyfish.jimmer.spring.graphql.toFetcher
 import org.babyfish.jimmer.sql.example.kt.model.Author
 import org.babyfish.jimmer.sql.example.kt.repository.AuthorRepository
 import org.babyfish.jimmer.sql.example.kt.service.dto.AuthorInput
@@ -26,14 +28,17 @@ class AuthorService(
 
     @QueryMapping
     fun authors(
-        @Argument name: String?
+        @Argument name: String?,
+        env: DataFetchingEnvironment
     ): List<Author> =
-        authorRepository.findByName(name)
+        authorRepository.findByName(name, env.toFetcher())
 
     // --- Mutation ---
 
     @MutationMapping
-    fun saveAuthor(@Argument input: AuthorInput): Author =
+    fun saveAuthor(
+        @Argument input: AuthorInput
+    ): Author =
         authorRepository.save(input)
 
     @MutationMapping

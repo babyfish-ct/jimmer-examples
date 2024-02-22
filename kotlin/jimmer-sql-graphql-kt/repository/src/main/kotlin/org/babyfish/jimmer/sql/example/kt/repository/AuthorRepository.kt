@@ -13,7 +13,7 @@ import org.springframework.data.domain.Sort
 
 interface AuthorRepository : KRepository<Author, Long> {
 
-    fun findByName(name: String?): List<Author> =
+    fun findByName(name: String?, fetcher: Fetcher<Author>?): List<Author> =
         sql
             .createQuery(Author::class) {
                 name?.let {
@@ -24,7 +24,7 @@ interface AuthorRepository : KRepository<Author, Long> {
                         )
                     )
                 }
-                select(table)
+                select(table.fetch(fetcher))
             }
             .execute()
 }

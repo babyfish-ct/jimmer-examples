@@ -3,6 +3,7 @@ package org.babyfish.jimmer.sql.example.kt.repository
 import org.babyfish.jimmer.Specification
 import org.babyfish.jimmer.spring.repository.KRepository
 import org.babyfish.jimmer.sql.example.kt.model.*
+import org.babyfish.jimmer.sql.fetcher.Fetcher
 import org.babyfish.jimmer.sql.kt.ast.expression.*
 import org.babyfish.jimmer.sql.kt.ast.table.makeOrders
 import org.springframework.data.domain.Sort
@@ -21,7 +22,8 @@ interface BookRepository : KRepository<Book, Long> {
         maxPrice: BigDecimal?,
         storeName: String?,
         authorName: String?,
-        sortCode: String?
+        sortCode: String?,
+        fetcher: Fetcher<Book>?
     ): List<Book> =
         sql
             .createQuery(Book::class) {
@@ -35,7 +37,7 @@ interface BookRepository : KRepository<Book, Long> {
                     )
                 }
                 orderBy(table.makeOrders(sortCode ?: "name asc"))
-                select(table)
+                select(table.fetch(fetcher))
             }
             .execute()
 
@@ -47,7 +49,8 @@ interface BookRepository : KRepository<Book, Long> {
      */
     fun find(
         specification: Specification<Book>,
-        sort: Sort
+        sort: Sort,
+        fetcher: Fetcher<Book>?
     ): List<Book>
 
     fun findAvgPriceGroupByStoreIds(storeIds: Collection<Long>): Map<Long, BigDecimal> =

@@ -1,5 +1,7 @@
 package org.babyfish.jimmer.sql.example.kt.service
 
+import graphql.schema.DataFetchingEnvironment
+import org.babyfish.jimmer.spring.graphql.toFetcher
 import org.babyfish.jimmer.sql.example.kt.model.BookStore
 import org.babyfish.jimmer.sql.example.kt.repository.BookStoreRepository
 import org.babyfish.jimmer.sql.example.kt.service.dto.BookStoreInput
@@ -27,9 +29,13 @@ class BookStoreService(
 
     @QueryMapping
     fun bookStores(
-        @Argument name: String?
+        @Argument name: String?,
+        env: DataFetchingEnvironment
     ): List<BookStore> {
-        return bookStoreRepository.findByNameLikeOrderByName(name)
+        return bookStoreRepository.findByNameLikeOrderByName(
+            name,
+            env.toFetcher()
+        )
     }
 
     // --- Mutation ---

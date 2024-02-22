@@ -1,5 +1,7 @@
 package org.babyfish.jimmer.sql.example.kt.service
 
+import graphql.schema.DataFetchingEnvironment
+import org.babyfish.jimmer.spring.graphql.toFetcher
 import org.babyfish.jimmer.spring.model.SortUtils
 import org.babyfish.jimmer.sql.example.kt.model.Book
 import org.babyfish.jimmer.sql.example.kt.repository.BookRepository
@@ -36,7 +38,8 @@ class BookService(
         @Argument maxPrice: BigDecimal?,
         @Argument storeName: String?,
         @Argument authorName: String?,
-        @Argument sortCode: String?
+        @Argument sortCode: String?,
+        env: DataFetchingEnvironment
     ): List<Book> =
         bookRepository.findBooks(
             name = name,
@@ -44,17 +47,20 @@ class BookService(
             maxPrice = maxPrice,
             storeName = storeName,
             authorName = authorName,
-            sortCode = sortCode
+            sortCode = sortCode,
+            fetcher = env.toFetcher()
         )
 
     @QueryMapping
     fun booksBySuperQBE(
         @Argument specification: BookSpecification?,
-        @Argument sortCode: String?
+        @Argument sortCode: String?,
+        env: DataFetchingEnvironment
     ): List<Book> =
         bookRepository.find(
             specification ?: BookSpecification(),
-            SortUtils.toSort(sortCode ?: "name asc")
+            SortUtils.toSort(sortCode ?: "name asc"),
+            env.toFetcher()
         )
 
     // --- Mutation ---
