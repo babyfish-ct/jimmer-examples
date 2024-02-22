@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="org.babyfish.jimmer.example.save.RecursiveTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2024-02-08T13:25:10" hostname="chentaodeMBP" time="0.02">
-  <properties/>
-  <testcase name="testDeleteSubTrees()" classname="org.babyfish.jimmer.example.save.RecursiveTest" time="0.011"/>
-  <testcase name="testCreateTree()" classname="org.babyfish.jimmer.example.save.RecursiveTest" time="0.008"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>

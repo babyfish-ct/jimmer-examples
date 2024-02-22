@@ -1,6 +1,6 @@
 plugins {
-    kotlin("jvm") version "1.6.10"
-    id("com.google.devtools.ksp") version "1.7.10-1.0.6"
+    kotlin("jvm") version "1.9.21"
+    id("com.google.devtools.ksp") version "1.9.21-1.0.15"
 }
 
 val jimmerVersion = "0.8.98"
