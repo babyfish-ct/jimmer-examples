@@ -19,6 +19,11 @@ jimmer:
     openapi:
       path: /openapi.yml
       ui-path: /openapi.html
+      properties:
+        info:
+          title: Openapi of store-service
+          description: "`/author/{id}` accesses current service, `/author/{id}/detail` accesses all services"
+          version: "0.8.98"
 
 server:
   port: 7003

@@ -6,7 +6,7 @@
 
     <groupId>org.babyfish.jimmer.sql.example.graphql</groupId>
     <artifactId>jimmer-sql-graphql</artifactId>
-    <version>${jimmer.version}</version>
+    <version>0.8.98</version>
 
     <packaging>pom</packaging>
 
