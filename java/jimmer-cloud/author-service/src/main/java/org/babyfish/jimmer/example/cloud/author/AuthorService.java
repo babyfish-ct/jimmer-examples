@@ -19,6 +19,11 @@ public class AuthorService {
         this.authorRepository = authorRepository;
     }
 
+    /**
+     * Load Author form current service
+     * @param id The id of Author
+     * @return The Author Object
+     */
     @GetMapping("/author/{id}")
     public @FetchBy("SIMPLE_FETCHER") Author findAuthor(
             @PathVariable("id") long id
@@ -26,6 +31,11 @@ public class AuthorService {
         return authorRepository.findNullable(id, SIMPLE_FETCHER);
     }
 
+    /**
+     * Load Author form current service and associated objects from other services
+     * @param id The id of Author
+     * @return The Author object and associated objects
+     */
     @GetMapping("/author/{id}/detail")
     public @FetchBy("COMPLEX_FETCHER") Author findAuthorDetail(
             @PathVariable("id") long id

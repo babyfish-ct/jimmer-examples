@@ -17,12 +17,22 @@ class BookService(
     private val restTemplate: RestTemplate
 ) {
 
+    /**
+     * Load Book form current service
+     * @param id The id of Book
+     * @return The Book object
+     */
     @GetMapping("/book/{id}")
     fun findBook(
         @PathVariable("id") id: Long
     ) : @FetchBy("SIMPLE_FETCHER") Book? =
         bookRepository.findNullable(id, SIMPLE_FETCHER)
 
+    /**
+     * Load Book form current service and associated objects from other services
+     * @param id The id of Book
+     * @return The Book object and associated objects
+     */
     @GetMapping("/book/{id}/detail")
     fun findBookDetail(
         @PathVariable("id") id: Long

@@ -13,12 +13,22 @@ class AuthorService(
     private val authorRepository: AuthorRepository
 ) {
 
+    /**
+     * Load Author form current service
+     * @param id The id of Author
+     * @return The Author object
+     */
     @GetMapping("/author/{id}")
     fun findAuthor(
         @PathVariable("id") id: Long
     ): @FetchBy("SIMPLE_FETCHER") Author? =
         authorRepository.findNullable(id, SIMPLE_FETCHER)
 
+    /**
+     * Load Author form current service and associated objects from other services
+     * @param id The id of Author
+     * @return The Author object and associated objects
+     */
     @GetMapping("/author/{id}/detail")
     fun findAuthorDetail(
         @PathVariable("id") id: Long

@@ -19,6 +19,11 @@ public class StoreService {
         this.storeRepository = storeRepository;
     }
 
+    /**
+     * Load BookStore form current service
+     * @param id The id of BookStore
+     * @return The BookStore Object
+     */
     @GetMapping("/store/{id}")
     public @FetchBy("SIMPLE_FETCHER") BookStore findStore(
             @PathVariable("id") long id
@@ -26,6 +31,11 @@ public class StoreService {
         return storeRepository.findNullable(id, SIMPLE_FETCHER);
     }
 
+    /**
+     * Load BookStore form current service and associated objects from other services
+     * @param id The id of BookStore
+     * @return The BookStore object and associated objects
+     */
     @GetMapping("/store/{id}/detail")
     public @FetchBy("COMPLEX_FETCHER") BookStore findStoreDetail(
             @PathVariable("id") long id
