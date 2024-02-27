@@ -42,6 +42,12 @@ class TreeService(
     ): List<@FetchBy("RECURSIVE_FETCHER") TreeNode> = // ❶
         treeNodeRepository.findByParentIsNullAndName(rootName, RECURSIVE_FETCHER)
 
+    @GetMapping("/node/{id}")
+    fun findNodeById(
+        @PathVariable id: Long
+    ): @FetchBy("DETAIL_FETCHER") TreeNode? =
+        treeNodeRepository.findNullable(id, DETAIL_FETCHER)
+
     @PutMapping("/root/recursive")
     @Throws(SaveException::class)
     fun saveTree(
@@ -78,6 +84,12 @@ class TreeService(
         private val RECURSIVE_FETCHER = newFetcher(TreeNode::class).by {
             allScalarFields()
             `childNodes*`() // `*` means recursive
+        }
+
+        private val DETAIL_FETCHER = newFetcher(TreeNode::class).by {
+            allScalarFields()
+            `parent*`()
+            `childNodes*`()
         }
     }
 }
