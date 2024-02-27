@@ -23,7 +23,7 @@ export type BookDto = {
             readonly name: string;
             readonly website?: string | undefined;
             readonly avgPrice: number;
-        } | null | undefined;
+        } | undefined;
         readonly authors: ReadonlyArray<{
             readonly id: number;
             readonly createdTime: string;
@@ -32,7 +32,7 @@ export type BookDto = {
             readonly lastName: string;
             readonly gender: Gender;
         }>;
-    }
+    }, 
     /**
      * Default Book DTO that contains
      * <ul>
@@ -51,13 +51,13 @@ export type BookDto = {
         readonly store?: {
             readonly id: number;
             readonly name: string;
-        } | null | undefined;
+        } | undefined;
         readonly authors: ReadonlyArray<{
             readonly id: number;
             readonly firstName: string;
             readonly lastName: string;
         }>;
-    }
+    }, 
     /**
      * Simple Book DTO that only contains `id` and `name`
      */

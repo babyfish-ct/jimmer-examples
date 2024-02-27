@@ -10,14 +10,14 @@ export type BookStoreDto = {
         readonly modifiedTime: string;
         readonly name: string;
         readonly website?: string | undefined;
-    }
+    }, 
     /**
      * Simple BookStore DTO that only contains `id` and `name`
      */
     'BookStoreService/SIMPLE_FETCHER': {
         readonly id: number;
         readonly name: string;
-    }
+    }, 
     /**
      * BookStore DTO contains
      * <ul>
@@ -52,7 +52,7 @@ export type BookStoreDto = {
                 readonly gender: Gender;
             }>;
         }>;
-    }
+    }, 
     /**
      * BookStore DTO contains
      * <ul>

@@ -9,6 +9,7 @@ import org.babyfish.jimmer.sql.example.service.dto.RecursiveTreeInput;
 import org.babyfish.jimmer.sql.fetcher.Fetcher;
 import org.babyfish.jimmer.sql.fetcher.RecursiveListFieldConfig;
 import org.babyfish.jimmer.sql.runtime.SaveException;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,6 +60,14 @@ public class TreeService implements Fetchers {
         );
     }
 
+    @GetMapping("/node/{id}")
+    @Nullable
+    public @FetchBy("DETAIL_FETCHER") TreeNode findNodeById(
+            @PathVariable long id
+    ) {
+        return treeNodeRepository.findNullable(id, DETAIL_FETCHER);
+    }
+
     @PutMapping("/root/recursive")
     public TreeNode saveTree(@RequestBody RecursiveTreeInput input) throws SaveException {
         TreeNode rootNode = Objects.createTreeNode(
@@ -91,5 +100,11 @@ public class TreeService implements Fetchers {
     private static final Fetcher<TreeNode> RECURSIVE_FETCHER =
             TREE_NODE_FETCHER
                     .allScalarFields()
+                    .recursiveChildNodes();
+
+    private static final Fetcher<TreeNode> DETAIL_FETCHER =
+            TREE_NODE_FETCHER
+                    .allScalarFields()
+                    .recursiveParent()
                     .recursiveChildNodes();
 }

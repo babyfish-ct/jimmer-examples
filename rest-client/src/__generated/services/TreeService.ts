@@ -15,6 +15,14 @@ export class TreeService {
         return (await this.executor({uri: _uri, method: 'DELETE'})) as Promise<void>;
     }
     
+    readonly findNodeById: (options: TreeServiceOptions['findNodeById']) => Promise<
+        TreeNodeDto['TreeService/DETAIL_FETCHER'] | undefined
+    > = async(options) => {
+        let _uri = '/tree/node/';
+        _uri += encodeURIComponent(options.id);
+        return (await this.executor({uri: _uri, method: 'GET'})) as Promise<TreeNodeDto['TreeService/DETAIL_FETCHER'] | undefined>;
+    }
+    
     readonly findRootTrees: (options: TreeServiceOptions['findRootTrees']) => Promise<
         ReadonlyArray<TreeNodeDto['TreeService/RECURSIVE_FETCHER']>
     > = async(options) => {
@@ -61,6 +69,9 @@ export type TreeServiceOptions = {
     }, 
     'findRootTrees': {
         readonly rootName?: string | undefined
+    }, 
+    'findNodeById': {
+        readonly id: number
     }, 
     'saveTree': {
         readonly body: RecursiveTreeInput
