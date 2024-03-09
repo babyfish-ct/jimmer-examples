@@ -12,7 +12,7 @@ Jimmer支持查询任意形状的数据结构，如果数据结构的形状跨�
 > 
 >   等Jimmer逐渐完善发布1.0正式版本后，将会在微服务技术体系添加更多的功能，为该体系下更多的繁琐的细节进行抽象和简化。
 
-[文档链接]*(https://babyfish-ct.gitee.io/jimmer-doc/docs/spring/spring-cloud)*
+[文档链接](https://babyfish-ct.gitee.io/jimmer-doc/docs/spring/spring-cloud)
 
 ## Annotation Processor
 
@@ -41,13 +41,13 @@ Jimmer支持查询任意形状的数据结构，如果数据结构的形状跨�
 启动类|启用优先级|访问方式|
 |---|---|---|
 |[registry-center/.../RegistryCenterApp.java](./registry-center/src/main/java/org/babyfish/jimmer/example/cloud/registry/RegistryCenterApp.java)|率先启动|http://localhost:7000|
-|[author-service/.../AuthorServiceApp.java](./author-service/src/main/java/org/babyfish/jimmer/example/cloud/author/AuthorServiceApp.java)|在注册中心启动成功后启动|http://localhost:7003/openapi.html|
-|[book-service/.../BookServiceApp.java](./book-service/src/main/java/org/babyfish/jimmer/example/cloud/book/BookServiceApp.java)|在注册中心启动成功后启动|http://localhost:7002/openapi.html|
 |[store-service/.../StoreServiceApp.java](./store-service/src/main/java/org/babyfish/jimmer/example/cloud/store/StoreServiceApp.java)|在注册中心启动成功后启动|http://localhost:7001/openapi.html|
+|[book-service/.../BookServiceApp.java](./book-service/src/main/java/org/babyfish/jimmer/example/cloud/book/BookServiceApp.java)|在注册中心启动成功后启动|http://localhost:7002/openapi.html|
+|[author-service/.../AuthorServiceApp.java](./author-service/src/main/java/org/babyfish/jimmer/example/cloud/author/AuthorServiceApp.java)|在注册中心启动成功后启动|http://localhost:7003/openapi.html|
 
 启动完成后，可以访问上面表格中后面三个的服务openapi。
 
-以`http://localhost:7001/openapi.html`为例子，该服务支持两个get请求：
+以`http://localhost:7001/openapi.html`为例子，该服务支持两个`GET`请求：
 
 -   `/store/{id}`
 
