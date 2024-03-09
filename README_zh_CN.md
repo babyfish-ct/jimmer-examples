@@ -26,32 +26,32 @@
     </thead>
     <tbody>
         <tr>
-            <td><a href="https://github.com/babyfish-ct/jimmer-examples/tree/main/java/jimmer-core">java/jimmer-core</a></td>
-            <td><a href="https://github.com/babyfish-ct/jimmer-examples/tree/main/kotlin/jimmer-core-kt">java/jimmer-core-kt</a></td>
+            <td><a href="./java/jimmer-core/README_zh_CN.md">java/jimmer-core</a></td>
+            <td><a href="./kotlin/jimmer-core-kt">java/jimmer-core-kt</a></td>
             <td>ORM无关示例，展示<a href="https://github.com/immerjs/immer">immer</a>风格的不可变对象</td>
             <td>★★★★</td>
         </tr>
         <tr>
-            <td><a href="https://github.com/babyfish-ct/jimmer-examples/tree/main/java/jimmer-sql">java/jimmer-sql</a></td>
-            <td><a href="https://github.com/babyfish-ct/jimmer-examples/tree/main/kotlin/jimmer-sql-kt">java/jimmer-sql-kt</a></td>
+            <td><a href="./java/jimmer-sql/README_zh_CN.md">java/jimmer-sql</a></td>
+            <td><a href="./kotlin/jimmer-sql-kt">java/jimmer-sql-kt</a></td>
             <td>利用Jimmer快速构建REST服务。这个例子展示了大部分Jimmer的功能，是最重要的最基础的例子</td>
             <td>★★★★★</td>
         </tr>
         <tr>
-            <td><a href="https://github.com/babyfish-ct/jimmer-examples/tree/main/java/jimmer-sql-graphql">java/jimmer-sql-graphql</a></td>
-            <td><a href="https://github.com/babyfish-ct/jimmer-examples/tree/main/kotlin/jimmer-sql-graphql-kt">java/jimmer-sql-graphql-kt</a></td>
+            <td><a href="./java/jimmer-sql-graphql/README_zh_CN.md">java/jimmer-sql-graphql</a></td>
+            <td><a href="./kotlin/jimmer-sql-graphql-kt">java/jimmer-sql-graphql-kt</a></td>
             <td>利用Jimmer快速构建GraphQL服务</td>
             <td>★★</td>
         </tr>
         <tr>
-            <td><a href="https://github.com/babyfish-ct/jimmer-examples/tree/main/java/jimmer-cloud">java/jimmer-cloud</a></td>
-            <td><a href="https://github.com/babyfish-ct/jimmer-examples/tree/main/kotlin/jimmer-cloud-kt">java/jimmer-cloud-kt</a></td>
+            <td><a href="./java/jimmer-cloud/README_zh_CN.md">java/jimmer-cloud</a></td>
+            <td><a href="./kotlin/jimmer-cloud-kt">java/jimmer-cloud-kt</a></td>
             <td>基于Spring Cloud的微服务项目，展示Jimmer的远程关联</td>
             <td>★</td>
         </tr>
         <tr>
-            <td><a href="https://github.com/babyfish-ct/jimmer-examples/tree/main/java/save-command">java/save-command</a></td>
-            <td><a href="https://github.com/babyfish-ct/jimmer-examples/tree/main/kotlin/save-command-kt">kotlin/save-command-kt</a></td>
+            <td><a href="./java/save-command/README_zh_CN.md">java/save-command</a></td>
+            <td><a href="./kotlin/save-command-kt">kotlin/save-command-kt</a></td>
             <td>针对保存指令的专项例子</td>
             <td>★★★</td>
         </tr>
