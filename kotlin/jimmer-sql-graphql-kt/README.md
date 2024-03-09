@@ -78,7 +78,7 @@ This example involves multiple features.
 </tbody>
 </table>
 
-## Annotation Processor
+## Kotlin Symbol Processing
 
 The project depends on the [KSP](https://kotlinlang.org/docs/ksp-overview.html). When opening this project in IntelliJ IDEA for the first time, you may notice that some code that should have been automatically generated is missing. To resolve this, you can choose any of the following methods:
 

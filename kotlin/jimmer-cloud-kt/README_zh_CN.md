@@ -14,7 +14,7 @@ Jimmer支持查询任意形状的数据结构，如果数据结构的形状跨�
 
 [文档链接](https://babyfish-ct.gitee.io/jimmer-doc/docs/spring/spring-cloud)
 
-## Annotation Processor
+## Kotlin Symbol Processing
 
 项目依赖于[KSP](https://kotlinlang.org/docs/ksp-overview.html)，首次使用Intellij打开本项目时，会发现一些本该被自动生成代码并不存在的问题。对此，可以选择以下任何一种方法：
  

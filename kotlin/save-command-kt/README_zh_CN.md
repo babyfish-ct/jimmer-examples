@@ -12,7 +12,7 @@
 
 这一句简单的描述后隐藏着很多种细节，如果对此感兴趣，可以看这个例子，它展示保存指令的一些内部细节。
 
-## Annotation Processor
+## Kotlin Symbol Processing
 
 项目依赖于[KSP](https://kotlinlang.org/docs/ksp-overview.html)，首次使用Intellij打开本项目时，会发现一些本该被自动生成代码并不存在的问题。对此，可以选择以下任何一种方法：
  

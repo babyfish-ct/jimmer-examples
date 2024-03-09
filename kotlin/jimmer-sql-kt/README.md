@@ -81,21 +81,13 @@ This example involves multiple features.
 </tbody>
 </table>
 
-## Annotation Processor
+## Kotlin Symbol Processing
 
-The project depends on the [Annotation Processor](https://www.jetbrains.com/help/idea/annotation-processors-support.html). When opening this project in IntelliJ IDEA for the first time, you may notice that some code that should have been automatically generated is missing. To resolve this, you can choose any of the following methods:
+The project depends on the [KSP](https://kotlinlang.org/docs/ksp-overview.html). When opening this project in IntelliJ IDEA for the first time, you may notice that some code that should have been automatically generated is missing. To resolve this, you can choose any of the following methods:
 
 -   First, run the `./mvnw install` or `./gradlew build` command in the project directory from the command line to generate the code, and then open the project with IntelliJ IDEA.
 
 -   Open the project directly with IntelliJ IDEA, ignoring the IDE errors temporarily. After the dependencies are downloaded, run the project's main method. All IDE errors will automatically disappear, and the application will start correctly.
-
-## Opening Method
-
-This project supports both `pom.xml` and `build.gradle`, meaning it supports both Maven and Gradle.
-
-When opening this kind of project for the first time, IntelliJ will ask how to open it. Make your choice.
-
-If you want to switch the opening method, exit IntelliJ, delete the hidden `.idea` directory in the project, and then reopen the project with IntelliJ and make a new selection.
 
 ## Running Method
 
@@ -153,4 +145,4 @@ In the pop-up dialog, enter `a` or `b` and confirm.
 
 ---
 
-[⇦ Previous Example ⇦](../jimmer-core) | [⇧ Back to Parent ⇧](../) | [⇨ Next Example ⇨](../jimmer-sql-graphql/)
+[⇦ Previous Example ⇦](../jimmer-cor-kt) | [⇧ Back to Parent ⇧](../) | [⇨ Next Example ⇨](../jimmer-sql-graphql-kt/)

@@ -14,7 +14,7 @@ Jimmer supports querying data structures of arbitrary shapes. If the shape of th
 
 [Documentation link](https://babyfish-ct.github.io/jimmer-doc/docs/spring/spring-cloud)
 
-## Annotation Processor
+## Kotlin Symbol Processing
 
 The project depends on the [KSP](https://kotlinlang.org/docs/ksp-overview.html). When opening this project in IntelliJ IDEA for the first time, you may notice that some code that should have been automatically generated is missing. To resolve this, you can choose any of the following methods:
 
