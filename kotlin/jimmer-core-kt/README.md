@@ -32,7 +32,7 @@ The project depends on the [KSP](https://kotlinlang.org/docs/ksp-overview.html).
 
 ## Running Method
 
-**After ensuring that the missing code has been generated and recognized by IntelliJ**, you can directly run the `main` method in [App.java](./src/main/java/org/babyfish/jimmer/example/core/App.java).
+**After ensuring that the missing code has been generated and recognized by IntelliJ**, you can directly run the `main` method in [App.kt](./src/main/kotlin/org/babyfish/jimmer/example/kt/core/App.kt).
 
 ---
 

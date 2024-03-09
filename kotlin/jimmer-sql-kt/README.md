@@ -101,7 +101,7 @@ The current example supports two running modes:
 
     This is the default mode, provided for users who want to quickly run and experience the example.
 
-    This mode uses the H2 embedded database, so there is no need to install any external environment. You can directly run [service/.../App.java](./service/src/main/kotlin/org/babyfish/jimmer/sql/example/App.java).
+    This mode uses the H2 embedded database, so there is no need to install any external environment. You can directly run [service/.../App.kt](./service/src/main/kotlin/org/babyfish/jimmer/sql/example/kt/App.kt).
 
 - Caching mode
 
@@ -113,13 +113,13 @@ The current example supports two running modes:
 
         First, install Docker, then execute [env-with-cache/maxwell/install.sh](../../env-with-cache/maxwell/install.sh) to complete the installation.
 
-        Finally, run [service/.../App.java](./service/src/main/kotlin/org/babyfish/jimmer/sql/example/App.java) using the Spring profile parameter `-Dspring.profiles.active=maxwell` or `--spring.profiles.active=maxwell`.
+        Finally, run [service/.../App.kt](./service/src/main/kotlin/org/babyfish/jimmer/sql/example/kt/App.kt) using the Spring profile parameter `-Dspring.profiles.active=maxwell` or `--spring.profiles.active=maxwell`.
 
     - Postgres + Debezium
 
         First, install Docker, then execute [env-with-cache/debezium/install.sh](../../env-with-cache/debezium/install.sh) to complete the installation.
 
-        Finally, run [service/.../App.java](./service/src/main/kotlin/org/babyfish/jimmer/sql/example/App.java) using the Spring profile parameter `-Dspring.profiles.active=debezium` or `--spring.profiles.active=debezium`.
+        Finally, run [service/.../App.kt](./service/src/main/kotlin/org/babyfish/jimmer/sql/example/kt/App.kt) using the Spring profile parameter `-Dspring.profiles.active=debezium` or `--spring.profiles.active=debezium`.
 
     > You only need to choose one of the two environments. If you install both, the Docker containers may encounter errors due to insufficient memory. If you really want to do this, it is recommended to allocate 3GB of memory for Docker.
 
