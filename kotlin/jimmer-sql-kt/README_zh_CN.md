@@ -103,7 +103,7 @@
 
     这是默认的模式，为想要快速运行和体验例子的用户提供。
     
-    该模式采用H2内嵌数据库，所以无需安装任何外部环境，直接运行[service/.../App.java](./service/src/main/java/org/babyfish/jimmer/sql/example/App.java)即可。
+    该模式采用H2内嵌数据库，所以无需安装任何外部环境，直接运行[service/.../App.java](./service/src/main/kotlin/org/babyfish/jimmer/sql/example/App.java)即可。
 
 -   有缓存模式
 
@@ -115,13 +115,13 @@
 
         先安装docker，然后执行[env-with-cache/maxwell/install.sh](../../env-with-cache/maxwell/install.sh)完成安装。
 
-        最后，使用参数spring profile参数`-Dspring.profiles.active=maxwell`或`--spring.profiles.active=maxwell`运行[service/.../App.java](./service/src/main/java/org/babyfish/jimmer/sql/example/App.java)即可。
+        最后，使用参数spring profile参数`-Dspring.profiles.active=maxwell`或`--spring.profiles.active=maxwell`运行[service/.../App.java](./service/src/main/kotlin/org/babyfish/jimmer/sql/example/App.java)即可。
 
     -   Postgres + Debezium
 
         先安装docker，然后执行[env-with-cache/debezium/install.sh](../../env-with-cache/debezium/install.sh)完成安装。
 
-        最后，使用参数spring profile参数`-Dspring.profiles.active=debezium`或`--spring.profiles.active=debezium`运行[service/.../App.java](./service/src/main/java/org/babyfish/jimmer/sql/example/App.java)即可。
+        最后，使用参数spring profile参数`-Dspring.profiles.active=debezium`或`--spring.profiles.active=debezium`运行[service/.../App.java](./service/src/main/kotlin/org/babyfish/jimmer/sql/example/App.java)即可。
 
     >   两种环境选择一种即可，如果都安装，可能因内存不足而导致docker容器发生错误。如果真的要这么做，建议为docker分配3GB内存。
 

@@ -32,7 +32,7 @@ Immer完美结合了不可变对象和可变对象的优点，代码简单、功
 
 ## 运行方式
 
-**在确保缺失的代码被已经被生成并为Intellij所识别后**，直接运行[App.java](./src/main/java/org/babyfish/jimmer/example/core/App.java)中的`main`方法即可。
+**在确保缺失的代码被已经被生成并为Intellij所识别后**，直接运行[App.java](./src/main/kotlin/org/babyfish/jimmer/example/core/App.java)中的`main`方法即可。
 
 ---
 
