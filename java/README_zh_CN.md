@@ -1,6 +1,6 @@
 # Java例子
 
-[English](./) | 中文
+<h2>[English](./) | 中文</h2>
 
 <table>
     <thead>

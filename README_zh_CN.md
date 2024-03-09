@@ -1,8 +1,8 @@
 # Jimmer例子
 
-## 子目录
+<h2>[English](./) | 中文</h2>
 
-[English](./) | 中文
+## 子目录
 
 这是[Jimmer](https://github.com/babyfish-ct/jimmer)的例子合集，存在如下4个子目录：
 

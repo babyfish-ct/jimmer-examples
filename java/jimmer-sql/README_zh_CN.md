@@ -1,6 +1,6 @@
 # 使用Jimmer构建REST服务
 
-[English](./) | 中文
+<h2>[English](./) | 中文</h2>
 
 ## 介绍
 
