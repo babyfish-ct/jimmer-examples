@@ -135,4 +135,4 @@
 
 ---
 
-[⇦ 上一个例子 ⇦](./jimmer-core) | [⇧ 返回上级 ⇧](../) | [⇨ 下一个例子 ⇨](./jimmer-sql-graphql/)
+[⇦ 上一个例子 ⇦](../jimmer-core) | [⇧ 返回上级 ⇧](../) | [⇨ 下一个例子 ⇨](../jimmer-sql-graphql/)
