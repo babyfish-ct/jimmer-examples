@@ -82,17 +82,17 @@ This example involves multiple features.
 
 The project depends on the [Annotation Processor](https://www.jetbrains.com/help/idea/annotation-processors-support.html). When opening this project in IntelliJ IDEA for the first time, you may notice that some code that should have been automatically generated is missing. To resolve this, you can choose any of the following methods:
 
-- First, run the ./mvnw install or ./gradlew build command in the project directory from the command line to generate the code, and then open the project with IntelliJ IDEA.
+- First, run the `./mvnw install` or `./gradlew build` command in the project directory from the command line to generate the code, and then open the project with IntelliJ IDEA.
 
-- Open the project directly with IntelliJ IDEA, ignoring the IDE errors temporarily. After the dependencies are downloaded, run the project's main method or unit tests (save-command/save-command-kt demonstrates the functionality with unit tests). All IDE errors will automatically disappear, and the application will start correctly.
+- Open the project directly with IntelliJ IDEA, ignoring the IDE errors temporarily. After the dependencies are downloaded, run the project's main method. All IDE errors will automatically disappear, and the application will start correctly.
 
 ## Opening Method
 
-This project supports both pom.xml and build.gradle, meaning it supports both Maven and Gradle.
+This project supports both `pom.xml` and `build.gradle`, meaning it supports both Maven and Gradle.
 
 When opening this kind of project for the first time, IntelliJ will ask how to open it. Make your choice.
 
-If you want to switch the opening method, exit IntelliJ, delete the hidden .idea directory in the project, and then reopen the project with IntelliJ and make a new selection.
+If you want to switch the opening method, exit IntelliJ, delete the hidden `.idea` directory in the project, and then reopen the project with IntelliJ and make a new selection.
 
 ## Running Method
 
@@ -102,25 +102,25 @@ The current example supports two running modes:
 
 ### Two Running Modes
 
-- Non-caching mode
+-   Non-caching mode
 
     This is the default mode, provided for users who want to quickly run and experience the example.
 
     This mode uses the H2 embedded database, so there is no need to install any external environment. You can directly run [service/.../App.java](./service/src/main/java/org/babyfish/jimmer/sql/example/App.java).
 
-- Caching mode
+-   Caching mode
 
     This mode is provided to showcase the powerful [Jimmer caching](https://babyfish-ct.github.io/jimmer-doc/docs/cache/) and requires external dependencies.
 
     To better demonstrate its universality, Jimmer provides two external environments.
 
-    - MySQL + Maxwell
+    -   MySQL + Maxwell
 
         First, install Docker, then execute [env-with-cache/maxwell/install.sh](../../env-with-cache/maxwell/install.sh) to complete the installation.
 
         Finally, run [service/.../App.java](./service/src/main/java/org/babyfish/jimmer/sql/example/App.java) using the Spring profile parameter `-Dspring.profiles.active=maxwell` or `--spring.profiles.active=maxwell`.
 
-    - Postgres + Debezium
+    -   Postgres + Debezium
 
         First, install Docker, then execute [env-with-cache/debezium/install.sh](../../env-with-cache/debezium/install.sh) to complete the installation.
 
@@ -138,9 +138,9 @@ If you want to access the service with a tenant's identity, you need to set the 
 
 > By default, there are only two tenants in the data: `a` and `b`. Of course, users can add more tenants.
 
-- For query operations, this HTTP request header is optional. If it is not provided, it will query the books of all tenants.
+-   For query operations, this HTTP request header is optional. If it is not provided, it will query the books of all tenants.
 
-- For data saving operations, this HTTP request header is required. If it is not provided, the server-side will throw an exception.
+-   For data saving operations, this HTTP request header is required. If it is not provided, the server-side will throw an exception.
 
 You can set the HTTP request header in the bottom-left corner of the `http://localhost:8080/graphiql` page:
 

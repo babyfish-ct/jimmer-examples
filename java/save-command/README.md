@@ -16,17 +16,17 @@ This simple description hides many details, and if you are interested, you can c
 
 The project depends on the [Annotation Processor](https://www.jetbrains.com/help/idea/annotation-processors-support.html). When opening this project in IntelliJ IDEA for the first time, you may notice that some code that should have been automatically generated is missing. To resolve this, you can choose any of the following methods:
 
-- First, run the ./mvnw install or ./gradlew build command in the project directory from the command line to generate the code, and then open the project with IntelliJ IDEA.
+- First, run the `./mvnw install` or `./gradlew build` command in the project directory from the command line to generate the code, and then open the project with IntelliJ IDEA.
 
-- Open the project directly with IntelliJ IDEA, ignoring the IDE errors temporarily. After the dependencies are downloaded, run the project's main method or unit tests (save-command/save-command-kt demonstrates the functionality with unit tests). All IDE errors will automatically disappear, and the application will start correctly.
+- Open the project directly with IntelliJ IDEA, ignoring the IDE errors temporarily. After the dependencies are downloaded, run the project's unit tests. All IDE errors will automatically disappear, and the application will start correctly.
 
 ## Opening Method
 
-This project supports both pom.xml and build.gradle, meaning it supports both Maven and Gradle.
+This project supports both `pom.xml` and `build.gradle`, meaning it supports both Maven and Gradle.
 
 When opening this kind of project for the first time, IntelliJ will ask how to open it. Make your choice.
 
-If you want to switch the opening method, exit IntelliJ, delete the hidden .idea directory in the project, and then reopen the project with IntelliJ and make a new selection.
+If you want to switch the opening method, exit IntelliJ, delete the hidden `.idea` directory in the project, and then reopen the project with IntelliJ and make a new selection.
 
 ## Running Method
 
