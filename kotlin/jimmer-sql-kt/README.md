@@ -85,7 +85,7 @@ This example involves multiple features.
 
 The project depends on the [KSP](https://kotlinlang.org/docs/ksp-overview.html). When opening this project in IntelliJ IDEA for the first time, you may notice that some code that should have been automatically generated is missing. To resolve this, you can choose any of the following methods:
 
--   First, run the `./mvnw install` or `./gradlew build` command in the project directory from the command line to generate the code, and then open the project with IntelliJ IDEA.
+-   First, run the `./gradlew build` command in the project directory from the command line to generate the code, and then open the project with IntelliJ IDEA.
 
 -   Open the project directly with IntelliJ IDEA, ignoring the IDE errors temporarily. After the dependencies are downloaded, run the project's main method. All IDE errors will automatically disappear, and the application will start correctly.
 
