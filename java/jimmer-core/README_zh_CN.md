@@ -26,7 +26,7 @@ Immer完美结合了不可变对象和可变对象的优点，代码简单、功
 
 项目依赖于[Annotation Processor](https://www.jetbrains.com/help/idea/annotation-processors-support.html)，首次使用Intellij打开本项目时，会发现一些本该被自动生成代码并不存在的问题。对此，可以选择以下任何一种方法：
  
--   先用命令行在要打开的项目目录下执行./mvnw install(仅Java例子提供)或./gradlew build命令完成代码生成，再用Intellij打开项目。
+-   先用命令行在要打开的项目目录下执行./mvnw install或./gradlew build命令完成代码生成，再用Intellij打开项目。
  
 -   直接用Intelilj代开项目，暂时无视IDE的错误，依赖下载完毕后，直接运行项目的main方法或单元测试 (save-command/save-command-kt以单元测试演示功能)，所有IDE错误将会自动消失，应用也会被正确启动。
 
