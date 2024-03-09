@@ -133,6 +133,24 @@
 
     >   两种环境选择一种即可，如果都安装，可能因内存不足而导致docker容器发生错误。如果真的要这么做，建议为docker分配3GB内存。
 
+无论通过哪种运行模式启动了项目，均可以通过`http://localhost:8080/openapi.html`访问服务。
+
+##  租户身份
+
+为了展示[全局过滤器](./https://babyfish-ct.gitee.io/jimmer-doc/docs/query/global-filter/)，本例子的例子`Book`对象是被多租户管理的。
+
+如果要模拟一个租户的身份，需要在HTTP请求头中设置`tenant`，其值为`a`和`b`。
+
+>   默认数据中只有两个租户：`a`和`b`，当让，用户可以添加更多的租户。
+
+-   对于查询操作而言，这个HTTP请求头是可选的，如果没有，就查询所有租户的书籍
+
+-   对于数据保存操作而言，这个HTTP请求头是必须，如果没有，服务端会抛出异常。
+
+可以在`http://localhost:8080/openapi.html`页面的右上角找到一个按钮，设置租户
+
+![tenant](../../__internal/swagger-authorize.webp)
+
 ---
 
 [⇦ 上一个例子 ⇦](../jimmer-core) | [⇧ 返回上级 ⇧](../) | [⇨ 下一个例子 ⇨](../jimmer-sql-graphql/)
