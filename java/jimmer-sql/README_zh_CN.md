@@ -132,3 +132,7 @@
         最后，使用参数spring profile参数`-Dspring.profiles.active=debezium`或`--spring.profiles.active=debezium`运行[service/.../App.java](./service/src/main/java/org/babyfish/jimmer/sql/example/App.java)即可。
 
     >   两种环境选择一种即可，如果都安装，可能因内存不足而导致docker容器发生错误。如果真的要这么做，建议为docker分配3GB内存。
+
+---
+
+[⇦ 上一个例子 ⇦](./jimmer-core) | [⇧ 返回上级 ⇧](../) | [⇨ 下一个例子 ⇨](./jimmer-sql-graphql/)
