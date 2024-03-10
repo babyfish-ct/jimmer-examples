@@ -27,25 +27,25 @@ For more details, please refer to the descriptions in the respective sub-directo
     <tbody>
         <tr>
             <td><a href="./java/jimmer-core">java/jimmer-core</a></td>
-            <td><a href="./kotlin/jimmer-core-kt">java/jimmer-core-kt</a></td>
+            <td><a href="./kotlin/jimmer-core-kt">kotlin/jimmer-core-kt</a></td>
             <td>ORM-independent examples, showcasing <a href="https://github.com/immerjs/immer">immer</a>-style immutable objects</td>
             <td>★★★★</td>
         </tr>
         <tr>
             <td><a href="./java/jimmer-sql">java/jimmer-sql</a></td>
-            <td><a href="./kotlin/jimmer-sql-kt">java/jimmer-sql-kt</a></td>
+            <td><a href="./kotlin/jimmer-sql-kt">kotlin/jimmer-sql-kt</a></td>
             <td>Quickly build REST services using Jimmer. This example showcases most of Jimmer's features and is the most important and fundamental example</td>
             <td>★★★★★</td>
         </tr>
         <tr>
             <td><a href="./java/jimmer-sql-graphql">java/jimmer-sql-graphql</a></td>
-            <td><a href="./kotlin/jimmer-sql-graphql-kt">java/jimmer-sql-graphql-kt</a></td>
+            <td><a href="./kotlin/jimmer-sql-graphql-kt">kotlin/jimmer-sql-graphql-kt</a></td>
             <td>Quickly build GraphQL services using Jimmer</td>
             <td>★★</td>
         </tr>
         <tr>
             <td><a href="./java/jimmer-cloud">java/jimmer-cloud</a></td>
-            <td><a href="./kotlin/jimmer-cloud-kt">java/jimmer-cloud-kt</a></td>
+            <td><a href="./kotlin/jimmer-cloud-kt">kotlin/jimmer-cloud-kt</a></td>
             <td>A microservices project based on Spring Cloud, showcasing Jimmer's remote association</td>
             <td>★</td>
         </tr>
