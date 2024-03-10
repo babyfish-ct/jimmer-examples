@@ -8,8 +8,8 @@ This is a collection of examples for [Jimmer](https://github.com/babyfish-ct/jim
 
 |Sub-directory|Description|
 |---|---|
-|java|Examples in Java|
-|kotlin|Examples in Kotlin|
+|[java](./java/)|Examples in Java|
+|[kotlin](./kotlin/)|Examples in Kotlin|
 |rest-client|[java/jimmer-sql/](./java/jimmer-sql/) and [kotlin/jimmer-sql-kt/](./kotlin/jimmer-sql-kt/) are two examples of building REST services using Jimmer. Jimmer can automatically generate TypeScript code required by the web client *([documentation link](https://babyfish-ct.github.io/jimmer-doc/docs/client/))*. This is a React-based web application that demonstrates how to use the automatically generated TypeScript code by Jimmer.|
 |env-with-cache|Jimmer supports powerful caching *([documentation link](https://babyfish-ct.github.io/jimmer-doc/docs/cache/))*. Developers can specify a Spring profile to run [java/jimmer-sql/](./java/jimmer-sql/), [kotlin/jimmer-sql-kt/](./kotlin/jimmer-sql-kt/), [java/jimmer-sql-graphql/](./java/jimmer-sql-graphql/), or [kotlin/jimmer-sql-graphql-kt/](./kotlin/jimmer-sql-graphql-kt/) with caching support. In this running mode, these examples require an external environment, and this sub-directory is the installation directory for those external environments.|
 
