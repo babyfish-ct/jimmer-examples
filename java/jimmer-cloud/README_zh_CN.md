@@ -40,10 +40,10 @@ Jimmer支持查询任意形状的数据结构，如果数据结构的形状跨�
 
 启动类|启用优先级|访问方式|
 |---|---|---|
-|[registry-center/.../RegistryCenterApp.java](./registry-center/src/main/java/org/babyfish/jimmer/example/cloud/registry/RegistryCenterApp.java)|率先启动|http://localhost:7000|
-|[store-service/.../StoreServiceApp.java](./store-service/src/main/java/org/babyfish/jimmer/example/cloud/store/StoreServiceApp.java)|在注册中心启动成功后启动|http://localhost:7001/openapi.html|
-|[book-service/.../BookServiceApp.java](./book-service/src/main/java/org/babyfish/jimmer/example/cloud/book/BookServiceApp.java)|在注册中心启动成功后启动|http://localhost:7002/openapi.html|
-|[author-service/.../AuthorServiceApp.java](./author-service/src/main/java/org/babyfish/jimmer/example/cloud/author/AuthorServiceApp.java)|在注册中心启动成功后启动|http://localhost:7003/openapi.html|
+|[registry-center/.../RegistryCenterApp.java](./registry-center/src/main/java/org/babyfish/jimmer/example/cloud/registry/RegistryCenterApp.java)|率先启动|`http://localhost:7000`|
+|[store-service/.../StoreServiceApp.java](./store-service/src/main/java/org/babyfish/jimmer/example/cloud/store/StoreServiceApp.java)|在注册中心启动成功后启动|`http://localhost:7001/openapi.html`|
+|[book-service/.../BookServiceApp.java](./book-service/src/main/java/org/babyfish/jimmer/example/cloud/book/BookServiceApp.java)|在注册中心启动成功后启动|`http://localhost:7002/openapi.html`|
+|[author-service/.../AuthorServiceApp.java](./author-service/src/main/java/org/babyfish/jimmer/example/cloud/author/AuthorServiceApp.java)|在注册中心启动成功后启动|`http://localhost:7003/openapi.html`|
 
 启动完成后，可以访问上面表格中后面三个的服务openapi。
 

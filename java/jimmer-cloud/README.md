@@ -40,10 +40,10 @@ Fortunately, all services that depend on a database use the H2 embedded database
 
 Start Class | Priority | Access Method
 |---|---|---|
-|[registry-center/.../RegistryCenterApp.java](./registry-center/src/main/java/org/babyfish/jimmer/example/cloud/registry/RegistryCenterApp.java) | Start first | http://localhost:7000
-|[store-service/.../StoreServiceApp.java](./store-service/src/main/java/org/babyfish/jimmer/example/cloud/store/StoreServiceApp.java) | Start after the registry center is up | http://localhost:7001/openapi.html
-|[book-service/.../BookServiceApp.java](./book-service/src/main/java/org/babyfish/jimmer/example/cloud/book/BookServiceApp.java) | Start after the registry center is up | http://localhost:7002/openapi.html
-|[author-service/.../AuthorServiceApp.java](./author-service/src/main/java/org/babyfish/jimmer/example/cloud/author/AuthorServiceApp.java) | Start after the registry center is up | http://localhost:7003/openapi.html
+|[registry-center/.../RegistryCenterApp.java](./registry-center/src/main/java/org/babyfish/jimmer/example/cloud/registry/RegistryCenterApp.java) | Start first | `http://localhost:7000`|
+|[store-service/.../StoreServiceApp.java](./store-service/src/main/java/org/babyfish/jimmer/example/cloud/store/StoreServiceApp.java) | Start after the registry center is up | `http://localhost:7001/openapi.html`|
+|[book-service/.../BookServiceApp.java](./book-service/src/main/java/org/babyfish/jimmer/example/cloud/book/BookServiceApp.java) | Start after the registry center is up | `http://localhost:7002/openapi.html`|
+|[author-service/.../AuthorServiceApp.java](./author-service/src/main/java/org/babyfish/jimmer/example/cloud/author/AuthorServiceApp.java) | Start after the registry center is up | `http://localhost:7003/openapi.html`|
 
 After starting, you can access the OpenAPI of the last three services in the table above.
 
