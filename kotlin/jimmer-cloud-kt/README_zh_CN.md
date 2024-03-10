@@ -1,4 +1,4 @@
-# Jimmer的远程实体关联
+# Jimmer的远程实体关联 (Kotlin)
 
 [English](./) | 中文
 

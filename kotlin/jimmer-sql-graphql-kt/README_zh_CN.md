@@ -1,4 +1,4 @@
-# 使用Jimmer构建GraphQL服务
+# 使用Jimmer构建GraphQL服务 (Kotlin)
 
 [English](./) | 中文
 
