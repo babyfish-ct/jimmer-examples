@@ -95,8 +95,6 @@ The project depends on the [KSP](https://kotlinlang.org/docs/ksp-overview.html).
 
 The current example supports two running modes:
 
-### Two Running Modes
-
 - Non-caching mode
 
     This is the default mode, provided for users who want to quickly run and experience the example.

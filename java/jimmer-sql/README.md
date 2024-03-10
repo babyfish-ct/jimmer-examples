@@ -103,8 +103,6 @@ If you want to switch the opening method, exit IntelliJ, delete the hidden `.ide
 
 The current example supports two running modes:
 
-### Two Running Modes
-
 - Non-caching mode
 
     This is the default mode, provided for users who want to quickly run and experience the example.
