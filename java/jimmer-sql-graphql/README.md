@@ -1,4 +1,4 @@
-# Building GraphQL Services with Jimmer
+# Building GraphQL Services with Jimmer (Java)
 
 English | [中文](./README_zh_CN.md)
 

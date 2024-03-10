@@ -1,4 +1,4 @@
-# Remote Entity Association in Jimmer
+# Remote Entity Association in Jimmer (Java)
 
 English | [中文](./README_zh_CN.md)
 

@@ -1,4 +1,4 @@
-# Building REST Services with Jimmer
+# Building REST Services with Jimmer (Java)
 
 English | [中文](./README_zh_CN.md)
 

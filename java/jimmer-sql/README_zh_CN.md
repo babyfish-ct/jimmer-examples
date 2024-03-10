@@ -1,4 +1,4 @@
-# 使用Jimmer构建REST服务
+# 使用Jimmer构建REST服务 (Java)
 
 [English](./) | 中文
 
