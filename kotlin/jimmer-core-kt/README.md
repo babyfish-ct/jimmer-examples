@@ -1,4 +1,4 @@
-# Immutability of Jimmer Objects
+# Immutability of Jimmer Objects (Kotlin)
 
 English | [中文](./README_zh_CN.md)
 
