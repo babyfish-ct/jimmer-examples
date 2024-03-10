@@ -32,7 +32,7 @@ Jimmer支持查询任意形状的数据结构，如果数据结构的形状跨�
 
 启动类|启用优先级|访问方式|
 |---|---|---|
-|[registry-center/.../RegistryCenterApp.kt](./registry-center/src/main/kotlin/org/babyfish/jimmer/example/cloud/kt/RegistryCenterApp.kt)|率先启动|http://localhost:7000`|
+|[registry-center/.../RegistryCenterApp.kt](./registry-center/src/main/kotlin/org/babyfish/jimmer/example/cloud/kt/RegistryCenterApp.kt)|率先启动|`http://localhost:7000`|
 |[store-service/.../StoreServiceApp.kt](./store-service/src/main/kotlin/org/babyfish/jimmer/example/cloud/kt/store/StoreServiceApp.kt)|在注册中心启动成功后启动|`http://localhost:7001/openapi.html`|
 |[book-service/.../BookServiceApp.kt](./book-service/src/main/kotlin/org/babyfish/jimmer/example/cloud/kt/book/BookServiceApp.kt)|在注册中心启动成功后启动|`http://localhost:7002/openapi.html`|
 |[author-service/.../AuthorServiceApp.kt](./author-service/src/main/kotlin/org/babyfish/jimmer/example/cloud/kt/author/AuthorServiceApp.kt)|在注册中心启动成功后启动|`http://localhost:7003/openapi.html`|
