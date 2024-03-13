@@ -33,7 +33,7 @@
         </tr>
         <tr>
             <td><a href="./java/jimmer-sql/README_zh_CN.md">java/jimmer-sql</a></td>
-            <td><a href="./kotlin/jimmer-sql-kt">javkotlina/jimmer-sql-kt</a></td>
+            <td><a href="./kotlin/jimmer-sql-kt">kotlin/jimmer-sql-kt</a></td>
             <td>利用Jimmer快速构建REST服务。这个例子展示了大部分Jimmer的功能，是最重要的最基础的例子</td>
             <td>★★★★★</td>
         </tr>
