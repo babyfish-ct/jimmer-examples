@@ -39,7 +39,7 @@
         </tr>
         <tr>
             <td><a href="./java/jimmer-sql-graphql/README_zh_CN.md">java/jimmer-sql-graphql</a></td>
-            <td><a href="./kotlin/jimmer-sql-graphql-kt">jakotlinva/jimmer-sql-graphql-kt</a></td>
+            <td><a href="./kotlin/jimmer-sql-graphql-kt">kotlin/jimmer-sql-graphql-kt</a></td>
             <td>利用Jimmer快速构建GraphQL服务</td>
             <td>★★</td>
         </tr>
