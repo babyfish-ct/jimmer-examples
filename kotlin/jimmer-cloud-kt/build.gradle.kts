@@ -1,4 +1,4 @@
-val jimmerVersion by extra { "0.8.110" }
+val jimmerVersion by extra { "0.8.111" }
 val springCloudVersion by extra { "2021.0.3" }
 
 allprojects {

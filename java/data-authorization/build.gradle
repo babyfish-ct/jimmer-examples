@@ -3,7 +3,7 @@ plugins {
 }
 
 ext {
-    jimmerVersion = "0.8.110"
+    jimmerVersion = "0.8.111"
     log4jVersion = "2.12.4"
 }
 
