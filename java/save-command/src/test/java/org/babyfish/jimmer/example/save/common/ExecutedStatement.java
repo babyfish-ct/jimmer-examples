@@ -1,6 +1,6 @@
 package org.babyfish.jimmer.example.save.common;
 
-import org.babyfish.jimmer.sql.runtime.DbNull;
+import org.babyfish.jimmer.sql.runtime.DbLiteral;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,7 +17,7 @@ public final class ExecutedStatement {
         this.sql = sql;
         List<Object> variableList = new ArrayList<>(variables.length);
         for (Object variable : variables) {
-            variableList.add(variable instanceof DbNull ? null : variable);
+            variableList.add(variable instanceof DbLiteral.DbNull ? null : variable);
         }
         this.variables = Collections.unmodifiableList(variableList);
     }
