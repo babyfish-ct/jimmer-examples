@@ -17,8 +17,6 @@ dependencies {
 
     implementation "org.babyfish.jimmer:jimmer-core:${jimmerVersion}"
     annotationProcessor "org.babyfish.jimmer:jimmer-apt:${jimmerVersion}"
-
-    implementation 'javax.validation:validation-api:2.0.1.Final'
 }
 
 java {
