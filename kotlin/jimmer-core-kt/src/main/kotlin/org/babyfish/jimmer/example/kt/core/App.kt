@@ -14,6 +14,11 @@ fun main(args: Array<String>) {
     println("-------------------")
     treeNodeDemo()
     println()
+
+    println("Sweeter TreeNode demo")
+    println("-------------------")
+    sweeterTreeNodeDemo()
+    println()
 }
 
 private fun bookDemo() {
@@ -62,6 +67,41 @@ private fun treeNodeDemo() {
      * First step, create new object from scratch
      */
     val treeNode = new(TreeNode::class).by {
+        name = "Root"
+        childNodes().addBy {
+            name = "Food"
+            childNodes().addBy {
+                name = "Drinks"
+                childNodes().addBy {
+                    name = "Cococola"
+                }
+                childNodes().addBy {
+                    name = "Fanta"
+                }
+            }
+        }
+    }
+
+    /*
+     * Second step, make some "changes" based on the existing object to get a new object.
+     */
+    val newTreeNode = new(TreeNode::class).by(treeNode) {
+        childNodes()[0] // Food
+            .childNodes()[0] // Drinks
+            .childNodes()[0] // Cococola
+            .name += " plus"
+    }
+
+    println("treeNode: $treeNode")
+    println("newTreeNode: $newTreeNode")
+}
+
+private fun sweeterTreeNodeDemo() {
+
+    /*
+     * First step, create new object from scratch
+     */
+    val treeNode = TreeNode {
         name = "Root"
         childNodes().addBy {
             name = "Food"
