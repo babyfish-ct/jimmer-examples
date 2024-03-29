@@ -103,18 +103,24 @@ private fun sweeterTreeNodeDemo() {
      */
     val treeNode = TreeNode {
         name = "Root"
-        childNodes().addBy {
-            name = "Food"
-            childNodes().addBy {
-                name = "Drinks"
-                childNodes().addBy {
-                    name = "Cococola"
-                }
-                childNodes().addBy {
-                    name = "Fanta"
-                }
+        childNodes = listOf(
+            TreeNode {
+                name = "Food"
+                childNodes = listOf(
+                    TreeNode {
+                        name = "Drinks"
+                        childNodes = listOf(
+                            TreeNode{
+                                name = "Cococola"
+                            },
+                            TreeNode {
+                                name = "Fanta"
+                            }
+                        )
+                    }
+                )
             }
-        }
+        )
     }
 
     /*
