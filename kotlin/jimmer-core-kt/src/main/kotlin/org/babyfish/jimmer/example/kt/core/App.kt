@@ -28,7 +28,9 @@ private fun bookDemo() {
      */
     val book = new(Book::class).by {
         name = "book"
-        store().name = "store"
+        store {
+            name = "store"
+        }
         authors().addBy {
             name = "author-1"
         }
@@ -103,24 +105,18 @@ private fun sweeterTreeNodeDemo() {
      */
     val treeNode = TreeNode {
         name = "Root"
-        childNodes = listOf(
-            TreeNode {
-                name = "Food"
-                childNodes = listOf(
-                    TreeNode {
-                        name = "Drinks"
-                        childNodes = listOf(
-                            TreeNode{
-                                name = "Cococola"
-                            },
-                            TreeNode {
-                                name = "Fanta"
-                            }
-                        )
-                    }
-                )
+        childNodes().addBy {
+            name = "Food"
+            childNodes().addBy {
+                name = "Drinks"
+                childNodes().addBy {
+                    name = "Cococola"
+                }
+                childNodes().addBy {
+                    name = "Fanta"
+                }
             }
-        )
+        }
     }
 
     /*
