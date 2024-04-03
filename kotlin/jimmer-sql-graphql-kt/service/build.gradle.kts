@@ -21,7 +21,7 @@ repositories {
 dependencies {
 
 	implementation(project(":repository"))
-	runtimeOnly(project(":runtime"))
+	implementation(project(":runtime"))
 
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-graphql")

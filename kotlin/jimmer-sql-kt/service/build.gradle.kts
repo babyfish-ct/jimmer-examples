@@ -19,7 +19,7 @@ repositories {
 dependencies {
 
 	implementation(project(":repository"))
-	runtimeOnly(project(":runtime"))
+	implementation(project(":runtime"))
 
 	ksp("org.babyfish.jimmer:jimmer-ksp:${jimmerVersion}")
 

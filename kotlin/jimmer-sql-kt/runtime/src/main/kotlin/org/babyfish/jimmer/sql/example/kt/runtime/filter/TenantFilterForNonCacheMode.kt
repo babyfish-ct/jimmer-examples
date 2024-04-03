@@ -10,15 +10,13 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.stereotype.Component
 
 /*
- * see KSqlClientDsl.addFilters
- *
  * This bean is only be used when cache is NOT enabled.
  */
 @ConditionalOnMissingBean(TenantFilterForCacheMode::class)
 @Component
 open class TenantFilterForNonCacheMode(
     protected val tenantProvider: TenantProvider
-) : KFilter<TenantAware> { // ❶
+) : KFilter<TenantAware> {
 
     override fun filter(args: KFilterArgs<TenantAware>) {
         tenantProvider.tenant?.let {
@@ -28,7 +26,3 @@ open class TenantFilterForNonCacheMode(
         }
     }
 }
-
-/*----------------Documentation Links----------------
-❶ https://babyfish-ct.github.io/jimmer/docs/query/global-filter/user-filter
----------------------------------------------------*/
