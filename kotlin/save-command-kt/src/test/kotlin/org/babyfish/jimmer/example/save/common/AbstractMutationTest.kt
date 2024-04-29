@@ -1,6 +1,5 @@
 package org.babyfish.jimmer.example.save.common
 
-import org.babyfish.jimmer.example.save.model.ENTITY_MANAGER
 import org.babyfish.jimmer.sql.dialect.H2Dialect
 import org.babyfish.jimmer.sql.kt.KSqlClient
 import org.babyfish.jimmer.sql.kt.cfg.KSqlClientDsl
@@ -33,7 +32,6 @@ abstract class AbstractMutationTest {
         createDatabase(connection)
         executedStatements = mutableListOf()
         sqlClient = newKSqlClient {
-            setEntityManager(ENTITY_MANAGER)
             setDialect(H2Dialect())
             setConnectionManager {
                 proceed(connection)

@@ -79,13 +79,7 @@ class TriggerTest : AbstractMutationWithTriggerTest() {
                         }
                     }
                 }
-            ) {
-                /*
-                 * If you use jimmer-spring-starter, it is unnecessary to
-                 * do it because this switch is turned on.
-                 */
-                setAutoAttachingAll()
-            }
+            )
 
         /*
          * This example focuses on triggers, so we don't assert SQL statements,

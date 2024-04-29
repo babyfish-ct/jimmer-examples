@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 
 /**
  * Recommended learning sequence: 5
@@ -150,8 +151,8 @@ public class ManyToManyTest extends AbstractMutationTest {
 
                 // Are target ids valid
                 new ExecutedStatement(
-                        "select tb_1_.ID from AUTHOR tb_1_ where tb_1_.ID in (?, ?, ?)",
-                        100L, 88888L, 99999L
+                        "select tb_1_.ID from AUTHOR tb_1_ where tb_1_.ID = any(?)",
+                        Arrays.asList(100L, 88888L, 99999L)
                 )
         );
     }
@@ -225,28 +226,18 @@ public class ManyToManyTest extends AbstractMutationTest {
                 10L, "SQL in Action", 1, new BigDecimal(45)
         );
 
-        SimpleSaveResult<Book> result = sql()
-                .getEntities()
-                .saveCommand(
-                        BookDraft.$.produce(book -> {
-                            book.setName("SQL in Action");
-                            book.setEdition(1);
-                            book.setPrice(new BigDecimal(49));
-                            book.addIntoAuthors(author -> {
-                                author.setFirstName("Ben");
-                                author.setLastName("Brumm");
-                                author.setGender(Gender.MALE);
-                            });
-                        })
-                )
-                /*
-                 * You can also use `setAutoAttachingAll()`.
-                 *
-                 * If you use jimmer-spring-starter, it is unecessary to
-                 * do it because this switch is turned on.
-                 */
-                .setAutoAttaching(BookProps.AUTHORS)
-                .execute();
+        SimpleSaveResult<Book> result = sql().save(
+                BookDraft.$.produce(book -> {
+                    book.setName("SQL in Action");
+                    book.setEdition(1);
+                    book.setPrice(new BigDecimal(49));
+                    book.addIntoAuthors(author -> {
+                        author.setFirstName("Ben");
+                        author.setLastName("Brumm");
+                        author.setGender(Gender.MALE);
+                    });
+                })
+        );
 
         assertExecutedStatements(
 

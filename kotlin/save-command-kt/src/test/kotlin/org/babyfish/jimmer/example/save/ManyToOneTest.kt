@@ -252,15 +252,7 @@ class ManyToOneTest : AbstractMutationTest() {
                         website = "https://www.turing.com"
                     }
                 }
-            ) {
-                /*
-                 * You can also use `setAutoAttachingAll()`.
-                 *
-                 * If you use jimmer-spring-starter, it is unnecessary to
-                 * do it because this switch is turned on.
-                 */
-                setAutoAttaching(Book::store)
-            }
+            )
 
         assertExecutedStatements(
 

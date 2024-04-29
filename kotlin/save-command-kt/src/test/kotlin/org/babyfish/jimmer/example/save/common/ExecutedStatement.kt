@@ -1,6 +1,6 @@
 package org.babyfish.jimmer.example.save.common
 
-import org.babyfish.jimmer.sql.runtime.DbNull
+import org.babyfish.jimmer.sql.runtime.DbLiteral
 
 data class ExecutedStatement private constructor(
     val sql: String,
@@ -10,7 +10,7 @@ data class ExecutedStatement private constructor(
         this(
             sql,
             variables.map {
-                if (it is DbNull) {
+                if (it is DbLiteral.DbNull) {
                     null
                 } else {
                     it

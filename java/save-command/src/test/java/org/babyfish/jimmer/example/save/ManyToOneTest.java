@@ -239,27 +239,17 @@ public class ManyToOneTest extends AbstractMutationTest {
                 "insert into book(id, name, edition, price) values(?, ?, ?, ?)",
                 10L, "SQL in Action", 1, new BigDecimal(45));
 
-        SimpleSaveResult<Book> result = sql()
-                .getEntities()
-                .saveCommand(
-                        BookDraft.$.produce(book -> {
-                            book.setName("SQL in Action");
-                            book.setEdition(1);
-                            book.setPrice(new BigDecimal(49));
-                            book.applyStore(store -> {
-                                store.setName("TURING");
-                                store.setWebsite("https://www.turing.com");
-                            });
-                        })
-                )
-                /*
-                 * You can also use `setAutoAttachingAll()`.
-                 *
-                 * If you use jimmer-spring-starter, it is unecessary to
-                 * do it because this switch is turned on.
-                 */
-                .setAutoAttaching(BookProps.STORE)
-                .execute();
+        SimpleSaveResult<Book> result = sql().save(
+                BookDraft.$.produce(book -> {
+                    book.setName("SQL in Action");
+                    book.setEdition(1);
+                    book.setPrice(new BigDecimal(49));
+                    book.applyStore(store -> {
+                        store.setName("TURING");
+                        store.setWebsite("https://www.turing.com");
+                    });
+                })
+        );
 
         assertExecutedStatements(
 

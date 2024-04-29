@@ -51,7 +51,6 @@ public class BookService {
             DataFetchingEnvironment env
     ) {
         Fetcher<Book> fetcher = DataFetchingEnvironments.createFetcher(Book.class, env);
-        System.out.println(fetcher);
         return bookRepository.findBooks(
                 name,
                 minPrice,

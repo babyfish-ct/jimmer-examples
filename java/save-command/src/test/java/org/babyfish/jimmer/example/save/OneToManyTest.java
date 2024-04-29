@@ -196,26 +196,16 @@ public class OneToManyTest extends AbstractMutationTest {
 
         jdbc("insert into book_store(id, name) values(?, ?)", 1L, "MANNING");
 
-        SimpleSaveResult<BookStore> result = sql()
-                .getEntities()
-                .saveCommand(
-                        BookStoreDraft.$.produce(store -> {
-                            store.setName("MANNING");
-                            store.addIntoBooks(book -> {
-                                book.setName("SQL in Action");
-                                book.setEdition(1);
-                                book.setPrice(new BigDecimal(49));
-                            });
-                        })
-                )
-                /*
-                 * You can also use `setAutoAttachingAll()`.
-                 *
-                 * If you use jimmer-spring-starter, it is unecessary to
-                 * do it because this switch is turned on.
-                 */
-                .setAutoAttaching(BookStoreProps.BOOKS)
-                .execute();
+        SimpleSaveResult<BookStore> result = sql().save(
+                BookStoreDraft.$.produce(store -> {
+                    store.setName("MANNING");
+                    store.addIntoBooks(book -> {
+                        book.setName("SQL in Action");
+                        book.setEdition(1);
+                        book.setPrice(new BigDecimal(49));
+                    });
+                })
+        );
 
         assertExecutedStatements(
 

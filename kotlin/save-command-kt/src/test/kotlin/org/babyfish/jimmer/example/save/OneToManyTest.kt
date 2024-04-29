@@ -216,15 +216,7 @@ class OneToManyTest() : AbstractMutationTest() {
                         price = BigDecimal(49)
                     }
                 }
-            ) {
-                /*
-                 * You can also use `setAutoAttachingAll()`.
-                 *
-                 * If you use jimmer-spring-starter, it is unnecessary to
-                 * do it because this switch is turned on.
-                 */
-                setAutoAttaching(BookStore::books)
-            }
+            )
 
         assertExecutedStatements(
 

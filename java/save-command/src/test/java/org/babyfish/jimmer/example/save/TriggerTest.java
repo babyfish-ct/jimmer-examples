@@ -49,34 +49,26 @@ public class TriggerTest extends AbstractMutationWithTriggerTest {
                 20L, 300L, 20L, 400L, 20L, 500L
         );
 
-        sql()
-                .getEntities()
-                .saveCommand(
-                        BookStoreDraft.$.produce(turing -> {
-                            turing.setName("TURING");
-                            turing.addIntoBooks(security -> {
-                                security.setName("Microservices Security in Action");
-                                security.setEdition(1);
-                                security.setPrice(new BigDecimal("43.59"));
-                                security.addIntoAuthors(author -> author.setId(100L));
-                                security.addIntoAuthors(author -> author.setId(200L));
-                                security.addIntoAuthors(author -> author.setId(300L));
-                            });
-                            turing.addIntoBooks(linq -> {
-                                linq.setName("LINQ in Action");
-                                linq.setEdition(1);
-                                linq.setPrice(new BigDecimal("31.59"));
-                                linq.addIntoAuthors(author -> author.setId(400L));
-                                linq.addIntoAuthors(author -> author.setId(500L));
-                            });
-                        })
-                )
-                /*
-                 * If you use jimmer-spring-starter, it is unecessary to
-                 * do it because this switch is turned on.
-                 */
-                .setAutoAttachingAll()
-                .execute();
+        sql().save(
+                BookStoreDraft.$.produce(turing -> {
+                    turing.setName("TURING");
+                    turing.addIntoBooks(security -> {
+                        security.setName("Microservices Security in Action");
+                        security.setEdition(1);
+                        security.setPrice(new BigDecimal("43.59"));
+                        security.addIntoAuthors(author -> author.setId(100L));
+                        security.addIntoAuthors(author -> author.setId(200L));
+                        security.addIntoAuthors(author -> author.setId(300L));
+                    });
+                    turing.addIntoBooks(linq -> {
+                        linq.setName("LINQ in Action");
+                        linq.setEdition(1);
+                        linq.setPrice(new BigDecimal("31.59"));
+                        linq.addIntoAuthors(author -> author.setId(400L));
+                        linq.addIntoAuthors(author -> author.setId(500L));
+                    });
+                })
+        );
         
         /*
          * This example focuses on triggers, so we don't assert SQL statements,

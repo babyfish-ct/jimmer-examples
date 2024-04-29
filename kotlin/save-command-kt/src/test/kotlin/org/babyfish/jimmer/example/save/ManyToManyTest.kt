@@ -157,8 +157,8 @@ class ManyToManyTest : AbstractMutationTest() {
 
             // Are target ids valid
             ExecutedStatement(
-                "select tb_1_.ID from AUTHOR tb_1_ where tb_1_.ID in (?, ?, ?)",
-                100L, 88888L, 99999L
+                "select tb_1_.ID from AUTHOR tb_1_ where tb_1_.ID = any(?)",
+                listOf(100L, 88888L, 99999L)
             )
         )
     }
@@ -248,15 +248,7 @@ class ManyToManyTest : AbstractMutationTest() {
                         gender = Gender.MALE
                     }
                 }
-            ) {
-                /*
-                 * You can also use `setAutoAttachingAll()`.
-                 *
-                 * If you use jimmer-spring-starter, it is unnecessary to
-                 * do it because this switch is turned on.
-                 */
-                setAutoAttaching(Book::authors)
-            }
+            )
 
         assertExecutedStatements(
 
