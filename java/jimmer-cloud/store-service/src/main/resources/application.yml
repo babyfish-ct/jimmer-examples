@@ -22,7 +22,7 @@ jimmer:
         info:
           title: Openapi of store-service
           description: "`/store/{id}` accesses current service, `/store/{id}/detail` accesses all services"
-          version: "0.8.132"
+          version: "0.8.134"
 
 server:
   port: 7001

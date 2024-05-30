@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.babyfish.jimmer.sql.example</groupId>
         <artifactId>jimmer-sql</artifactId>
-        <version>0.8.132</version>
+        <version>0.8.134</version>
     </parent>
 
     <dependencyManagement>
@@ -24,7 +24,7 @@
     <artifactId>service</artifactId>
 
     <properties>
-        <jimmer.version>0.8.132</jimmer.version>
+        <jimmer.version>0.8.134</jimmer.version>
         <spring.boot.version>2.7.0</spring.boot.version>
     </properties>
 
