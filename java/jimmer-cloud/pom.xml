@@ -6,7 +6,7 @@
 
     <groupId>org.babyfish.jimmer.sql.example.cloud</groupId>
     <artifactId>jimmer-sql-cloud</artifactId>
-    <version>0.8.134</version>
+    <version>0.8.135</version>
 
     <packaging>pom</packaging>
 
@@ -19,7 +19,7 @@
     </modules>
 
     <properties>
-        <jimmer.version>0.8.134</jimmer.version>
+        <jimmer.version>0.8.135</jimmer.version>
         <spring.boot.version>2.7.0</spring.boot.version>
         <spring.cloud.version>2021.0.3</spring.cloud.version>
         <maven.compiler.source>1.8</maven.compiler.source>

@@ -25,8 +25,14 @@ private fun bookDemo() {
 
     /*
      * First step, create new object from scratch
+     *
+     *
+     * These three ways of writing are completely equivalent
+     *
+     * 1. val book = Book {...}
+     * 2. val book = new(Book::class).by {...}
      */
-    val book = new(Book::class).by {
+    val book = Book {
         name = "book"
         store {
             name = "store"
@@ -42,8 +48,12 @@ private fun bookDemo() {
     /*
      * Second step, make some "changes" based on the existing object to get a new object.
      *
-     * `val newBook = book.copy {...}` is shorthand for
-     * `val newBook = new(Book::class).by(book) {...}`
+     *
+     * These three ways of writing are completely equivalent
+     *
+     * 1. val newBook = book.copy {...}
+     * 2. val newBook = Book(book) {...}
+     * 3. val newBook = new(Book::class).by(book) {...}
      */
     val newBook = book.copy {
 
