@@ -1,7 +1,6 @@
 package org.babyfish.jimmer.example.kt.core
 
 import org.babyfish.jimmer.example.kt.core.model.*
-import org.babyfish.jimmer.kt.new
 import java.time.LocalDateTime
 
 fun main(args: Array<String>) {
@@ -78,7 +77,7 @@ private fun treeNodeDemo() {
     /*
      * First step, create new object from scratch
      */
-    val treeNode = new(TreeNode::class).by {
+    val treeNode = TreeNode {
         name = "Root"
         childNodes().addBy {
             name = "Food"
@@ -97,7 +96,7 @@ private fun treeNodeDemo() {
     /*
      * Second step, make some "changes" based on the existing object to get a new object.
      */
-    val newTreeNode = new(TreeNode::class).by(treeNode) {
+    val newTreeNode = treeNode.copy {
         childNodes()[0] // Food
             .childNodes()[0] // Drinks
             .childNodes()[0] // Cococola
