@@ -23,7 +23,7 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
 	implementation("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
-	implementation("org.springframework.data:spring-data-redis:${springBootVersion}")
+	implementation("org.redisson:redisson-spring-boot-starter:3.17.4")
 	implementation("org.springframework.kafka:spring-kafka:${springBootVersion}")
 	implementation("org.apache.kafka:connect-api:0.10.0.0")
 }

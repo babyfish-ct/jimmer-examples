@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.babyfish.jimmer.sql.example</groupId>
         <artifactId>jimmer-sql</artifactId>
-        <version>0.8.140</version>
+        <version>0.8.147</version>
     </parent>
 
     <artifactId>runtime</artifactId>
@@ -18,9 +18,9 @@
             <version>${jimmer.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-redis</artifactId>
-            <version>${spring.boot.version}</version>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson-spring-boot-starter</artifactId>
+            <version>3.17.4</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.kafka</groupId>

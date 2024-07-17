@@ -11,8 +11,8 @@ dependencies {
     implementation project(":model")
     implementation project(":repository")
 
-    // For RedisConnectionFactory
-    implementation "org.springframework.data:spring-data-redis:${springBootVersion}"
+    // For RedisConnectionFactory and Redisson
+    implementation 'org.redisson:redisson-spring-boot-starter:3.17.4'
 
     // For HttpServletRequest(javax or jakatra)
     implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"

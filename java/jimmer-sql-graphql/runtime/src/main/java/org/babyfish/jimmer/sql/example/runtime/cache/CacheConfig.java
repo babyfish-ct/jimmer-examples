@@ -3,20 +3,19 @@ package org.babyfish.jimmer.sql.example.runtime.cache;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.babyfish.jimmer.meta.ImmutableProp;
 import org.babyfish.jimmer.meta.ImmutableType;
-import org.babyfish.jimmer.spring.cache.CaffeineBinder;
-import org.babyfish.jimmer.spring.cache.RedisCaches;
-import org.babyfish.jimmer.spring.cache.RedisHashBinder;
-import org.babyfish.jimmer.spring.cache.RedisValueBinder;
 import org.babyfish.jimmer.sql.cache.AbstractCacheFactory;
 import org.babyfish.jimmer.sql.cache.Cache;
+import org.babyfish.jimmer.sql.cache.CacheCreator;
 import org.babyfish.jimmer.sql.cache.CacheFactory;
 import org.babyfish.jimmer.sql.cache.chain.*;
-import org.babyfish.jimmer.sql.example.model.BookStoreProps;
+import org.babyfish.jimmer.sql.cache.redis.spring.RedisCacheCreator;
+import org.babyfish.jimmer.sql.cache.redisson.RedissonCacheLocker;
+import org.babyfish.jimmer.sql.cache.redisson.RedissonCacheTracker;
+import org.redisson.api.RedissonClient;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.core.RedisTemplate;
 
 import java.time.Duration;
 import java.util.List;
@@ -30,111 +29,48 @@ import java.util.List;
 public class CacheConfig {
 
     @Bean
-    public CacheFactory cacheFactory( // ❶
+    public CacheFactory cacheFactory(
+            RedissonClient redissonClient,
             RedisConnectionFactory connectionFactory,
             ObjectMapper objectMapper
     ) {
-        RedisTemplate<String, byte[]> redisTemplate = RedisCaches.cacheRedisTemplate(connectionFactory);
+        CacheCreator creator = new RedisCacheCreator(connectionFactory, objectMapper)
+                .withRemoteDuration(Duration.ofHours(1))
+                .withLocalCache(100, Duration.ofMinutes(5))
+                .withMultiViewProperties(40, Duration.ofMinutes(2), Duration.ofMinutes(24))
+                .withSoftLock( // Optional, for better consistency
+                        new RedissonCacheLocker(redissonClient),
+                        Duration.ofSeconds(30)
+                )
+                .withTracking( // Optional, for application cluster
+                        new RedissonCacheTracker(redissonClient)
+                );
 
-        /*
-         * Single-view caches:
-         *      - All object caches
-         *      - `Book.store`
-         *      - `Book.authors`
-         *      - `TreeNode.parent`
-         *      - `TreeNode.childNodes`
-         *
-         * Multiple-view caches:
-         *      - `BookStore.books`
-         *      - `Author.books`
-         *      - `BookStore.avgPrice`
-         *      - `BookStore.newestBooks`
-         */
         return new AbstractCacheFactory() {
 
             // Id -> Object
             @Override
-            public Cache<?, ?> createObjectCache(ImmutableType type) { // ❷
-                return new ChainCacheBuilder<>()
-                        .add(new CaffeineBinder<>(512, Duration.ofSeconds(1)))
-                        .add(new RedisValueBinder<>(redisTemplate, objectMapper, type, Duration.ofMinutes(10)))
-                        .build();
+            public Cache<?, ?> createObjectCache(ImmutableType type) {
+                return creator.createForObject(type);
             }
 
             // Id -> TargetId, for one-to-one/many-to-one
             @Override
-            public Cache<?, ?> createAssociatedIdCache(ImmutableProp prop) { // ❸
-                return createPropCache(
-                        getFilterState().isAffected(prop.getTargetType()), // ❹
-                        prop,
-                        redisTemplate,
-                        objectMapper,
-                        Duration.ofMinutes(5)
-                );
+            public Cache<?, ?> createAssociatedIdCache(ImmutableProp prop) {
+                return creator.createForProp(prop, getFilterState().isAffected(prop.getTargetType()));
             }
 
             // Id -> TargetId list, for one-to-many/many-to-many
             @Override
-            public Cache<?, List<?>> createAssociatedIdListCache(ImmutableProp prop) { // ❺
-                return createPropCache(
-                        getFilterState().isAffected(prop.getTargetType()), // ❻
-                        prop,
-                        redisTemplate,
-                        objectMapper,
-                        Duration.ofMinutes(5)
-                );
+            public Cache<?, List<?>> createAssociatedIdListCache(ImmutableProp prop) {
+                return creator.createForProp(prop, getFilterState().isAffected(prop.getTargetType()));
             }
 
             // Id -> computed value, for transient properties with resolver
             @Override
-            public Cache<?, ?> createResolverCache(ImmutableProp prop) { // ❼
-                return createPropCache(
-                        prop.equals(BookStoreProps.AVG_PRICE.unwrap()) ||
-                                prop.equals(BookStoreProps.NEWEST_BOOKS.unwrap()),
-                        prop,
-                        redisTemplate,
-                        objectMapper,
-                        Duration.ofHours(1)
-                );
+            public Cache<?, ?> createResolverCache(ImmutableProp prop) {
+                return creator.createForProp(prop, true);
             }
         };
     }
-
-    private static <K, V> Cache<K, V> createPropCache(
-            boolean isMultiView,
-            ImmutableProp prop,
-            RedisTemplate<String, byte[]> redisTemplate,
-            ObjectMapper objectMapper,
-            Duration redisDuration
-    ) {
-        /*
-         * If multi-view cache is required, only redis can be used, because redis support hash structure.
-         * The value of redis hash is a nested map, so that different users can see different data.
-         *
-         * Other simple key value caches can be divided into two levels.
-         * The first level is caffeine, the second level is redis.
-         *
-         * Note: Once the multi-view cache takes affect, it will consume
-         * a lot of cache space, please only use it for important data.
-         */
-        if (isMultiView) { // ❽
-            return new ChainCacheBuilder<K, V>()
-                    .add(new RedisHashBinder<>(redisTemplate, objectMapper, prop, redisDuration))
-                    .build();
-        }
-
-        return new ChainCacheBuilder<K, V>()
-                .add(new CaffeineBinder<>(512, Duration.ofSeconds(1)))
-                .add(new RedisValueBinder<>(redisTemplate, objectMapper, prop, redisDuration))
-                .build();
-    }
 }
-
-/*----------------Documentation Links----------------
-❶ https://babyfish-ct.github.io/jimmer/docs/cache/enable-cache
-❷ https://babyfish-ct.github.io/jimmer/docs/cache/cache-type/object
-❸ ❺ https://babyfish-ct.github.io/jimmer/docs/cache/cache-type/association
-❹ ❻ https://babyfish-ct.github.io/jimmer/docs/cache/multiview-cache/user-filter#better-approach
-❼ https://babyfish-ct.github.io/jimmer/docs/cache/cache-type/calculation
-❽ https://babyfish-ct.github.io/jimmer/docs/cache/multiview-cache/concept
----------------------------------------------------*/
