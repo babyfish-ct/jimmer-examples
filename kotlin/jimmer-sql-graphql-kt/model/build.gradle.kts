@@ -15,7 +15,9 @@ repositories {
 
 dependencies {
 
-	implementation("org.babyfish.jimmer:jimmer-sql-kotlin:${jimmerVersion}")
+	implementation("org.babyfish.jimmer:jimmer-sql-kotlin:${jimmerVersion}") {
+		exclude(group = "org.antlr", module = "antlr4-runtime")
+	}
 	ksp("org.babyfish.jimmer:jimmer-ksp:${jimmerVersion}")
 
 	implementation("org.jetbrains.kotlin:kotlin-reflect")

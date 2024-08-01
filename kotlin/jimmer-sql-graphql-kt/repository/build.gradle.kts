@@ -16,7 +16,9 @@ dependencies {
 
 	api(project(":model"))
 
-	api("org.babyfish.jimmer:jimmer-spring-boot-starter:${jimmerVersion}")
+	api("org.babyfish.jimmer:jimmer-spring-boot-starter:${jimmerVersion}") {
+		exclude(group = "org.antlr", module = "antlr4-runtime")
+	}
 
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
