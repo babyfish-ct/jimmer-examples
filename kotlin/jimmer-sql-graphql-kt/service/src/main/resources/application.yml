@@ -1,4 +1,10 @@
 spring:
+
+  # Disable redisson for default profile
+  autoconfigure:
+    exclude:
+      - org.redisson.spring.starter.RedissonAutoConfiguration
+
   graphql:
     graphiql:
       enabled: true

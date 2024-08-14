@@ -2,6 +2,11 @@
 ## You can run `<jimmer_home>/example/env-with-cache/debezium/install.sh` to install them in docker
 
 spring:
+
+  # Redisson has been disabled in default profile, enable it in this profile
+  autoconfigure:
+    exclude: # Exclude nothing
+
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5200/jimmer_demo
