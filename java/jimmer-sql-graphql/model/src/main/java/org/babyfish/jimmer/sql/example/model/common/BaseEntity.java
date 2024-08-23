@@ -19,5 +19,5 @@ public interface BaseEntity {
 }
 
 /*----------------Documentation Links----------------
-❶ https://babyfish-ct.github.io/jimmer/docs/mapping/advanced/mapped-super-class
+❶ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/advanced/mapped-super-class
 ---------------------------------------------------*/

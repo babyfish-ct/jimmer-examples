@@ -24,12 +24,12 @@ interface TreeNode : BaseEntity {
 }
 
 /*----------------Documentation Links----------------
-❶ ❷ https://babyfish-ct.github.io/jimmer/docs/mapping/advanced/key
-❸ https://babyfish-ct.github.io/jimmer/docs/mapping/base/association/many-to-one
+❶ ❷ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/advanced/key
+❸ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/base/association/many-to-one
 
-❹ https://babyfish-ct.github.io/jimmer/docs/mapping/advanced/on-dissociate
-  https://babyfish-ct.github.io/jimmer/docs/mutation/save-command/dissociation
-  https://babyfish-ct.github.io/jimmer/docs/mutation/delete-command
+❹ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/advanced/on-dissociate
+  https://babyfish-ct.github.io/jimmer-doc/docs/mutation/save-command/dissociation
+  https://babyfish-ct.github.io/jimmer-doc/docs/mutation/delete-command
 
-❺ https://babyfish-ct.github.io/jimmer/docs/mapping/base/association/one-to-many
+❺ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/base/association/one-to-many
 ---------------------------------------------------*/

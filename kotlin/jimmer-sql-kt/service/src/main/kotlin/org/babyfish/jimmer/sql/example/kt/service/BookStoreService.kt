@@ -106,7 +106,7 @@ class BookStoreService(
 }
 
 /*----------------Documentation Links----------------
-❶ ❷ ❸ ❹ ❺ https://babyfish-ct.github.io/jimmer/docs/spring/client/api#declare-fetchby
-❻ https://babyfish-ct.github.io/jimmer/docs/spring/client/error#allow-to-throw-all-exceptions-of-family
-❼ https://babyfish-ct.github.io/jimmer/docs/mutation/save-command/input-dto/
+❶ ❷ ❸ ❹ ❺ https://babyfish-ct.github.io/jimmer-doc/docs/spring/client/api#declare-fetchby
+❻ https://babyfish-ct.github.io/jimmer-doc/docs/spring/client/error#allow-to-throw-all-exceptions-of-family
+❼ https://babyfish-ct.github.io/jimmer-doc/docs/mutation/save-command/input-dto/
 ---------------------------------------------------*/

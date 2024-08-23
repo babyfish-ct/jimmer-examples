@@ -96,7 +96,7 @@ public class BookStoreNewestBooksResolver implements TransientResolver<Long, Lis
 }
 
 /*----------------Documentation Links----------------
-❶ ❷ ❸ https://babyfish-ct.github.io/jimmer/docs/mapping/advanced/calculated/transient#associative-calculation-bookstorenewestbooks
-❹ https://babyfish-ct.github.io/jimmer/docs/cache/multiview-cache/user-filter#subkey-of-calculated-properties
-❺ ❻ https://babyfish-ct.github.io/jimmer/docs/cache/multiview-cache/user-filter#consistency
+❶ ❷ ❸ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/advanced/calculated/transient#associative-calculation-bookstorenewestbooks
+❹ https://babyfish-ct.github.io/jimmer-doc/docs/cache/multiview-cache/user-filter#subkey-of-calculated-properties
+❺ ❻ https://babyfish-ct.github.io/jimmer-doc/docs/cache/multiview-cache/user-filter#consistency
 ---------------------------------------------------*/

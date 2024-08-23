@@ -30,13 +30,13 @@ public interface TreeNode extends BaseEntity {
 }
 
 /*----------------Documentation Links----------------
-❶ ❸ https://babyfish-ct.github.io/jimmer/docs/mapping/advanced/key
-❷ https://babyfish-ct.github.io/jimmer/docs/mapping/base/nullity
-❹ https://babyfish-ct.github.io/jimmer/docs/mapping/base/association/many-to-one
+❶ ❸ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/advanced/key
+❷ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/base/nullity
+❹ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/base/association/many-to-one
 
-❺ https://babyfish-ct.github.io/jimmer/docs/mapping/advanced/on-dissociate
-  https://babyfish-ct.github.io/jimmer/docs/mutation/save-command/dissociation
-  https://babyfish-ct.github.io/jimmer/docs/mutation/delete-command
+❺ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/advanced/on-dissociate
+  https://babyfish-ct.github.io/jimmer-doc/docs/mutation/save-command/dissociation
+  https://babyfish-ct.github.io/jimmer-doc/docs/mutation/delete-command
 
-❻ https://babyfish-ct.github.io/jimmer/docs/mapping/base/association/one-to-many
+❻ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/base/association/one-to-many
 ---------------------------------------------------*/

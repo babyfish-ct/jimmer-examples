@@ -7,5 +7,5 @@ public interface BookStoreRepository extends JRepository<BookStore, Long> { // �
 }
 
 /*----------------Documentation Links----------------
-❶ https://babyfish-ct.github.io/jimmer/docs/spring/repository/concept
+❶ https://babyfish-ct.github.io/jimmer-doc/docs/spring/repository/concept
 ---------------------------------------------------*/

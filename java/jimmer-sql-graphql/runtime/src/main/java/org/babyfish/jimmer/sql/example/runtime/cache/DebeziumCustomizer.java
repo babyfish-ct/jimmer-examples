@@ -49,5 +49,5 @@ public class DebeziumCustomizer implements Customizer {
 }
 
 /*----------------Documentation Links----------------
-https://babyfish-ct.github.io/jimmer/docs/mutation/trigger#listen-to-message-queue
+https://babyfish-ct.github.io/jimmer-doc/docs/mutation/trigger#listen-to-message-queue
 ---------------------------------------------------*/
