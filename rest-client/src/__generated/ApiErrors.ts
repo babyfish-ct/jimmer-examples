@@ -1,3 +1,4 @@
+import type {SaveErrorCode} from './model/enums/';
 import type {ExportedSavePath} from './model/static/';
 
 export type AllErrors = {
@@ -7,10 +8,6 @@ export type AllErrors = {
     } | {
         family: 'SAVE_COMMAND', 
         code: 'NULL_TARGET', 
-        exportedPath: ExportedSavePath
-    } | {
-        family: 'SAVE_COMMAND', 
-        code: 'ILLEGAL_TARGET_ID', 
         exportedPath: ExportedSavePath
     } | {
         family: 'SAVE_COMMAND', 
@@ -30,15 +27,11 @@ export type AllErrors = {
         exportedPath: ExportedSavePath
     } | {
         family: 'SAVE_COMMAND', 
-        code: 'EMPTY_OBJECT', 
+        code: 'ILLEGAL_INTERCEPTOR_BEHAVIOR', 
         exportedPath: ExportedSavePath
     } | {
         family: 'SAVE_COMMAND', 
-        code: 'NO_KEY_PROPS', 
-        exportedPath: ExportedSavePath
-    } | {
-        family: 'SAVE_COMMAND', 
-        code: 'NO_NON_ID_PROPS', 
+        code: 'NO_KEY_PROP', 
         exportedPath: ExportedSavePath
     } | {
         family: 'SAVE_COMMAND', 
@@ -47,10 +40,6 @@ export type AllErrors = {
     } | {
         family: 'SAVE_COMMAND', 
         code: 'OPTIMISTIC_LOCK_ERROR', 
-        exportedPath: ExportedSavePath
-    } | {
-        family: 'SAVE_COMMAND', 
-        code: 'KEY_NOT_UNIQUE', 
         exportedPath: ExportedSavePath
     } | {
         family: 'SAVE_COMMAND', 
@@ -72,6 +61,25 @@ export type AllErrors = {
         family: 'SAVE_COMMAND', 
         code: 'UNSTRUCTURED_ASSOCIATION', 
         exportedPath: ExportedSavePath
+    } | {
+        family: 'SAVE_COMMAND', 
+        code: 'TARGET_IS_NOT_TRANSFERABLE', 
+        saveErrorCode: SaveErrorCode, 
+        exportedPath: ExportedSavePath
+    } | {
+        family: 'SAVE_COMMAND', 
+        code: 'INCOMPLETE_PROPERTY', 
+        saveErrorCode: SaveErrorCode, 
+        exportedPath: ExportedSavePath
+    } | {
+        family: 'SAVE_COMMAND', 
+        code: 'NOT_UNIQUE', 
+        saveErrorCode: SaveErrorCode, 
+        exportedPath: ExportedSavePath
+    } | {
+        family: 'SAVE_COMMAND', 
+        code: 'ILLEGAL_TARGET_ID', 
+        exportedPath: ExportedSavePath
     };
 export type ApiErrors = {
     'authorService': {
@@ -82,10 +90,6 @@ export type ApiErrors = {
             } | {
                 family: 'SAVE_COMMAND', 
                 code: 'NULL_TARGET', 
-                readonly [key:string]: any
-            } | {
-                family: 'SAVE_COMMAND', 
-                code: 'ILLEGAL_TARGET_ID', 
                 readonly [key:string]: any
             } | {
                 family: 'SAVE_COMMAND', 
@@ -105,15 +109,11 @@ export type ApiErrors = {
                 readonly [key:string]: any
             } | {
                 family: 'SAVE_COMMAND', 
-                code: 'EMPTY_OBJECT', 
+                code: 'ILLEGAL_INTERCEPTOR_BEHAVIOR', 
                 readonly [key:string]: any
             } | {
                 family: 'SAVE_COMMAND', 
-                code: 'NO_KEY_PROPS', 
-                readonly [key:string]: any
-            } | {
-                family: 'SAVE_COMMAND', 
-                code: 'NO_NON_ID_PROPS', 
+                code: 'NO_KEY_PROP', 
                 readonly [key:string]: any
             } | {
                 family: 'SAVE_COMMAND', 
@@ -122,10 +122,6 @@ export type ApiErrors = {
             } | {
                 family: 'SAVE_COMMAND', 
                 code: 'OPTIMISTIC_LOCK_ERROR', 
-                readonly [key:string]: any
-            } | {
-                family: 'SAVE_COMMAND', 
-                code: 'KEY_NOT_UNIQUE', 
                 readonly [key:string]: any
             } | {
                 family: 'SAVE_COMMAND', 
@@ -146,6 +142,22 @@ export type ApiErrors = {
             } | {
                 family: 'SAVE_COMMAND', 
                 code: 'UNSTRUCTURED_ASSOCIATION', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'TARGET_IS_NOT_TRANSFERABLE', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'INCOMPLETE_PROPERTY', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'NOT_UNIQUE', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'ILLEGAL_TARGET_ID', 
                 readonly [key:string]: any
             })
     }, 
@@ -160,10 +172,6 @@ export type ApiErrors = {
                 readonly [key:string]: any
             } | {
                 family: 'SAVE_COMMAND', 
-                code: 'ILLEGAL_TARGET_ID', 
-                readonly [key:string]: any
-            } | {
-                family: 'SAVE_COMMAND', 
                 code: 'CANNOT_DISSOCIATE_TARGETS', 
                 readonly [key:string]: any
             } | {
@@ -180,15 +188,11 @@ export type ApiErrors = {
                 readonly [key:string]: any
             } | {
                 family: 'SAVE_COMMAND', 
-                code: 'EMPTY_OBJECT', 
+                code: 'ILLEGAL_INTERCEPTOR_BEHAVIOR', 
                 readonly [key:string]: any
             } | {
                 family: 'SAVE_COMMAND', 
-                code: 'NO_KEY_PROPS', 
-                readonly [key:string]: any
-            } | {
-                family: 'SAVE_COMMAND', 
-                code: 'NO_NON_ID_PROPS', 
+                code: 'NO_KEY_PROP', 
                 readonly [key:string]: any
             } | {
                 family: 'SAVE_COMMAND', 
@@ -197,10 +201,6 @@ export type ApiErrors = {
             } | {
                 family: 'SAVE_COMMAND', 
                 code: 'OPTIMISTIC_LOCK_ERROR', 
-                readonly [key:string]: any
-            } | {
-                family: 'SAVE_COMMAND', 
-                code: 'KEY_NOT_UNIQUE', 
                 readonly [key:string]: any
             } | {
                 family: 'SAVE_COMMAND', 
@@ -221,6 +221,22 @@ export type ApiErrors = {
             } | {
                 family: 'SAVE_COMMAND', 
                 code: 'UNSTRUCTURED_ASSOCIATION', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'TARGET_IS_NOT_TRANSFERABLE', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'INCOMPLETE_PROPERTY', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'NOT_UNIQUE', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'ILLEGAL_TARGET_ID', 
                 readonly [key:string]: any
             }), 
         'saveCompositeBook': AllErrors & ({
@@ -233,10 +249,6 @@ export type ApiErrors = {
                 readonly [key:string]: any
             } | {
                 family: 'SAVE_COMMAND', 
-                code: 'ILLEGAL_TARGET_ID', 
-                readonly [key:string]: any
-            } | {
-                family: 'SAVE_COMMAND', 
                 code: 'CANNOT_DISSOCIATE_TARGETS', 
                 readonly [key:string]: any
             } | {
@@ -253,15 +265,11 @@ export type ApiErrors = {
                 readonly [key:string]: any
             } | {
                 family: 'SAVE_COMMAND', 
-                code: 'EMPTY_OBJECT', 
+                code: 'ILLEGAL_INTERCEPTOR_BEHAVIOR', 
                 readonly [key:string]: any
             } | {
                 family: 'SAVE_COMMAND', 
-                code: 'NO_KEY_PROPS', 
-                readonly [key:string]: any
-            } | {
-                family: 'SAVE_COMMAND', 
-                code: 'NO_NON_ID_PROPS', 
+                code: 'NO_KEY_PROP', 
                 readonly [key:string]: any
             } | {
                 family: 'SAVE_COMMAND', 
@@ -270,10 +278,6 @@ export type ApiErrors = {
             } | {
                 family: 'SAVE_COMMAND', 
                 code: 'OPTIMISTIC_LOCK_ERROR', 
-                readonly [key:string]: any
-            } | {
-                family: 'SAVE_COMMAND', 
-                code: 'KEY_NOT_UNIQUE', 
                 readonly [key:string]: any
             } | {
                 family: 'SAVE_COMMAND', 
@@ -294,6 +298,22 @@ export type ApiErrors = {
             } | {
                 family: 'SAVE_COMMAND', 
                 code: 'UNSTRUCTURED_ASSOCIATION', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'TARGET_IS_NOT_TRANSFERABLE', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'INCOMPLETE_PROPERTY', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'NOT_UNIQUE', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'ILLEGAL_TARGET_ID', 
                 readonly [key:string]: any
             })
     }, 
@@ -310,10 +330,6 @@ export type ApiErrors = {
                 readonly [key:string]: any
             } | {
                 family: 'SAVE_COMMAND', 
-                code: 'ILLEGAL_TARGET_ID', 
-                readonly [key:string]: any
-            } | {
-                family: 'SAVE_COMMAND', 
                 code: 'CANNOT_DISSOCIATE_TARGETS', 
                 readonly [key:string]: any
             } | {
@@ -330,15 +346,11 @@ export type ApiErrors = {
                 readonly [key:string]: any
             } | {
                 family: 'SAVE_COMMAND', 
-                code: 'EMPTY_OBJECT', 
+                code: 'ILLEGAL_INTERCEPTOR_BEHAVIOR', 
                 readonly [key:string]: any
             } | {
                 family: 'SAVE_COMMAND', 
-                code: 'NO_KEY_PROPS', 
-                readonly [key:string]: any
-            } | {
-                family: 'SAVE_COMMAND', 
-                code: 'NO_NON_ID_PROPS', 
+                code: 'NO_KEY_PROP', 
                 readonly [key:string]: any
             } | {
                 family: 'SAVE_COMMAND', 
@@ -347,10 +359,6 @@ export type ApiErrors = {
             } | {
                 family: 'SAVE_COMMAND', 
                 code: 'OPTIMISTIC_LOCK_ERROR', 
-                readonly [key:string]: any
-            } | {
-                family: 'SAVE_COMMAND', 
-                code: 'KEY_NOT_UNIQUE', 
                 readonly [key:string]: any
             } | {
                 family: 'SAVE_COMMAND', 
@@ -371,6 +379,22 @@ export type ApiErrors = {
             } | {
                 family: 'SAVE_COMMAND', 
                 code: 'UNSTRUCTURED_ASSOCIATION', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'TARGET_IS_NOT_TRANSFERABLE', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'INCOMPLETE_PROPERTY', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'NOT_UNIQUE', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'ILLEGAL_TARGET_ID', 
                 readonly [key:string]: any
             })
     }

@@ -176,7 +176,7 @@ export class BookService {
     readonly saveBook: (options: BookServiceOptions['saveBook']) => Promise<
         Dynamic_Book
     > = async(options) => {
-        let _uri = '/book/';
+        let _uri = '/book';
         return (await this.executor({uri: _uri, method: 'PUT', body: options.body})) as Promise<Dynamic_Book>;
     }
     

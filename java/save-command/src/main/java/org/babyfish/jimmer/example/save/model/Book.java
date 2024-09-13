@@ -7,10 +7,10 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
+@KeyUniqueConstraint
 public interface Book {
 
     @Id
-    //`identity(10, 10)` in database, so it is 10, 20, 30 ...
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id();
 
@@ -24,6 +24,7 @@ public interface Book {
 
     @Nullable // Null property, Java API requires this annotation, but kotlin API does not
     @ManyToOne
+    @OnDissociate(DissociateAction.DELETE)
     BookStore store();
 
     @ManyToMany(orderedProps = {

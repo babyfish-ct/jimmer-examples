@@ -52,7 +52,7 @@ abstract class AbstractMutationWithTriggerTest : AbstractMutationTest() {
             Assertions.assertEquals(
                 events[i],
                 this.events[i],
-                "events[i]: expected \"" +
+                "events[$i]: expected \"" +
                     events[i] +
                     "\", actual \"" +
                     this.events[i] +

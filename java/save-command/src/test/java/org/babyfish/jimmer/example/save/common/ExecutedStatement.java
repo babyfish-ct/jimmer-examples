@@ -11,28 +11,56 @@ public final class ExecutedStatement {
 
     private final String sql;
 
-    private final List<?> variables;
+    private final List<List<Object>> variableLists;
 
-    public ExecutedStatement(String sql, Object ... variables) {
+    private ExecutedStatement(String sql, List<List<Object>> variableLists) {
         this.sql = sql;
-        List<Object> variableList = new ArrayList<>(variables.length);
+        this.variableLists = variableLists;
+    }
+
+    public static ExecutedStatement of(String sql, Object ... variables) {
+        List<Object> list = new ArrayList<>(variables.length);
         for (Object variable : variables) {
-            variableList.add(variable instanceof DbLiteral.DbNull ? null : variable);
+            list.add(variable instanceof DbLiteral.DbNull ? null : variable);
         }
-        this.variables = Collections.unmodifiableList(variableList);
+        return new ExecutedStatement(
+                simpleSql(sql),
+                Collections.singletonList(
+                        Collections.unmodifiableList(list)
+                )
+        );
+    }
+
+    @SafeVarargs
+    public static ExecutedStatement batchOf(
+            String sql,
+            List<Object> ...variableMatrix
+    ) {
+        List<List<Object>> lists = new ArrayList<>(variableMatrix.length);
+        for (List<Object> variables : variableMatrix) {
+            List<Object> list = new ArrayList<>(variables.size());
+            for (Object variable : variables) {
+                list.add(variable instanceof DbLiteral.DbNull ? null : variable);
+            }
+            lists.add(Collections.unmodifiableList(list));
+        }
+        return new ExecutedStatement(
+                simpleSql(sql),
+                Collections.unmodifiableList(lists)
+        );
     }
 
     public String getSql() {
         return sql;
     }
 
-    public List<?> getVariables() {
-        return variables;
+    public List<List<Object>> getVariableLists() {
+        return variableLists;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(sql, variables);
+        return Objects.hash(sql, variableLists);
     }
 
     @Override
@@ -40,14 +68,22 @@ public final class ExecutedStatement {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ExecutedStatement that = (ExecutedStatement) o;
-        return sql.equals(that.sql) && variables.equals(that.variables);
+        return sql.equals(that.sql) && variableLists.equals(that.variableLists);
     }
 
     @Override
     public String toString() {
         return "ExecutedStatement{" +
                 "sql='" + sql + '\'' +
-                ", variables=" + variables +
+                ", variableLists=" + variableLists +
                 '}';
+    }
+
+    private static String simpleSql(String sql) {
+        return sql
+                .replace("--->", "")
+                .replace("\n", "")
+                .replace("\r", "");
+
     }
 }

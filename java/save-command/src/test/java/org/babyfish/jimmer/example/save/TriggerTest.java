@@ -9,44 +9,39 @@ import java.math.BigDecimal;
 /**
  * Recommended learning sequence: 7
  *
- * <p>SaveModeTest -> IncompleteObjectTest -> ManyToOneTest ->
- * OneToManyTest -> ManyToManyTest -> RecursiveTest -> [Current: TriggerTest]</p>
+ *
+ * SaveModeTest -> IncompleteObjectTest -> ManyToOneTest ->
+ * OneToManyTest -> ManyToManyTest -> RecursiveTest -> [Current: TriggerTest]
  */
 public class TriggerTest extends AbstractMutationWithTriggerTest {
 
     @Test
     public void test() {
 
-        jdbc("insert into book_store(name) values(?)", "MANNING");
-
+        jdbc("insert into book_store(id, name) values(?, ?)", 1L, "MANNING");
         jdbc(
-                "insert into book(name, edition, price, store_id) values" +
-                        "(?, ?, ?, ?)," +
-                        "(?, ?, ?, ?)",
-                "Microservices Security in Action", 1, new BigDecimal("33.59"), 1L,
-                "LINQ in Action", 1, new BigDecimal("21.59"), 1L
+                "insert into book(id, name, edition, price, store_id) values" +
+                        "(?, ?, ?, ?, ?)," +
+                        "(?, ?, ?, ?, ?)",
+                1L, "Microservices Security in Action", 1, new BigDecimal("33.59"), 1L,
+                2L, "LINQ in Action", 1, new BigDecimal("21.59"), 1L
         );
-
         jdbc(
-                "insert into author(first_name, last_name, gender) values" +
-                        "(?, ?, ?), (?, ?, ?)," +
-                        "(?, ?, ?), (?, ?, ?), (?, ?, ?)",
-
-                "Prabath", "Siriwardena", "M",
-                "Nuwan", "Dias", "M",
-
-                "Fabrice", "Marguerie", "M",
-                "Steve", "Eichert", "M",
-                "Jim", "Wooley", "M"
+                ("insert into author(id, first_name, last_name, gender) values" +
+                        "(?, ?, ?, ?), (?, ?, ?, ?)," +
+                        "(?, ?, ?, ?), (?, ?, ?, ?), (?, ?, ?, ?)"),
+                1L, "Prabath", "Siriwardena", "M",
+                2L, "Nuwan", "Dias", "M",
+                3L, "Fabrice", "Marguerie", "M",
+                4L, "Steve", "Eichert", "M",
+                5L, "Jim", "Wooley", "M"
         );
-
         jdbc(
-                "insert into book_author_mapping(book_id, author_id) values" +
+                ("insert into book_author_mapping(book_id, author_id) values" +
                         "(?, ?), (?, ?), " +
-                        "(?, ?), (?, ?), (?, ?)",
-
-                10L, 100L, 10L, 200L,
-                20L, 300L, 20L, 400L, 20L, 500L
+                        "(?, ?), (?, ?), (?, ?)"),
+                1L, 1L, 1L, 2L,
+                2L, 3L, 2L, 4L, 2L, 5L
         );
 
         sql().save(
@@ -56,86 +51,87 @@ public class TriggerTest extends AbstractMutationWithTriggerTest {
                         security.setName("Microservices Security in Action");
                         security.setEdition(1);
                         security.setPrice(new BigDecimal("43.59"));
-                        security.addIntoAuthors(author -> author.setId(100L));
-                        security.addIntoAuthors(author -> author.setId(200L));
-                        security.addIntoAuthors(author -> author.setId(300L));
+                        security.addIntoAuthors(author -> author.setId(1L));
+                        security.addIntoAuthors(author -> author.setId(2L));
+                        security.addIntoAuthors(author -> author.setId(3L));
                     });
                     turing.addIntoBooks(linq -> {
                         linq.setName("LINQ in Action");
                         linq.setEdition(1);
                         linq.setPrice(new BigDecimal("31.59"));
-                        linq.addIntoAuthors(author -> author.setId(400L));
-                        linq.addIntoAuthors(author -> author.setId(500L));
+                        linq.addIntoAuthors(author -> author.setId(4L));
+                        linq.addIntoAuthors(author -> author.setId(5L));
                     });
                 })
         );
-        
+
         /*
          * This example focuses on triggers, so we don't assert SQL statements,
          * but directly assert events
          */
+
         assertEvents(
 
                 "The entity \"org.babyfish.jimmer.example.save.model.BookStore\" is changed, " +
                         "old: null, " +
-                        "new: {\"id\":2,\"name\":\"TURING\"}",
+                        "new: {\"id\":100,\"name\":\"TURING\"}",
 
                 "The entity \"org.babyfish.jimmer.example.save.model.Book\" is changed, " +
-                        "old: {\"id\":10,\"name\":\"Microservices Security in Action\",\"edition\":1,\"price\":33.59,\"store\":{\"id\":1}}, " +
-                        "new: {\"id\":10,\"name\":\"Microservices Security in Action\",\"edition\":1,\"price\":43.59,\"store\":{\"id\":2}}",
+                        "old: {\"id\":1,\"name\":\"Microservices Security in Action\",\"edition\":1,\"price\":33.59,\"store\":{\"id\":1}}, " +
+                        "new: {\"id\":1,\"name\":\"Microservices Security in Action\",\"edition\":1,\"price\":43.59,\"store\":{\"id\":100}}",
 
                 "The association \"org.babyfish.jimmer.example.save.model.Book.store\" is changed, " +
-                        "source id: 10, " +
+                        "source id: 1, " +
                         "detached target id: 1, " +
-                        "attached target id: 2",
+                        "attached target id: 100",
 
                 "The association \"org.babyfish.jimmer.example.save.model.BookStore.books\" is changed, " +
                         "source id: 1, " +
-                        "detached target id: 10, " +
+                        "detached target id: 1, " +
                         "attached target id: null",
 
                 "The association \"org.babyfish.jimmer.example.save.model.BookStore.books\" is changed, " +
-                        "source id: 2, " +
+                        "source id: 100, " +
                         "detached target id: null, " +
-                        "attached target id: 10",
-
-                "The association \"org.babyfish.jimmer.example.save.model.Book.authors\" is changed, " +
-                        "source id: 10, " +
-                        "detached target id: null, " +
-                        "attached target id: 300",
-
-                "The association \"org.babyfish.jimmer.example.save.model.Author.books\" is changed, " +
-                        "source id: 300, " +
-                        "detached target id: null, " +
-                        "attached target id: 10",
+                        "attached target id: 1",
 
                 "The entity \"org.babyfish.jimmer.example.save.model.Book\" is changed, " +
-                        "old: {\"id\":20,\"name\":\"LINQ in Action\",\"edition\":1,\"price\":21.59,\"store\":{\"id\":1}}, " +
-                        "new: {\"id\":20,\"name\":\"LINQ in Action\",\"edition\":1,\"price\":31.59,\"store\":{\"id\":2}}",
+                        "old: {\"id\":2,\"name\":\"LINQ in Action\",\"edition\":1,\"price\":21.59,\"store\":{\"id\":1}}, " +
+                        "new: {\"id\":2,\"name\":\"LINQ in Action\",\"edition\":1,\"price\":31.59,\"store\":{\"id\":100}}",
 
                 "The association \"org.babyfish.jimmer.example.save.model.Book.store\" is changed, " +
-                        "source id: 20, " +
+                        "source id: 2, " +
                         "detached target id: 1, " +
-                        "attached target id: 2",
+                        "attached target id: 100",
 
                 "The association \"org.babyfish.jimmer.example.save.model.BookStore.books\" is changed, " +
                         "source id: 1, " +
-                        "detached target id: 20, " +
+                        "detached target id: 2, " +
                         "attached target id: null",
 
                 "The association \"org.babyfish.jimmer.example.save.model.BookStore.books\" is changed, " +
-                        "source id: 2, " +
+                        "source id: 100, " +
                         "detached target id: null, " +
-                        "attached target id: 20",
+                        "attached target id: 2",
 
                 "The association \"org.babyfish.jimmer.example.save.model.Book.authors\" is changed, " +
-                        "source id: 20, " +
-                        "detached target id: 300, " +
+                        "source id: 1, " +
+                        "detached target id: null, " +
+                        "attached target id: 3",
+
+                "The association \"org.babyfish.jimmer.example.save.model.Author.books\" is changed, " +
+                        "source id: 3, " +
+                        "detached target id: null, " +
+                        "attached target id: 1",
+
+                "The association \"org.babyfish.jimmer.example.save.model.Book.authors\" is changed, " +
+                        "source id: 2, " +
+                        "detached target id: 3, " +
                         "attached target id: null",
 
                 "The association \"org.babyfish.jimmer.example.save.model.Author.books\" is changed, " +
-                        "source id: 300, " +
-                        "detached target id: 20, " +
+                        "source id: 3, " +
+                        "detached target id: 2, " +
                         "attached target id: null"
         );
     }

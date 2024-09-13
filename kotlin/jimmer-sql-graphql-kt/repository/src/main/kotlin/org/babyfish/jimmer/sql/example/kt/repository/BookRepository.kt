@@ -72,11 +72,12 @@ interface BookRepository : KRepository<Book, Long> {
         sql
             .createQuery(Book::class) {
                 where(
-                    tuple(table.name, table.edition) valueIn subQuery(Book::class) {
+                    tuple(table.storeId, table.name, table.edition) valueIn subQuery(Book::class) {
                         // Apply `filter` for sub query is better.
                         where(table.storeId valueIn storeIds)
-                        groupBy(table.name)
+                        groupBy(table.storeId, table.name)
                         select(
+                            table.storeId,
                             table.name,
                             max(table.edition).asNonNull()
                         )

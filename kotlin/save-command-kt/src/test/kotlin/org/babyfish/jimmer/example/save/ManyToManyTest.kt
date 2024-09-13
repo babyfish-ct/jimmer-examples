@@ -4,7 +4,6 @@ import org.babyfish.jimmer.example.save.common.AbstractMutationTest
 import org.babyfish.jimmer.example.save.common.ExecutedStatement
 import org.babyfish.jimmer.example.save.model.*
 import org.babyfish.jimmer.kt.new
-import org.babyfish.jimmer.sql.runtime.ExecutionException
 import org.babyfish.jimmer.sql.runtime.SaveException
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
@@ -32,55 +31,136 @@ class ManyToManyTest : AbstractMutationTest() {
         
         jdbc(
             "insert into book(id, name, edition, price) values(?, ?, ?, ?)",
-            10L, "SQL in Action", 1, BigDecimal(45)
+            1L, "SQL in Action", 1, BigDecimal(45)
         )
         jdbc(
             "insert into author(id, first_name, last_name, gender) values(?, ?, ?, ?)",
-            100L, "Ben", "Brumm", "M"
+            1L, "Fabrice", "Marguerie", "M"
+        )
+        jdbc(
+            "insert into author(id, first_name, last_name, gender) values(?, ?, ?, ?)",
+            2L, "Steve", "Eichert", "M"
+        )
+        jdbc(
+            "insert into author(id, first_name, last_name, gender) values(?, ?, ?, ?)",
+            3L, "Jim", "Wooley", "M"
         )
         
-        val result = sql.entities.save(
+        val result = sql.save(
             new(Book::class).by {
                 name = "SQL in Action"
                 edition = 1
                 price = BigDecimal(49)
                 authors().addBy { 
-                    id = 100L
+                    id = 1L
+                }
+                authors().addBy {
+                    id = 2L
+                }
+                authors().addBy {
+                    id = 3L
                 }
             }
         )
         
         assertExecutedStatements( 
             
-            // Select aggregate-root by key
-            ExecutedStatement(
-                "select tb_1_.ID, tb_1_.NAME, tb_1_.EDITION " +
-                    "from BOOK tb_1_ " +
-                    "where tb_1_.NAME = ? and tb_1_.EDITION = ?",
-                "SQL in Action", 1
+            // Merge aggregate-root
+            ExecutedStatement.of(
+                "merge into BOOK(NAME, EDITION, PRICE) " +
+                    "key(NAME, EDITION) values(?, ?, ?)",
+                "SQL in Action", 1, BigDecimal(49)
+            ),
+
+            // Detach unnecessary associations based on `Book.authors`
+            ExecutedStatement.of(
+                "delete from BOOK_AUTHOR_MAPPING " +
+                    "where BOOK_ID = ? and not (AUTHOR_ID = any(?))",
+                1L, listOf(1L, 2L, 3L)
             ),  
             
-            // Aggregate exists, update it
-            ExecutedStatement(
-                "update BOOK set PRICE = ? where ID = ?",
-                BigDecimal(49), 10L
-            ),  
-            
-            // Query mapping from middle table
-            ExecutedStatement(
-                "select AUTHOR_ID from BOOK_AUTHOR_MAPPING where BOOK_ID = ?",
-                10L
-            ),  
-            
-            // Mapping does not exist, insert it
-            ExecutedStatement(
-                "insert into BOOK_AUTHOR_MAPPING(BOOK_ID, AUTHOR_ID) values(?, ?)",
-                10L, 100L
+            // Attach new associations based on `Book.authors`
+            ExecutedStatement.batchOf(
+                "merge into BOOK_AUTHOR_MAPPING(BOOK_ID, AUTHOR_ID) " +
+                    "key(BOOK_ID, AUTHOR_ID) " +
+                    "values(?, ?)",
+                listOf(1L, 1L),
+                listOf(1L, 2L),
+                listOf(1L, 3L)
             )
         )
-        Assertions.assertEquals(2, result.totalAffectedRowCount)
+        Assertions.assertEquals(4, result.totalAffectedRowCount)
         Assertions.assertEquals(1, result.affectedRowCount(Book::class))
-        Assertions.assertEquals(1, result.affectedRowCount(Book::authors))
+        Assertions.assertEquals(3, result.affectedRowCount(Book::authors))
+    }
+
+    @Test
+    fun testDeleteMiddleTableByShortAssociation() {
+
+        jdbc(
+            "insert into book(id, name, edition, price) values(?, ?, ?, ?)",
+            1L, "LINQ in Action", 1, BigDecimal(45)
+        )
+        jdbc(
+            "insert into author(id, first_name, last_name, gender) values(?, ?, ?, ?)",
+            1L, "Fabrice", "Brumm", "M"
+        )
+        jdbc(
+            "insert into author(id, first_name, last_name, gender) values(?, ?, ?, ?)",
+            2L, "Steve", "Eichert", "M"
+        )
+        jdbc(
+            "insert into author(id, first_name, last_name, gender) values(?, ?, ?, ?)",
+            3L, "Jim", "Wooley", "M"
+        )
+        jdbc("insert into book_author_mapping(book_id, author_id) values(?, ?)", 1L, 1L)
+        jdbc("insert into book_author_mapping(book_id, author_id) values(?, ?)", 1L, 2L)
+        jdbc("insert into book_author_mapping(book_id, author_id) values(?, ?)", 1L, 3L)
+
+        val result = sql.save(
+            new(Book::class).by {
+                name = "LINQ in Action"
+                edition = 1
+                price = BigDecimal(49)
+                authors().addBy {
+                    id = 1L
+                }
+                // Only `Author-1` is specified here,
+                // so old associations to `Author-2`
+                // and `Author-3` will be detached
+            }
+        )
+
+        assertExecutedStatements(
+
+            // Merge aggregate-root
+            ExecutedStatement.of(
+                "merge into BOOK(NAME, EDITION, PRICE) key(NAME, EDITION) values(?, ?, ?)",
+                "LINQ in Action", 1, BigDecimal(49)
+            ),
+
+            // Detach unnecessary associations base on `Book.authors`
+            ExecutedStatement.of(
+                "delete from BOOK_AUTHOR_MAPPING " +
+                    "where BOOK_ID = ? and AUTHOR_ID <> ?",
+                1L, 1L
+            ),
+
+            // Attach new associations base on `Book.authors`
+            // Even if no data is actually modified, performing an upsert on the
+            // underlying database(i.e: `merge` of `H2`) will still cause the
+            // affected row count of the table to increase.
+            ExecutedStatement.of(
+                "merge into BOOK_AUTHOR_MAPPING(BOOK_ID, AUTHOR_ID) " +
+                    "key(BOOK_ID, AUTHOR_ID) " +
+                    "values(?, ?)",
+                1L, 1L
+            )
+        )
+
+        Assertions.assertEquals(4, result.totalAffectedRowCount)
+        Assertions.assertEquals(1, result.affectedRowCount(Book::class))
+        Assertions.assertEquals(3, result.affectedRowCount(Book::authors))
     }
 
     @Test
@@ -88,21 +168,21 @@ class ManyToManyTest : AbstractMutationTest() {
 
         jdbc(
             "insert into book(id, name, edition, price) values(?, ?, ?, ?)",
-            10L, "SQL in Action", 1, BigDecimal(45)
+            1L, "LINQ in Action", 1, BigDecimal(45)
         )
         jdbc(
             "insert into author(id, first_name, last_name, gender) values(?, ?, ?, ?)",
-            100L, "Ben", "Brumm", "M"
+            1L, "Fabrice", "Marguerie", "M"
         )
 
         val ex = Assertions.assertThrows(SaveException::class.java) {
-            sql.entities.save(
+            sql.save(
                 new(Book::class).by {
-                    name = "SQL in Action"
+                    name = "LINQ in Action"
                     edition = 1
                     price = BigDecimal(49)
                     authors().addBy {
-                        id = 100L
+                        id = 1L
                     }
                     authors().addBy {
                         id = 88888L
@@ -111,191 +191,122 @@ class ManyToManyTest : AbstractMutationTest() {
                         id = 99999L
                     }
                 }
-            ) {
-                /*
-                 * You can also use `setAutoIdOnlyTargetCheckingAll()`.
-                 *
-                 * If you use jimmer-spring-starter, it is unnecessary to
-                 * do it because this switch is turned on.
-                 *
-                 * If the underlying `BOOK_AUTHOR_MAPPING.AUTHOR_ID`
-                 * has foreign key constraints,
-                 * even if this configuration is not used, error still will be
-                 * raised by database so that you can choose not to use this
-                 * configuration when you have strict performance requirements.
-                 * However, this configuration can bring better error message.
-                 *
-                 * Sometimes it is not possible to add foreign key constraints,
-                 * such table sharding. At this time, this configuration is
-                 * very important.
-                 */
-                setAutoIdOnlyTargetChecking(Book::authors)
-            }
+            )
         }
 
         Assertions.assertEquals(
             "Save error caused by the path: \"<root>.authors\": " +
-                "Illegal ids: [88888, 99999]",
+                "Cannot save the entity, the associated id of the reference property " +
+                "\"org.babyfish.jimmer.example.save.model.Book.authors\" is \"88888\" " +
+                "but there is no corresponding associated object in the database",
             ex.message
         )
 
         assertExecutedStatements(
 
-            // Query aggregate-root by key
-            ExecutedStatement(
-                "select tb_1_.ID, tb_1_.NAME, tb_1_.EDITION " +
-                    "from BOOK tb_1_ " +
-                    "where tb_1_.NAME = ? and tb_1_.EDITION = ?",
-                "SQL in Action", 1
+            // Merge aggregate-root
+            ExecutedStatement.of(
+                "merge into BOOK(NAME, EDITION, PRICE) key(NAME, EDITION) values(?, ?, ?)",
+                "LINQ in Action", 1, BigDecimal(49)
             ),
 
-            // Aggregate exists, update it
-            ExecutedStatement(
-                "update BOOK set PRICE = ? where ID = ?",
-                BigDecimal(49), 10L
+            // Detach unnecessary associations based on `Book.authors`
+            ExecutedStatement.of(
+                "delete from BOOK_AUTHOR_MAPPING " +
+                    "where BOOK_ID = ? and not (AUTHOR_ID = any(?))",
+                1L, listOf(1L, 88888L, 99999L)
             ),
 
-            // Are target ids valid
-            ExecutedStatement(
-                "select tb_1_.ID from AUTHOR tb_1_ where tb_1_.ID = any(?)",
-                listOf(100L, 88888L, 99999L)
+            // Attach new associations based on `Book.authors`
+            ExecutedStatement.batchOf(
+                "merge into BOOK_AUTHOR_MAPPING(BOOK_ID, AUTHOR_ID) " +
+                    "key(BOOK_ID, AUTHOR_ID) " +
+                    "values(?, ?)",
+                listOf(1L, 1L),
+                listOf(1L, 88888L),
+                listOf(1L, 99999L)
+            ),
+
+            // Investigate why the database throws
+            // error about constraint violation
+            ExecutedStatement.of(
+                "select tb_1_.ID from AUTHOR tb_1_ " +
+                    "where tb_1_.ID = ?",
+                88888L
             )
         )
     }
 
     @Test
-    fun deleteMiddleTable() {
+    fun testInsertMiddleTableByLongAssociation() {
 
         jdbc(
             "insert into book(id, name, edition, price) values(?, ?, ?, ?)",
-            10L, "SQL in Action", 1, BigDecimal(45)
+            1L, "LINQ in Action", 1, BigDecimal(45)
         )
-        jdbc(
-            "insert into author(id, first_name, last_name, gender) values(?, ?, ?, ?)",
-            100L, "Ben", "Brumm", "M"
-        )
-        jdbc(
-            "insert into author(id, first_name, last_name, gender) values(?, ?, ?, ?)",
-            200L, "Prabath", "Siriwardena", "M"
-        )
-        jdbc("insert into book_author_mapping(book_id, author_id) values(?, ?)", 10L, 100L)
-        jdbc("insert into book_author_mapping(book_id, author_id) values(?, ?)", 10L, 200L)
 
-        val result = sql.entities.save(
+        val result = sql.save(
             new(Book::class).by {
-                name = "SQL in Action"
+                name = "LINQ in Action"
                 edition = 1
                 price = BigDecimal(49)
                 authors().addBy {
-                    id = 100L
+                    firstName = "Fabrice"
+                    lastName = "Marguerie"
+                    gender = Gender.MALE
+                }
+                authors().addBy {
+                    firstName = "Steve"
+                    lastName = "Eichert"
+                    gender = Gender.MALE
+                }
+                authors().addBy {
+                    firstName = "Jim"
+                    lastName = "Wooley"
+                    gender = Gender.MALE
                 }
             }
         )
 
         assertExecutedStatements(
 
-            // Query aggregate-root by key
-            ExecutedStatement(
-                "select tb_1_.ID, tb_1_.NAME, tb_1_.EDITION " +
-                    "from BOOK tb_1_ " +
-                    "where tb_1_.NAME = ? and tb_1_.EDITION = ?",
-                "SQL in Action", 1
+            // Merge aggregate-root
+            ExecutedStatement.of(
+                "merge into BOOK(NAME, EDITION, PRICE) " +
+                    "key(NAME, EDITION) " +
+                    "values(?, ?, ?)",
+                "LINQ in Action", 1, BigDecimal(49)
             ),
 
-            // Aggregate-root exists, update it
-            ExecutedStatement(
-                "update BOOK set PRICE = ? where ID = ?",
-                BigDecimal(49), 10L
+            // Merge associated objects
+            ExecutedStatement.batchOf(
+                "merge into AUTHOR(FIRST_NAME, LAST_NAME, GENDER) " +
+                    "key(FIRST_NAME, LAST_NAME) " +
+                    "values(?, ?, ?)",
+                listOf("Fabrice", "Marguerie", "M"),
+                listOf("Steve", "Eichert", "M"),
+                listOf("Jim", "Wooley", "M")
             ),
 
-            // Query mapping from middle table
-            ExecutedStatement(
-                "select AUTHOR_ID from BOOK_AUTHOR_MAPPING where BOOK_ID = ?",
-                10L
-            ),
-
-            // The mapping references to `Author-200` must be deleted
-            ExecutedStatement(
+            // Detach unnecessary associations based on `Book.authors`
+            ExecutedStatement.of(
                 "delete from BOOK_AUTHOR_MAPPING " +
-                    "where (BOOK_ID, AUTHOR_ID) = (?, ?)",
-                10L, 200L
+                    "where BOOK_ID = ? and not (AUTHOR_ID = any(?))",
+                1L, listOf(100L, 101L, 102L)
+            ),
+
+            // Attach new associations based on `Book.authors`
+            ExecutedStatement.batchOf(
+                "merge into BOOK_AUTHOR_MAPPING(BOOK_ID, AUTHOR_ID) key(BOOK_ID, AUTHOR_ID) values(?, ?)",
+                listOf(1L, 100L),
+                listOf(1L, 101L),
+                listOf(1L, 102L)
             )
         )
 
-        Assertions.assertEquals(2, result.totalAffectedRowCount)
+        Assertions.assertEquals(7, result.totalAffectedRowCount)
         Assertions.assertEquals(1, result.affectedRowCount(Book::class))
-        Assertions.assertEquals(1, result.affectedRowCount(Book::authors))
-    }
-
-    @Test
-    fun testAttachAuthor() {
-
-        jdbc(
-            "insert into book(id, name, edition, price) values(?, ?, ?, ?)",
-            10L, "SQL in Action", 1, BigDecimal(45)
-        )
-
-        val result = sql
-            .entities
-            .save(
-                new(Book::class).by {
-                    name = "SQL in Action"
-                    edition = 1
-                    price = BigDecimal(49)
-                    authors().addBy {
-                        firstName = "Ben"
-                        lastName = "Brumm"
-                        gender = Gender.MALE
-                    }
-                }
-            )
-
-        assertExecutedStatements(
-
-            // Query aggregate-root by key
-            ExecutedStatement(
-                "select tb_1_.ID, tb_1_.NAME, tb_1_.EDITION " +
-                    "from BOOK tb_1_ " +
-                    "where tb_1_.NAME = ? and tb_1_.EDITION = ?",
-                "SQL in Action", 1
-            ),
-
-            // Aggregate exists, update it
-            ExecutedStatement(
-                "update BOOK set PRICE = ? where ID = ?",
-                BigDecimal(49), 10L
-            ),
-
-            // Select associated object by key
-            ExecutedStatement(
-                "select tb_1_.ID, tb_1_.FIRST_NAME, tb_1_.LAST_NAME " +
-                    "from AUTHOR tb_1_ " +
-                    "where tb_1_.FIRST_NAME = ? and tb_1_.LAST_NAME = ?",
-                "Ben", "Brumm"
-            ),
-
-            // Associated object does not exists, insert it
-            ExecutedStatement(
-                "insert into AUTHOR(FIRST_NAME, LAST_NAME, GENDER) values(?, ?, ?)",
-                "Ben", "Brumm", "M"
-            ),
-
-            // Query mapping from middle table
-            ExecutedStatement(
-                "select AUTHOR_ID from BOOK_AUTHOR_MAPPING where BOOK_ID = ?",
-                10L
-            ),
-
-            // Mapping does not exist, insert it
-            ExecutedStatement(
-                "insert into BOOK_AUTHOR_MAPPING(BOOK_ID, AUTHOR_ID) values(?, ?)",
-                10L, 100L
-            )
-        )
-
-        Assertions.assertEquals(3, result.totalAffectedRowCount)
-        Assertions.assertEquals(1, result.affectedRowCount(Book::class))
-        Assertions.assertEquals(1, result.affectedRowCount(Author::class))
-        Assertions.assertEquals(1, result.affectedRowCount(Book::authors))
+        Assertions.assertEquals(3, result.affectedRowCount(Author::class))
+        Assertions.assertEquals(3, result.affectedRowCount(Book::authors))
     }
 }

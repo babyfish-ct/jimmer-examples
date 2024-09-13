@@ -3,9 +3,10 @@ package org.babyfish.jimmer.example.save.model
 import org.babyfish.jimmer.sql.*
 
 @Entity
+@KeyUniqueConstraint
 interface BookStore {
 
-    @Id // `identity(1, 1)` in database, so it is 1, 2, 3 ...
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long
 

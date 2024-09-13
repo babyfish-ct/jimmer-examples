@@ -26,22 +26,35 @@ class IncompleteObjectTest : AbstractMutationTest() {
             1, "O'REILLY", "http://www.oreilly.com"
         )
 
-        val result = sql
-            .entities
-            .save(
-                new(BookStore::class).by {
-                    id = 1L
-                    name = "O'REILLY+"
-                    website = null // `website` is specified
-                }
-            ) {
-                setMode(SaveMode.UPDATE_ONLY) 
+        val result = sql.save(
+            new(BookStore::class).by {
+                id = 1L
+                name = "O'REILLY+"
+
+                /*
+                 * Jimmer determines how to save data based
+                 * on the shape of the object, rather than
+                 * simply using "update not null".
+                 *
+                 * Instead, it leverages the dynamic ability
+                 * of Jimmer entities. It focuses on whether
+                 * a property of an object has been specified,
+                 * rather than whether the value of the property
+                 * is null.
+                 *
+                 * In this example, `Book.store` being specified
+                 * as null indicates that this foreign key will
+                 * be updated to null.
+                 */
+                website = null
             }
+        ) {
+            setMode(SaveMode.UPDATE_ONLY)
+        }
             
         assertExecutedStatements(
 
-            // `WEBSITE` is updated to be null
-            ExecutedStatement(
+            ExecutedStatement.of(
                 "update BOOK_STORE " +
                     "set NAME = ?, WEBSITE = ? " +
                     "where ID = ?",
@@ -59,41 +72,42 @@ class IncompleteObjectTest : AbstractMutationTest() {
             1, "O'REILLY", "http://www.oreilly.com"
         )
 
-        val result = sql
-            .entities
-            .save(
-                new(BookStore::class).by {
-                    id = 1L
-                    name = "O'REILLY+"
-                    // `website` is not specified
-                }
-            ) {
-                setMode(SaveMode.UPDATE_ONLY)
+        val result = sql.save(
+            new(BookStore::class).by {
+                id = 1L
+                name = "O'REILLY+"
+
+                // `website` is not specified
+                /*
+                 * Jimmer determines how to save data based
+                 * on the shape of the object, rather than
+                 * simply using "update not null".
+                 *
+                 * Instead, it leverages the dynamic ability
+                 * of Jimmer entities. It focuses on whether
+                 * a property of an object has been specified,
+                 * rather than whether the value of the property
+                 * is null.
+                 *
+                 * In this example, `Book.store` being not
+                 * specifie indicates that this foreign key
+                 * will not be updated.
+                 */
             }
+        ) {
+            setMode(SaveMode.UPDATE_ONLY)
+        }
 
         assertExecutedStatements(
 
             // Unspecified property `website` will not be updated
-            ExecutedStatement(
+            ExecutedStatement.of(
                 "update BOOK_STORE " +
                     "set NAME = ? " +
                     "where ID = ?",
                 "O'REILLY+", 1L
             )
         )
-
-        /*
-         * Objects can be incomplete, and unspecified properties will not be updated.
-         *
-         * This is a very important feature.
-         *
-         * - In traditional ORM, if you want to modify some properties of an object,
-         *   you need to query the old object, modify the properties you want to modify,
-         *   and finally save it.
-         *
-         * - In Jimmer, create an object and specify the properties you want to modify,
-         * save it.
-         */
 
         Assertions.assertEquals(1, result.totalAffectedRowCount)
     }

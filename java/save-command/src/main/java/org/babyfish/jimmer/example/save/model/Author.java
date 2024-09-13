@@ -5,10 +5,10 @@ import org.babyfish.jimmer.sql.*;
 import java.util.List;
 
 @Entity
+@KeyUniqueConstraint
 public interface Author {
 
     @Id
-    // `identity(100, 100)` in database, so it is 100, 200, 300 ...
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id();
 

@@ -7,13 +7,16 @@ import org.babyfish.jimmer.example.save.model.TreeNodeProps;
 import org.babyfish.jimmer.sql.DissociateAction;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.Collections;
+
 
 /**
  * Recommended learning sequence: 6
  *
- * <p>SaveModeTest -> IncompleteObjectTest -> ManyToOneTest ->
- * OneToManyTest -> ManyToManyTest -> [current: RecursiveTest] -> TriggerTest</p>
+ *
+ * SaveModeTest -> IncompleteObjectTest -> ManyToOneTest ->
+ * OneToManyTest -> ManyToManyTest -> [current: RecursiveTest] -> TriggerTest
  */
 public class RecursiveTest extends AbstractMutationTest {
 
@@ -26,149 +29,174 @@ public class RecursiveTest extends AbstractMutationTest {
 
     @Test
     public void testCreateTree() {
-
-        sql()
-                .getEntities()
-                .saveCommand(
-                        /*
-                         * `TreeNode` has two key properties: `name` and `parentNode`,
-                         * this means `name` and `parentNode` must be specified when `id` is missing.
-                         *
-                         * One-to-many association is special, parent object can specify the
-                         * many-to-one association of its child objects implicitly.
-                         * In this demo, Associations named `childNodes` specify `parentNode`
-                         * for child objects implicitly so that all child objects do not require
-                         * the `parentNode`.
-                         *
-                         * However, the `parentNode` of ROOT cannot be specified implicitly,
-                         * so that it must be specified manually
-                         */
-                        TreeNodeDraft.$.produce(root -> {
-                            root.setParentNode(null);
-                            root.setName("root");
-                            root.addIntoChildNodes(child_1 -> {
-                                child_1.setName("child-1");
-                                child_1.addIntoChildNodes(child_1_1 -> {
-                                    child_1_1.setName("child-1-1");
-                                    child_1_1.setChildNodes(Collections.emptyList());
-                                });
-                                child_1.addIntoChildNodes(child_1_2 -> {
-                                    child_1_2.setName("child-1-2");
-                                    child_1_2.setChildNodes(Collections.emptyList());
-                                });
-                            });
-                            root.addIntoChildNodes(child_2 -> {
-                                child_2.setName("child-2");
-                                child_2.addIntoChildNodes(child_2_1 -> {
-                                    child_2_1.setName("child-2-1");
-                                    child_2_1.setChildNodes(Collections.emptyList());
-                                });
-                                child_2.addIntoChildNodes(child_2_2 -> {
-                                    child_2_2.setName("child-2-2");
-                                    child_2_2.setChildNodes(Collections.emptyList());
-                                });
-                            });
-                        })
-                )
-                .execute();
+        sql().save(
+                /*
+                 * `TreeNode` has two key properties: `name` and `parentNode`,
+                 * this means `name` and `parentNode` must be specified when `id` is missing.
+                 *
+                 * One-to-many association is special, parent object can specify the
+                 * many-to-one association of its child objects implicitly.
+                 * In this demo, Associations named `childNodes` specify `parentNode`
+                 * for child objects implicitly so that all child objects do not require
+                 * the `parentNode`.
+                 *
+                 * However, the `parentNode` of ROOT cannot be specified implicitly,
+                 * so that it must be specified manually
+                 */
+                TreeNodeDraft.$.produce(root -> {
+                    root.setParentNode(null);
+                    root.setName("root");
+                    root.addIntoChildNodes(child_1 -> {
+                        child_1.setName("child-1");
+                        child_1.addIntoChildNodes(child_1_1 -> {
+                            child_1_1.setName("child-1-1");
+                            child_1_1.setChildNodes(Collections.emptyList());
+                        });
+                        child_1.addIntoChildNodes(child_1_2 -> {
+                            child_1_2.setName("child-1-2");
+                            child_1_2.setChildNodes(Collections.emptyList());
+                        });
+                    });
+                    root.addIntoChildNodes(child_2 -> {
+                        child_2.setName("child-2");
+                        child_2.addIntoChildNodes(child_2_1 -> {
+                            child_2_1.setName("child-2-1");
+                            child_2_1.setChildNodes(Collections.emptyList());
+                        });
+                        child_2.addIntoChildNodes(child_2_2 -> {
+                            child_2_2.setName("child-2-2");
+                            child_2_2.setChildNodes(Collections.emptyList());
+                        });
+                    });
+                })
+        );
 
         assertExecutedStatements(
 
-                // Query root
-                new ExecutedStatement(
-                        "select tb_1_.node_id, tb_1_.NAME, tb_1_.parent_id from TREE_NODE tb_1_ " +
-                                "where tb_1_.NAME = ? and tb_1_.parent_id is null",
+                // Does the aggregate-root exists?
+                //
+                // Logically, the `TreeNode` type is decorated by
+                // the annotation `@org.babyfish.jimmer.sql.KeyUniqueConstant`,
+                // so the database's own upsert capability should be used
+                // instead of using a select statement to determine whether
+                // the subsequent operation should be inserting or updating.
+                //
+                // However, the `parentId` of `root` here is null, which
+                // does not matter to the database's own upsert capability.
+                //
+                // To solve this problem, you need to do three things
+                //
+                // 1.Use postgres and configure the unique constraint to null not distinct
+                // (https://www.postgresql.org/about/featurematrix/detail/392/)
+                // 2. Configure the dialect `org.babyfish.jimmer.sql.dialect.PostgresDialect`
+                // 3. Set the `isNullNotDistinct` parameter of Jimmer's
+                // `@KeyUniqueConstant` annotation to true
+                ExecutedStatement.of(
+                        "select tb_1_.node_id, tb_1_.NAME, tb_1_.parent_id " +
+                        "from TREE_NODE tb_1_ " +
+                        "where tb_1_.parent_id is null and tb_1_.NAME = ?",
                         "root"
                 ),
 
                 // Root does not exist, insert it
-                new ExecutedStatement(
+                ExecutedStatement.of(
                         "insert into TREE_NODE(NAME, parent_id) values(?, ?)",
                         "root", null
                 ),
 
-                // Query `child-1`
-                new ExecutedStatement(
-                        "select tb_1_.node_id, tb_1_.NAME, tb_1_.parent_id " +
+                // Merge level-1 associated objects
+                ExecutedStatement.batchOf(
+                        "merge into TREE_NODE(NAME, parent_id) key(NAME, parent_id) values(?, ?)",
+                        Arrays.asList("child-1", 100L),
+                        Arrays.asList("child-2", 100L)
+                ),
+
+                // Merge level-2 associated objects
+                ExecutedStatement.batchOf(
+                        "merge into TREE_NODE(NAME, parent_id) key(NAME, parent_id) values(?, ?)",
+                        Arrays.asList("child-1-1", 101L),
+                        Arrays.asList("child-1-2", 101L),
+                        Arrays.asList("child-2-1", 102L),
+                        Arrays.asList("child-2-2", 102L)
+                ),
+
+                /*
+                 * From here, dissociates subtrees that are no longer needed.
+                 *
+                 * These generated SQL statement are highly related to the
+                 * global configuration `sqlClient.maxCommandJoinCount`(the default value is 2).
+                 * Different configurations will generate completely different SQLs..
+                 */
+
+                ExecutedStatement.of(
+                        "select tb_1_.node_id " +
+                        "from TREE_NODE tb_1_ " +
+                        "inner join TREE_NODE tb_2_ on tb_1_.parent_id = tb_2_.node_id " +
+                        "inner join TREE_NODE tb_3_ on tb_2_.parent_id = tb_3_.node_id " +
+                        "where tb_3_.parent_id = any(?)",
+                        Arrays.asList(103L, 104L, 105L, 106L)
+                ),
+
+                ExecutedStatement.batchOf(
+                        "delete from TREE_NODE tb_1_ " +
+                        "where exists(" +
+                        "--->select * " +
+                        "--->from TREE_NODE tb_2_ " +
+                        "--->where " +
+                        "--->--->tb_1_.parent_id = tb_2_.node_id " +
+                        "--->and " +
+                        "--->--->parent_id = ? " +
+                        "--->and " +
+                        "--->--->not (node_id = any(?))" +
+                        ")",
+                        Arrays.asList(103L, Collections.<Long>emptyList()),
+                        Arrays.asList(104L, Collections.<Long>emptyList()),
+                        Arrays.asList(105L, Collections.<Long>emptyList()),
+                        Arrays.asList(106L, Collections.<Long>emptyList())
+                ),
+
+                ExecutedStatement.batchOf(
+                        "delete from TREE_NODE " +
+                        "where parent_id = ? and not (node_id = any(?))",
+                        Arrays.asList(103L, Collections.<Long>emptyList()),
+                        Arrays.asList(104L, Collections.<Long>emptyList()),
+                        Arrays.asList(105L, Collections.<Long>emptyList()),
+                        Arrays.asList(106L, Collections.<Long>emptyList())
+                ),
+
+                ExecutedStatement.of(
+                        "select tb_1_.node_id " +
                                 "from TREE_NODE tb_1_ " +
-                                "where tb_1_.NAME = ? and tb_1_.parent_id = ?",
-                        "child-1", 1L
+                                "inner join TREE_NODE tb_2_ on tb_1_.parent_id = tb_2_.node_id " +
+                                "inner join TREE_NODE tb_3_ on tb_2_.parent_id = tb_3_.node_id " +
+                                "where " +
+                                "--->tb_3_.parent_id = any(?) " +
+                                "and " +
+                                "--->(tb_3_.parent_id, tb_2_.parent_id) not in ((?, ?), (?, ?), (?, ?), (?, ?))",
+                        Arrays.asList(101L, 102L), 101L, 103L, 101L, 104L, 102L, 105L, 102L, 106L
                 ),
 
-                // `child-1` does not exist, insert it
-                new ExecutedStatement(
-                        "insert into TREE_NODE(NAME, parent_id) values(?, ?)",
-                        "child-1", 1L
+                ExecutedStatement.batchOf(
+                        "delete from TREE_NODE tb_1_ " +
+                                "where exists(" +
+                                "--->select * " +
+                                "--->from TREE_NODE tb_2_ " +
+                                "--->where " +
+                                "--->--->tb_1_.parent_id = tb_2_.node_id " +
+                                "--->and " +
+                                "--->--->parent_id = ? " +
+                                "--->and " +
+                                "--->--->not (node_id = any(?))" +
+                                ")",
+                        Arrays.asList(101L, Arrays.asList(103L, 104L)),
+                        Arrays.asList(102L, Arrays.asList(105L, 106L))
                 ),
 
-                // Query `child-1-1`
-                new ExecutedStatement(
-                        "select tb_1_.node_id, tb_1_.NAME, tb_1_.parent_id " +
-                                "from TREE_NODE tb_1_ " +
-                                "where tb_1_.NAME = ? and tb_1_.parent_id = ?",
-                        "child-1-1", 2L
-                ),
-
-                // `child-1-1` does not exist, insert it
-                new ExecutedStatement(
-                        "insert into TREE_NODE(NAME, parent_id) values(?, ?)",
-                        "child-1-1", 2L
-                ),
-
-                // Query `child-1-2`
-                new ExecutedStatement(
-                        "select tb_1_.node_id, tb_1_.NAME, tb_1_.parent_id " +
-                                "from TREE_NODE tb_1_ " +
-                                "where tb_1_.NAME = ? and tb_1_.parent_id = ?",
-                        "child-1-2", 2L
-                ),
-
-                // `child-1-2` does not exist, insert it
-                new ExecutedStatement(
-                        "insert into TREE_NODE(NAME, parent_id) values(?, ?)",
-                        "child-1-2", 2L
-                ),
-
-                // Query `child-2`
-                new ExecutedStatement(
-                        "select tb_1_.node_id, tb_1_.NAME, tb_1_.parent_id " +
-                                "from TREE_NODE tb_1_ " +
-                                "where tb_1_.NAME = ? and tb_1_.parent_id = ?",
-                        "child-2", 1L
-                ),
-
-                // `child-2` does not exist, insert it
-                new ExecutedStatement(
-                        "insert into TREE_NODE(NAME, parent_id) values(?, ?)",
-                        "child-2", 1L
-                ),
-
-                // Query `child-2-1`
-                new ExecutedStatement(
-                        "select tb_1_.node_id, tb_1_.NAME, tb_1_.parent_id " +
-                                "from TREE_NODE tb_1_ " +
-                                "where tb_1_.NAME = ? and tb_1_.parent_id = ?",
-                        "child-2-1", 5L
-                ),
-
-                // `child-2-1` does not exist, insert it
-                new ExecutedStatement(
-                        "insert into TREE_NODE(NAME, parent_id) values(?, ?)",
-                        "child-2-1", 5L
-                ),
-
-                // Query `child-2-2`
-                new ExecutedStatement(
-                        "select tb_1_.node_id, tb_1_.NAME, tb_1_.parent_id " +
-                                "from TREE_NODE tb_1_ " +
-                                "where tb_1_.NAME = ? and tb_1_.parent_id = ?",
-                        "child-2-2", 5L
-                ),
-
-                // `child-2-2` does not exist, insert it
-                new ExecutedStatement(
-                        "insert into TREE_NODE(NAME, parent_id) values(?, ?)",
-                        "child-2-2", 5L
+                ExecutedStatement.batchOf(
+                        "delete from TREE_NODE " +
+                        "where parent_id = ? and not (node_id = any(?))",
+                        Arrays.asList(101L, Arrays.asList(103L, 104L)),
+                        Arrays.asList(102L, Arrays.asList(105L, 106L))
                 )
         );
     }
@@ -186,128 +214,176 @@ public class RecursiveTest extends AbstractMutationTest {
                         "        (7, 'child-2-2', 5)"
         );
 
-        sql()
-                .getEntities()
-                .saveCommand(
-                        // Please view the comment of `testCreateTree` to understand
-                        // why `parentNode` is a key property of `TreeNode`
-                        // but only the root node needs it.
-                        TreeNodeDraft.$.produce(root -> {
-                            root.setParentNode(null);
-                            root.setName("root");
-                            root.addIntoChildNodes(child_1 -> {
-                                child_1.setName("child-1");
-                                child_1.addIntoChildNodes(child_1_1 -> {
-                                    child_1_1.setName("child-1-1");
-                                    child_1_1.setChildNodes(Collections.emptyList());
-                                });
-                                // `child-1-2` in database will be deleted
-                            });
-                            // `-+-child-2`
-                            // ` |`
-                            // ` +----child-2-1`
-                            // ` |`
-                            // `-|----child-2-2`
-                            // in database will be deleted
-                        })
-                )
-                .setDissociateAction(TreeNodeProps.PARENT_NODE, DissociateAction.DELETE)
-                .execute();
+        sql().save(
+                // Please view the comment of `testCreateTree` to understand
+                // why `parentNode` is a key property of `TreeNode`
+                // but only the root node needs it.
+                TreeNodeDraft.$.produce(root -> {
+                    root.setParentNode(null);
+                    root.setName("root");
+                    root.addIntoChildNodes(child_1 -> {
+                        child_1.setName("child-1");
+                        child_1.addIntoChildNodes(child_1_1 -> {
+                            child_1_1.setName("child-1-1");
+                            child_1_1.setChildNodes(Collections.emptyList());
+                        });
+                        // The `child-1-2` is not specified here,
+                        // so the subtree `child-1-2` in database
+                        // will be detached
+                    });
+                    // The `child-2` is not specified here,
+                    // so the subtree
+                    // `-+-child-2`
+                    // ` "`
+                    // ` +----child-2-1`
+                    // ` "`
+                    // `-"----child-2-2`
+                    // in database will be detached
+                })
+        );
 
         assertExecutedStatements(
 
-                // Query aggregate by key
-                new ExecutedStatement(
+                // Does the aggregate-root exists?
+                //
+                // Logically, the `TreeNode` type is decorated by
+                // the annotation `@org.babyfish.jimmer.sql.KeyUniqueConstant`,
+                // so the database's own upsert capability should be used
+                // instead of using a select statement to determine whether
+                // the subsequent operation should be inserting or updating.
+                //
+                // However, the `parentId` of `root` here is null, which
+                // does not matter to the database's own upsert capability.
+                //
+                // To solve this problem, you need to do three things
+                //
+                // 1.Use postgres and configure the unique constraint to null not distinct
+                // (https://www.postgresql.org/about/featurematrix/detail/392/)
+                // 2. Configure the dialect `org.babyfish.jimmer.sql.dialect.PostgresDialect`
+                // 3. Set the `isNullNotDistinct` parameter of Jimmer's
+                // `@KeyUniqueConstant` annotation to true
+                ExecutedStatement.of(
                         "select tb_1_.node_id, tb_1_.NAME, tb_1_.parent_id " +
-                                "from TREE_NODE tb_1_ " +
-                                "where tb_1_.NAME = ? and tb_1_.parent_id is null",
+                        "from TREE_NODE tb_1_ " +
+                        "where tb_1_.parent_id is null and tb_1_.NAME = ?",
                         "root"
                 ),
 
-                // Aggregate-root exists, but not changed, do nothing
+                // The aggregate-root exists, do nothing
 
-                // Query `child-1` by key
-                new ExecutedStatement(
-                        "select tb_1_.node_id, tb_1_.NAME, tb_1_.parent_id " +
-                                "from TREE_NODE tb_1_ " +
-                                "where tb_1_.NAME = ? and tb_1_.parent_id = ?",
+                // Merge level-1 associated objects
+                ExecutedStatement.of(
+                        "merge into TREE_NODE(NAME, parent_id) " +
+                                "key(NAME, parent_id) " +
+                                "values(?, ?)",
                         "child-1", 1L
                 ),
 
-                // `child-1` exists, but not changed, do nothing
-
-                // Query `child-1-1` by key
-                new ExecutedStatement(
-                        "select tb_1_.node_id, tb_1_.NAME, tb_1_.parent_id " +
-                                "from TREE_NODE tb_1_ " +
-                                "where tb_1_.NAME = ? and tb_1_.parent_id = ?",
+                // Merge level-2 associated objects
+                ExecutedStatement.of(
+                        "merge into TREE_NODE(NAME, parent_id) " +
+                        "key(NAME, parent_id) " +
+                        "values(?, ?)",
                         "child-1-1", 2L
                 ),
 
-                // `child-1-1` exists, but not changed, do nothing
+                /*
+                 * From here, dissociates subtrees that are no longer needed.
+                 *
+                 * These generated SQL statement are highly related to the
+                 * global configuration `sqlClient.maxCommandJoinCount`(the default value is 2).
+                 * Different configurations will generate completely different SQLs..
+                 */
 
-                // Query child nodes of `child-1-1`
-                new ExecutedStatement(
-                        "select node_id from TREE_NODE where parent_id = ?",
-                        3L
-                ),
+                ExecutedStatement.of(
+                        "select tb_1_.node_id " +
+                                "from TREE_NODE tb_1_ " +
+                                "inner join TREE_NODE tb_2_ on tb_1_.parent_id = tb_2_.node_id " +
+                                "inner join TREE_NODE tb_3_ on tb_2_.parent_id = tb_3_.node_id " +
+                                "where tb_3_.parent_id = ?",
+        3L
+            ),
 
-                // `child-1-1` does not have child nodes, do nothing
+        ExecutedStatement.of(
+                "delete from TREE_NODE tb_1_ " +
+                        "where exists(" +
+                        "--->select * " +
+                        "--->from TREE_NODE tb_2_ " +
+                        "--->where " +
+                        "--->--->tb_1_.parent_id = tb_2_.node_id " +
+                        "--->and " +
+                        "--->--->parent_id = ? " +
+                        "--->and " +
+                        "--->--->not (node_id = any(?))" +
+                        ")",
+        3L, Collections.<Long>emptyList()
+            ),
+        ExecutedStatement.of(
+                "delete from TREE_NODE " +
+                        "where parent_id = ? and not (node_id = any(?))",
+                3L, Collections.<Long>emptyList()
+        ),
 
-                // Query child nodes of `child-1` except `child-1-1`
-                new ExecutedStatement(
-                        "select node_id " +
-                                "from TREE_NODE " +
-                                "where parent_id = ? and node_id <> ?",
+                ExecutedStatement.of(
+                        "select tb_1_.node_id " +
+                                "from TREE_NODE tb_1_ " +
+                        "inner join TREE_NODE tb_2_ on tb_1_.parent_id = tb_2_.node_id " +
+                                "inner join TREE_NODE tb_3_ on tb_2_.parent_id = tb_3_.node_id " +
+                                "where tb_3_.parent_id = ? and tb_2_.parent_id <> ?",
                         2L, 3L
                 ),
 
-                // Query child nodes of `child-1-2`
-                new ExecutedStatement(
-                        "select node_id from TREE_NODE where parent_id = ?",
-                        4L
+                ExecutedStatement.of(
+                        "delete from TREE_NODE tb_1_ " +
+                                "where exists(" +
+                                "--->select * " +
+                                "--->from TREE_NODE tb_2_ " +
+                                "--->where " +
+                                "--->--->tb_1_.parent_id = tb_2_.node_id " +
+                                "--->and " +
+                                "--->--->parent_id = ? " +
+                                "--->and " +
+                                "--->--->not (node_id = any(?))" +
+                                ")",
+                        2L, Arrays.asList(3L)
                 ),
 
-                // `child-1-2` does not have child nodes, do nothing
-
-                // Delete `child-1-2`
-                new ExecutedStatement(
-                        "delete from TREE_NODE where node_id = ?",
-                        4L
+                ExecutedStatement.of(
+                        "delete from TREE_NODE where parent_id = ? and not (node_id = any(?))",
+                        2L, Arrays.asList(3L)
                 ),
 
-                // Query child nodes of root except `child-1`
-                new ExecutedStatement(
-                        "select node_id " +
-                                "from TREE_NODE " +
-                                "where parent_id = ? and node_id <> ?",
+                ExecutedStatement.of(
+                        "select tb_1_.node_id " +
+                                "from TREE_NODE tb_1_ " +
+                                "inner join TREE_NODE tb_2_ on tb_1_.parent_id = tb_2_.node_id " +
+                                "inner join TREE_NODE tb_3_ on tb_2_.parent_id = tb_3_.node_id " +
+                                "where tb_3_.parent_id = ? and tb_2_.parent_id <> ?",
                         1L, 2L
                 ),
 
-                // Query child nodes of `child-2`
-                new ExecutedStatement(
-                        "select node_id from TREE_NODE where parent_id = ?",
-                        5L
+                ExecutedStatement.of(
+                        "delete from TREE_NODE tb_1_ " +
+                                "where exists(" +
+                                "--->select * " +
+                                "--->from TREE_NODE tb_2_ " +
+                                "--->where " +
+                                "--->--->tb_1_.parent_id = tb_2_.node_id " +
+                                "--->and " +
+                                "--->--->parent_id = ? " +
+                                "--->and " +
+                                "--->--->not (node_id = any(?))" +
+                                ")",
+                        1L, Collections.singletonList(2L)
                 ),
 
-                // Query child nodes of `child-2-1` and `child-2-2`
-                new ExecutedStatement(
-                        "select node_id from TREE_NODE where parent_id in (?, ?)",
-                        6L, 7L
-                ),
-
-                // `child-2-1` and `child-2-2` does not have child nodes, do nothing
-
-                // Delete `child-2-1` and `child-2-2`
-                new ExecutedStatement(
-                        "delete from TREE_NODE where node_id in (?, ?)",
-                        6L, 7L
-                ),
-
-                // Delete `child-2`
-                new ExecutedStatement(
-                        "delete from TREE_NODE where node_id = ?",
-                        5L
+                ExecutedStatement.of(
+                        "delete from TREE_NODE " +
+                                "where " +
+                                "--->parent_id = ? " +
+                                "and " +
+                                "--->not (node_id = any(?))",
+                        1L, Collections.singletonList(2L)
                 )
         );
     }

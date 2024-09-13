@@ -57,7 +57,7 @@ export class BookStoreService {
     readonly saveBookStore: (options: BookStoreServiceOptions['saveBookStore']) => Promise<
         Dynamic_BookStore
     > = async(options) => {
-        let _uri = '/bookStore/';
+        let _uri = '/bookStore';
         return (await this.executor({uri: _uri, method: 'PUT', body: options.body})) as Promise<Dynamic_BookStore>;
     }
 }

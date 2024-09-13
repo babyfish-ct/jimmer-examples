@@ -17,6 +17,7 @@ interface Book : BaseEntity, TenantAware {
 
     @Key // ❷
     val edition: Int
+
     val price: BigDecimal
 
     @ManyToOne // ❸

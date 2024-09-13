@@ -36,37 +36,32 @@ class ManyToOneTest : AbstractMutationTest() {
         jdbc("insert into book_store(id, name) values(?, ?)", 1L, "MANNING")
         jdbc(
             "insert into book(id, name, edition, price) values(?, ?, ?, ?)",
-            10L, "SQL in Action", 1, BigDecimal(45)
+            1L, "SQL in Action", 1, BigDecimal(45)
         )
-        val result = sql
-            .entities
-            .save(
-                new(Book::class).by {
-                    name = "SQL in Action"
-                    edition = 1
-                    price = BigDecimal(49)
-                    store = makeIdOnly(1L)
-                }
-            )
+        val result = sql.save(
+            new(Book::class).by {
+                name = "SQL in Action"
+                edition = 1
+                price = BigDecimal(49)
+                store = makeIdOnly(1L)
+            }
+        )
         
         assertExecutedStatements(
 
-            // Select data by key
-            ExecutedStatement(
-                "select tb_1_.ID, tb_1_.NAME, tb_1_.EDITION " +
-                    "from BOOK tb_1_ " +
-                    "where tb_1_.NAME = ? and tb_1_.EDITION = ?",
-                "SQL in Action", 1
-            ),
-
-            // Data exists, update it.
-            // The foreign key `store_id` is updated.
-            ExecutedStatement(
-                "update BOOK set PRICE = ?, STORE_ID = ? where ID = ?",
-                BigDecimal(49), 1L, 10L
+            // Merge the associated object.
+            //
+            // Associated object is parent object but aggregate-root is child object,
+            // so it is handled before aggregate-root
+            ExecutedStatement.of(
+                "merge into BOOK(NAME, EDITION, PRICE, STORE_ID) " +
+                    "key(NAME, EDITION) " +
+                    "values(?, ?, ?, ?)",
+                "SQL in Action", 1, BigDecimal(49), 1L
             )
         )
         Assertions.assertEquals(1, result.totalAffectedRowCount)
+        Assertions.assertEquals(1, result.affectedRowCount(Book::class))
     }
 
     @Test
@@ -78,47 +73,43 @@ class ManyToOneTest : AbstractMutationTest() {
         )
 
         val ex = Assertions.assertThrows(SaveException::class.java) {
-            sql
-                .entities
-                .save(
-                    new(Book::class).by {
-                        name = "SQL in Action"
-                        edition = 1
-                        price = BigDecimal(49)
-                        store = makeIdOnly(99999L)
-                    }
-                ) {
-                    /*
-                     * You can also use `setAutoIdOnlyTargetCheckingAll()`.
-                     *
-                     * If you use jimmer-spring-starter, it is unnecessary to
-                     * do it because this switch is turned on.
-                     *
-                     * If the underlying `BOOK.STORE_ID` has foreign key constraints,
-                     * even if this configuration is not used, error still will be
-                     * raised by database so that you can choose not to use this
-                     * configuration when you have strict performance requirements.
-                     * However, this configuration can bring better error message.
-                     *
-                     * Sometimes it is not possible to add foreign key constraints,
-                     * such table sharding. At this time, this configuration is
-                     * very important.
-                     */
-                    setAutoIdOnlyTargetChecking(Book::store)
+            sql.save(
+                new(Book::class).by {
+                    name = "SQL in Action"
+                    edition = 1
+                    price = BigDecimal(49)
+                    store = makeIdOnly(99999L)
                 }
+            )
         }
 
         Assertions.assertEquals(
             "Save error caused by the path: \"<root>.store\": " +
-                "Illegal ids: [99999]",
+                "Cannot save the entity, the associated id of the reference property " +
+                "\"org.babyfish.jimmer.example.save.model.Book.store\" is \"99999\" " +
+                "but there is no corresponding associated object in the database",
             ex.message
         )
 
         assertExecutedStatements(
 
-            // Is targetId valid?
-            ExecutedStatement(
-                "select tb_1_.ID from BOOK_STORE tb_1_ where tb_1_.ID = ?",
+            // Merge the associated object.
+            //
+            // Associated object is parent object but aggregate-root is child object,
+            // so it is handled before aggregate-root
+            ExecutedStatement.of(
+                "merge into BOOK(NAME, EDITION, PRICE, STORE_ID) " +
+                    "key(NAME, EDITION) " +
+                    "values(?, ?, ?, ?)",
+                "SQL in Action", 1, BigDecimal(49), 99999L
+            ),
+
+            // Investigate why the database throws
+            // error about constraint violation
+            ExecutedStatement.of(
+                "select tb_1_.ID " +
+                    "from BOOK_STORE tb_1_ " +
+                    "where tb_1_.ID = ?",
                 99999L
             )
         )
@@ -130,48 +121,49 @@ class ManyToOneTest : AbstractMutationTest() {
         jdbc("insert into book_store(id, name) values(?, ?)", 1L, "MANNING")
         jdbc(
             "insert into book(id, name, edition, price) values(?, ?, ?, ?)",
-            10L, "SQL in Action", 1, BigDecimal(45)
+            1L, "SQL in Action", 1, BigDecimal(45)
         )
 
-        val result = sql
-            .entities
-            .save(
-                new(Book::class).by {
-                    name = "SQL in Action"
-                    edition = 1
-                    price = BigDecimal(49)
-                    store().apply {
-                        name = "MANNING"
-                    }
+        val result = sql.save(
+            new(Book::class).by {
+                name = "SQL in Action"
+                edition = 1
+                price = BigDecimal(49)
+                store().apply {
+                    name = "MANNING"
                 }
-            )
+            }
+        )
         
         assertExecutedStatements(
 
-            // Select parent object by key.
-            ExecutedStatement(
-                "select tb_1_.ID, tb_1_.NAME " +
-                    "from BOOK_STORE tb_1_ " +
-                    "where tb_1_.NAME = ?",
+            // Merge the associated object.
+            //
+            // Associated object is parent object but aggregate-root is child object,
+            // so it is handled before aggregate-root.
+            //
+            // Even if no data is actually modified, performing an upsert on the
+            // underlying database(i.e: `merge` of `H2`) will still cause the
+            // affected row count of the table to increase.
+            ExecutedStatement.of(
+                "merge into BOOK_STORE(NAME) " +
+                    "key(NAME) " +
+                    "values(?)",
                 "MANNING"
             ),
 
-            // select aggregation-root object by key
-            ExecutedStatement(
-                ("select tb_1_.ID, tb_1_.NAME, tb_1_.EDITION " +
-                    "from BOOK tb_1_ " +
-                    "where tb_1_.NAME = ? and tb_1_.EDITION = ?"),
-                "SQL in Action", 1
-            ),
-
-            // Aggregation-root object exists, update it, include the foreign key
-            ExecutedStatement(
-                "update BOOK set PRICE = ?, STORE_ID = ? where ID = ?",
-                BigDecimal(49), 1L, 10L
+            // Merge aggregation-root
+            ExecutedStatement.of(
+                "merge into BOOK(NAME, EDITION, PRICE, STORE_ID) " +
+                    "key(NAME, EDITION) " +
+                    "values(?, ?, ?, ?)",
+                "SQL in Action", 1, BigDecimal(49), 1L
             )
         )
 
-        Assertions.assertEquals(1, result.totalAffectedRowCount)
+        Assertions.assertEquals(2, result.totalAffectedRowCount)
+        Assertions.assertEquals(1, result.affectedRowCount(BookStore::class))
+        Assertions.assertEquals(1, result.affectedRowCount(Book::class))
     }
 
     @Test
@@ -180,10 +172,10 @@ class ManyToOneTest : AbstractMutationTest() {
         jdbc("insert into book_store(id, name) values(?, ?)", 1L, "MANNING")
         jdbc(
             "insert into book(id, name, edition, price) values(?, ?, ?, ?)",
-            10L, "SQL in Action", 1, BigDecimal(45)
+            1L, "SQL in Action", 1, BigDecimal(45)
         )
         
-        val result = sql.entities.save(
+        val result = sql.save(
             new(Book::class).by {
                 name = "SQL in Action"
                 edition = 1
@@ -197,33 +189,23 @@ class ManyToOneTest : AbstractMutationTest() {
 
         assertExecutedStatements(
 
-            // Select parent by key
-            ExecutedStatement(
-                ("select tb_1_.ID, tb_1_.NAME " +
-                    "from BOOK_STORE tb_1_ " +
-                    "where tb_1_.NAME = ?"),
-                "MANNING"
+            // Merge the associated object.
+            //
+            // Associated object is parent object but aggregate-root is child object,
+            // so it is handled before aggregate-root.
+            ExecutedStatement.of(
+                "merge into BOOK_STORE(NAME, WEBSITE) " +
+                    "key(NAME) " +
+                    "values(?, ?)",
+                "MANNING", "https://www.manning.com"
             ),
 
-            // Parent exists, update it
-            ExecutedStatement(
-                "update BOOK_STORE set WEBSITE = ? where ID = ?",
-                "https://www.manning.com",
-                1L
-            ),
-
-            // Select aggregate-root object by key
-            ExecutedStatement(
-                ("select tb_1_.ID, tb_1_.NAME, tb_1_.EDITION " +
-                    "from BOOK tb_1_ " +
-                    "where tb_1_.NAME = ? and tb_1_.EDITION = ?"),
-                "SQL in Action", 1
-            ),
-
-            // Aggregate-root object exists, update it
-            ExecutedStatement(
-                "update BOOK set PRICE = ?, STORE_ID = ? where ID = ?",
-                BigDecimal(49), 1L, 10L
+            // Merge aggregation-root
+            ExecutedStatement.of(
+                "merge into BOOK(NAME, EDITION, PRICE, STORE_ID) " +
+                    "key(NAME, EDITION) " +
+                    "values(?, ?, ?, ?)",
+                "SQL in Action", 1, BigDecimal(49), 1L
             )
         )
 
@@ -237,53 +219,41 @@ class ManyToOneTest : AbstractMutationTest() {
 
         jdbc(
             "insert into book(id, name, edition, price) values(?, ?, ?, ?)",
-            10L, "SQL in Action", 1, BigDecimal(45)
+            1L, "SQL in Action", 1, BigDecimal(45)
         )
 
-        val result = sql
-            .entities
-            .save(
-                new(Book::class).by {
-                    name = "SQL in Action"
-                    edition = 1
-                    price = BigDecimal(49)
-                    store().apply {
-                        name = "TURING"
-                        website = "https://www.turing.com"
-                    }
+        val result = sql.save(
+            new(Book::class).by {
+                name = "SQL in Action"
+                edition = 1
+                price = BigDecimal(49)
+                store().apply {
+                    name = "TURING"
+                    website = "https://www.turing.com"
                 }
-            )
+            }
+        )
 
         assertExecutedStatements(
 
-            // Select parent by key
-            ExecutedStatement(
-                "select tb_1_.ID, tb_1_.NAME " +
-                    "from BOOK_STORE tb_1_ " +
-                    "where tb_1_.NAME = ?",
-                "TURING"
-            ),
-
-            // Parent does not exist, however, the switch to automatically create
-            // associated objects has not been turned on, so insert parent object.
-            ExecutedStatement(
-                "insert into BOOK_STORE(NAME, WEBSITE) values(?, ?)",
+            // Merge the associated object.
+            //
+            // Associated object is parent object but aggregate-root is child object,
+            // so it is handled before aggregate-root.
+            ExecutedStatement.of(
+                "merge into BOOK_STORE(NAME, WEBSITE) " +
+                    "key(NAME) " +
+                    "values(?, ?)",
                 "TURING", "https://www.turing.com"
             ),
 
-            // Select the aggregate-root by key
-            ExecutedStatement(
-                "select tb_1_.ID, tb_1_.NAME, tb_1_.EDITION " +
-                    "from BOOK tb_1_ " +
-                    "where tb_1_.NAME = ? and tb_1_.EDITION = ?",
-                "SQL in Action", 1
+            // Merge aggregate-root
+            ExecutedStatement.of(
+                "merge into BOOK(NAME, EDITION, PRICE, STORE_ID) " +
+                    "key(NAME, EDITION) " +
+                    "values(?, ?, ?, ?)",
+                "SQL in Action", 1, BigDecimal(49), 100L
             ),
-
-            // Aggregate-root exists, update it, include the foreign key
-            ExecutedStatement(
-                "update BOOK set PRICE = ?, STORE_ID = ? where ID = ?",
-                BigDecimal(49), 1L, 10L
-            )
         )
         Assertions.assertEquals(2, result.totalAffectedRowCount)
         Assertions.assertEquals(1, result.affectedRowCount(BookStore::class))
