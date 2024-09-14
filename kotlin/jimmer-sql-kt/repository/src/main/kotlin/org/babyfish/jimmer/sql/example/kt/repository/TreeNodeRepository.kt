@@ -30,9 +30,9 @@ interface TreeNodeRepository : KRepository<TreeNode, Long> { // ❶
 }
 
 /*----------------Documentation Links----------------
-❶ https://babyfish-ct.github.io/jimmer/docs/spring/repository/concept
-❷ ❹ https://babyfish-ct.github.io/jimmer/docs/spring/repository/abstract
+❶ https://babyfish-ct.github.io/jimmer-doc/docs/spring/repository/concept
+❷ ❹ https://babyfish-ct.github.io/jimmer-doc/docs/spring/repository/abstract
 
-❸ https://babyfish-ct.github.io/jimmer/docs/spring/repository/dto
-  https://babyfish-ct.github.io/jimmer/docs/query/object-fetcher/dto
+❸ https://babyfish-ct.github.io/jimmer-doc/docs/spring/repository/dto
+  https://babyfish-ct.github.io/jimmer-doc/docs/query/object-fetcher/dto
 ---------------------------------------------------*/

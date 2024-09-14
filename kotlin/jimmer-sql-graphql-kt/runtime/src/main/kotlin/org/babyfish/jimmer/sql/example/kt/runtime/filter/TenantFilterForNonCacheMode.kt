@@ -30,5 +30,5 @@ open class TenantFilterForNonCacheMode(
 }
 
 /*----------------Documentation Links----------------
-❶ https://babyfish-ct.github.io/jimmer/docs/query/global-filter/user-filter
+❶ https://babyfish-ct.github.io/jimmer-doc/docs/query/global-filter/user-filter
 ---------------------------------------------------*/

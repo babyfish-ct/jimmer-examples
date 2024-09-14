@@ -24,10 +24,10 @@ interface AuthorRepository : KRepository<Author, Long> { // ❶
 }
 
 /*----------------Documentation Links----------------
-❶ https://babyfish-ct.github.io/jimmer/docs/spring/repository/concept
-❷ https://babyfish-ct.github.io/jimmer/docs/spring/repository/default
-❸ https://babyfish-ct.github.io/jimmer/docs/query/qbe
-❹ ❺ https://babyfish-ct.github.io/jimmer/docs/query/dynamic-where
-❻ https://babyfish-ct.github.io/jimmer/docs/query/dynamic-order
-❼ https://babyfish-ct.github.io/jimmer/docs/query/object-fetcher/
+❶ https://babyfish-ct.github.io/jimmer-doc/docs/spring/repository/concept
+❷ https://babyfish-ct.github.io/jimmer-doc/docs/spring/repository/default
+❸ https://babyfish-ct.github.io/jimmer-doc/docs/query/qbe
+❹ ❺ https://babyfish-ct.github.io/jimmer-doc/docs/query/dynamic-where
+❻ https://babyfish-ct.github.io/jimmer-doc/docs/query/dynamic-order
+❼ https://babyfish-ct.github.io/jimmer-doc/docs/query/object-fetcher/
 ---------------------------------------------------*/

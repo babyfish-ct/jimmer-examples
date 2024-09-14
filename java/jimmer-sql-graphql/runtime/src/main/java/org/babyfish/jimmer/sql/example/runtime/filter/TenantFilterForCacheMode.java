@@ -57,9 +57,9 @@ public class TenantFilterForCacheMode
 }
 
 /*----------------Documentation Links----------------
-❶ https://babyfish-ct.github.io/jimmer/docs/cache/multiview-cache/user-filter
+❶ https://babyfish-ct.github.io/jimmer-doc/docs/cache/multiview-cache/user-filter
 
-❷ https://babyfish-ct.github.io/jimmer/docs/cache/multiview-cache/concept#subkey
+❷ https://babyfish-ct.github.io/jimmer-doc/docs/cache/multiview-cache/concept#subkey
 
-❸ https://babyfish-ct.github.io/jimmer/docs/cache/multiview-cache/user-filter#define-cache-friendly-filters
+❸ https://babyfish-ct.github.io/jimmer-doc/docs/cache/multiview-cache/user-filter#define-cache-friendly-filters
 ---------------------------------------------------*/

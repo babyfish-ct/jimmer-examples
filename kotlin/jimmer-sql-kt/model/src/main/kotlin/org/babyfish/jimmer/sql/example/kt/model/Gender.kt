@@ -12,5 +12,5 @@ enum class Gender {
 }
 
 /*----------------Documentation Links----------------
-https://babyfish-ct.github.io/jimmer/docs/mapping/advanced/enum
+https://babyfish-ct.github.io/jimmer-doc/docs/mapping/advanced/enum
 ---------------------------------------------------*/

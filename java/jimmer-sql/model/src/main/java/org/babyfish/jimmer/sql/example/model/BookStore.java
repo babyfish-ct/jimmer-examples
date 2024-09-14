@@ -53,8 +53,8 @@ public interface BookStore extends BaseEntity {
 }
 
 /*----------------Documentation Links----------------
-❶ https://babyfish-ct.github.io/jimmer/docs/mapping/advanced/key
-❷ https://babyfish-ct.github.io/jimmer/docs/mapping/base/nullity
-❸ https://babyfish-ct.github.io/jimmer/docs/mapping/base/association/one-to-many
-❹ ❺ https://babyfish-ct.github.io/jimmer/docs/mapping/advanced/calculated/transient
+❶ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/advanced/key
+❷ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/base/nullity
+❸ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/base/association/one-to-many
+❹ ❺ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/advanced/calculated/transient
 ---------------------------------------------------*/

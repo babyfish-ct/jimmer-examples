@@ -12,5 +12,5 @@ public enum Gender {
 }
 
 /*----------------Documentation Links----------------
-❶ ❷ https://babyfish-ct.github.io/jimmer/docs/mapping/advanced/enum
+❶ ❷ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/advanced/enum
 ---------------------------------------------------*/

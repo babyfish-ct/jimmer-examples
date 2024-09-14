@@ -95,9 +95,9 @@ class TreeService(
 }
 
 /*----------------Documentation Links----------------
-❶ https://babyfish-ct.github.io/jimmer/docs/spring/client/api#declare-fetchby
-  https://babyfish-ct.github.io/jimmer/docs/query/object-fetcher/recursive
+❶ https://babyfish-ct.github.io/jimmer-doc/docs/spring/client/api#declare-fetchby
+  https://babyfish-ct.github.io/jimmer-doc/docs/query/object-fetcher/recursive
 
-❷ https://babyfish-ct.github.io/jimmer/docs/mutation/save-command/input-dto/
-  https://babyfish-ct.github.io/jimmer/docs/object/view/dto-language#92-recursive-association
+❷ https://babyfish-ct.github.io/jimmer-doc/docs/mutation/save-command/input-dto/
+  https://babyfish-ct.github.io/jimmer-doc/docs/object/view/dto-language#92-recursive-association
 ---------------------------------------------------*/

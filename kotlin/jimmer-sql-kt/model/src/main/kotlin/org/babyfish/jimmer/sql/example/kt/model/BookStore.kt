@@ -46,7 +46,7 @@ interface BookStore : BaseEntity {
 }
 
 /*----------------Documentation Links----------------
-❶ https://babyfish-ct.github.io/jimmer/docs/mapping/advanced/key
-❷ https://babyfish-ct.github.io/jimmer/docs/mapping/base/association/one-to-many
-❸ ❹ https://babyfish-ct.github.io/jimmer/docs/mapping/advanced/calculated/transient
+❶ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/advanced/key
+❷ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/base/association/one-to-many
+❸ ❹ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/advanced/calculated/transient
 ---------------------------------------------------*/

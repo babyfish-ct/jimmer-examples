@@ -46,8 +46,8 @@ interface Book : BaseEntity, TenantAware {
 }
 
 /*----------------Documentation Links----------------
-❶ ❷ https://babyfish-ct.github.io/jimmer/docs/mapping/advanced/key
-❸ https://babyfish-ct.github.io/jimmer/docs/mapping/base/association/many-to-one
-❹ https://babyfish-ct.github.io/jimmer/docs/mapping/base/association/many-to-many
-❺ ❻ https://babyfish-ct.github.io/jimmer/docs/mapping/advanced/view/id-view
+❶ ❷ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/advanced/key
+❸ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/base/association/many-to-one
+❹ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/base/association/many-to-many
+❺ ❻ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/advanced/view/id-view
 ---------------------------------------------------*/
