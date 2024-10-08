@@ -62,7 +62,7 @@ interface BookRepository : KRepository<Book, Long> {
                 groupBy(table.storeId)
                 select(
                     table.storeId.asNonNull(),
-                    avg(table.price).asNonNull()
+                    avgAsDecimal(table.price).asNonNull()
                 )
             }
             .execute()

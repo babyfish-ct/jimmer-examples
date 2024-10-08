@@ -81,9 +81,12 @@ class ManyToManyTest : AbstractMutationTest() {
             
             // Attach new associations based on `Book.authors`
             ExecutedStatement.batchOf(
-                "merge into BOOK_AUTHOR_MAPPING(BOOK_ID, AUTHOR_ID) " +
-                    "key(BOOK_ID, AUTHOR_ID) " +
-                    "values(?, ?)",
+                "merge into BOOK_AUTHOR_MAPPING tb_1_ " +
+                    "using(values(?, ?)) tb_2_(BOOK_ID, AUTHOR_ID) " +
+                    "on tb_1_.BOOK_ID = tb_2_.BOOK_ID and tb_1_.AUTHOR_ID = tb_2_.AUTHOR_ID " +
+                    "when not matched then " +
+                    "insert(BOOK_ID, AUTHOR_ID) " +
+                    "values(tb_2_.BOOK_ID, tb_2_.AUTHOR_ID)",
                 listOf(1L, 1L),
                 listOf(1L, 2L),
                 listOf(1L, 3L)
@@ -145,22 +148,21 @@ class ManyToManyTest : AbstractMutationTest() {
                     "where BOOK_ID = ? and AUTHOR_ID <> ?",
                 1L, 1L
             ),
-
-            // Attach new associations base on `Book.authors`
-            // Even if no data is actually modified, performing an upsert on the
-            // underlying database(i.e: `merge` of `H2`) will still cause the
-            // affected row count of the table to increase.
+            
             ExecutedStatement.of(
-                "merge into BOOK_AUTHOR_MAPPING(BOOK_ID, AUTHOR_ID) " +
-                    "key(BOOK_ID, AUTHOR_ID) " +
-                    "values(?, ?)",
+                "merge into BOOK_AUTHOR_MAPPING tb_1_ " +
+                    "using(values(?, ?)) tb_2_(BOOK_ID, AUTHOR_ID) " +
+                    "on tb_1_.BOOK_ID = tb_2_.BOOK_ID and tb_1_.AUTHOR_ID = tb_2_.AUTHOR_ID " +
+                    "when not matched then " +
+                    "insert(BOOK_ID, AUTHOR_ID) " +
+                    "values(tb_2_.BOOK_ID, tb_2_.AUTHOR_ID)",
                 1L, 1L
             )
         )
 
-        Assertions.assertEquals(4, result.totalAffectedRowCount)
+        Assertions.assertEquals(3, result.totalAffectedRowCount)
         Assertions.assertEquals(1, result.affectedRowCount(Book::class))
-        Assertions.assertEquals(3, result.affectedRowCount(Book::authors))
+        Assertions.assertEquals(2, result.affectedRowCount(Book::authors))
     }
 
     @Test
@@ -219,9 +221,12 @@ class ManyToManyTest : AbstractMutationTest() {
 
             // Attach new associations based on `Book.authors`
             ExecutedStatement.batchOf(
-                "merge into BOOK_AUTHOR_MAPPING(BOOK_ID, AUTHOR_ID) " +
-                    "key(BOOK_ID, AUTHOR_ID) " +
-                    "values(?, ?)",
+                "merge into BOOK_AUTHOR_MAPPING tb_1_ " +
+                    "using(values(?, ?)) tb_2_(BOOK_ID, AUTHOR_ID) " +
+                    "on tb_1_.BOOK_ID = tb_2_.BOOK_ID and tb_1_.AUTHOR_ID = tb_2_.AUTHOR_ID " +
+                    "when not matched then " +
+                    "insert(BOOK_ID, AUTHOR_ID) " +
+                    "values(tb_2_.BOOK_ID, tb_2_.AUTHOR_ID)",
                 listOf(1L, 1L),
                 listOf(1L, 88888L),
                 listOf(1L, 99999L)
@@ -297,7 +302,12 @@ class ManyToManyTest : AbstractMutationTest() {
 
             // Attach new associations based on `Book.authors`
             ExecutedStatement.batchOf(
-                "merge into BOOK_AUTHOR_MAPPING(BOOK_ID, AUTHOR_ID) key(BOOK_ID, AUTHOR_ID) values(?, ?)",
+                "merge into BOOK_AUTHOR_MAPPING tb_1_ " +
+                    "using(values(?, ?)) tb_2_(BOOK_ID, AUTHOR_ID) " +
+                    "on tb_1_.BOOK_ID = tb_2_.BOOK_ID and tb_1_.AUTHOR_ID = tb_2_.AUTHOR_ID " +
+                    "when not matched then " +
+                    "insert(BOOK_ID, AUTHOR_ID) " +
+                    "values(tb_2_.BOOK_ID, tb_2_.AUTHOR_ID)",
                 listOf(1L, 100L),
                 listOf(1L, 101L),
                 listOf(1L, 102L)

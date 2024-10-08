@@ -79,9 +79,12 @@ public class ManyToManyTest extends AbstractMutationTest {
 
                 // Attach new associations based on `Book.authors`
                 ExecutedStatement.batchOf(
-                        "merge into BOOK_AUTHOR_MAPPING(BOOK_ID, AUTHOR_ID) " +
-                                "key(BOOK_ID, AUTHOR_ID) " +
-                                "values(?, ?)",
+                        "merge into BOOK_AUTHOR_MAPPING tb_1_ " +
+                                "using(values(?, ?)) tb_2_(BOOK_ID, AUTHOR_ID) " +
+                                "on tb_1_.BOOK_ID = tb_2_.BOOK_ID and tb_1_.AUTHOR_ID = tb_2_.AUTHOR_ID " +
+                                "when not matched then " +
+                                "insert(BOOK_ID, AUTHOR_ID) " +
+                                "values(tb_2_.BOOK_ID, tb_2_.AUTHOR_ID)",
                         Arrays.asList(1L, 1L),
                         Arrays.asList(1L, 2L),
                         Arrays.asList(1L, 3L)
@@ -150,16 +153,19 @@ public class ManyToManyTest extends AbstractMutationTest {
                 // underlying database(i.e: `merge` of `H2`) will still cause the
                 // affected row count of the table to increase.
                 ExecutedStatement.of(
-                        "merge into BOOK_AUTHOR_MAPPING(BOOK_ID, AUTHOR_ID) " +
-                                "key(BOOK_ID, AUTHOR_ID) " +
-                                "values(?, ?)",
+                        "merge into BOOK_AUTHOR_MAPPING tb_1_ " +
+                                "using(values(?, ?)) tb_2_(BOOK_ID, AUTHOR_ID) " +
+                                "on tb_1_.BOOK_ID = tb_2_.BOOK_ID and tb_1_.AUTHOR_ID = tb_2_.AUTHOR_ID " +
+                                "when not matched then " +
+                                "insert(BOOK_ID, AUTHOR_ID) " +
+                                "values(tb_2_.BOOK_ID, tb_2_.AUTHOR_ID)",
                         1L, 1L
                 )
         );
 
-        Assertions.assertEquals(4, result.getTotalAffectedRowCount());
+        Assertions.assertEquals(3, result.getTotalAffectedRowCount());
         Assertions.assertEquals(1, result.getAffectedRowCount(Book.class));
-        Assertions.assertEquals(3, result.getAffectedRowCount(BookProps.AUTHORS));
+        Assertions.assertEquals(2, result.getAffectedRowCount(BookProps.AUTHORS));
     }
 
     @Test
@@ -212,9 +218,12 @@ public class ManyToManyTest extends AbstractMutationTest {
 
                 // Attach new associations based on `Book.authors`
                 ExecutedStatement.batchOf(
-                        "merge into BOOK_AUTHOR_MAPPING(BOOK_ID, AUTHOR_ID) " +
-                                "key(BOOK_ID, AUTHOR_ID) " +
-                                "values(?, ?)",
+                        "merge into BOOK_AUTHOR_MAPPING tb_1_ " +
+                                "using(values(?, ?)) tb_2_(BOOK_ID, AUTHOR_ID) " +
+                                "on tb_1_.BOOK_ID = tb_2_.BOOK_ID and tb_1_.AUTHOR_ID = tb_2_.AUTHOR_ID " +
+                                "when not matched then " +
+                                "insert(BOOK_ID, AUTHOR_ID) " +
+                                "values(tb_2_.BOOK_ID, tb_2_.AUTHOR_ID)",
                         Arrays.asList(1L, 1L),
                         Arrays.asList(1L, 88888L),
                         Arrays.asList(1L, 99999L)
@@ -293,7 +302,12 @@ public class ManyToManyTest extends AbstractMutationTest {
 
                 // Attach new associations based on `Book.authors`
                 ExecutedStatement.batchOf(
-                        "merge into BOOK_AUTHOR_MAPPING(BOOK_ID, AUTHOR_ID) key(BOOK_ID, AUTHOR_ID) values(?, ?)",
+                        "merge into BOOK_AUTHOR_MAPPING tb_1_ " +
+                                "using(values(?, ?)) tb_2_(BOOK_ID, AUTHOR_ID) " +
+                                "on tb_1_.BOOK_ID = tb_2_.BOOK_ID and tb_1_.AUTHOR_ID = tb_2_.AUTHOR_ID " +
+                                "when not matched then " +
+                                "insert(BOOK_ID, AUTHOR_ID) " +
+                                "values(tb_2_.BOOK_ID, tb_2_.AUTHOR_ID)",
                         Arrays.asList(1L, 100L),
                         Arrays.asList(1L, 101L),
                         Arrays.asList(1L, 102L)
