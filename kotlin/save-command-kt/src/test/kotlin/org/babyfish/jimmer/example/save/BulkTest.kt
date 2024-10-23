@@ -42,6 +42,7 @@ class BulkTest : AbstractMutationTest() {
          *     \---Steve Eichert
          *
          * ----Jim Wooley (id = 4, Alone object)
+         * 
          * ----Vajo Lukic (id = 5, Alone object)
          */
         jdbc(
