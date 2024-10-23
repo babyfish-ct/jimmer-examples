@@ -188,7 +188,7 @@ class BulkTest : AbstractMutationTest() {
         )
 
         /**
-         * 5. Refetch tree and assert it
+         * 5. Refetch trees and assert them
          */
         val refetchedStores = sql.executeQuery(BookStore::class) {
             select(
