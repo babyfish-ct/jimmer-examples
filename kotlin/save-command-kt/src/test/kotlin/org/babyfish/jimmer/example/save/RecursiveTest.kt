@@ -8,11 +8,11 @@ import org.junit.jupiter.api.Test
 
 
 /**
- * Recommended learning sequence: 6
+ * Recommended learning sequence: 7
  *
  *
  * SaveModeTest -> IncompleteObjectTest -> ManyToOneTest ->
- * OneToManyTest -> ManyToManyTest -> [current: RecursiveTest] -> TriggerTest
+ * OneToManyTest -> ManyToManyTest -> BulkTest -> [current: RecursiveTest] -> TriggerTest
  */
 class RecursiveTest : AbstractMutationTest() {
 

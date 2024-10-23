@@ -14,7 +14,7 @@ import java.math.BigDecimal
  *
  *
  * SaveModeTest -> IncompleteObjectTest -> ManyToOneTest ->
- * OneToManyTest -> [Current: ManyToManyTest] -> RecursiveTest -> TriggerTest
+ * OneToManyTest -> [Current: ManyToManyTest] -> BulkTest -> RecursiveTest -> TriggerTest
  */
 class ManyToManyTest : AbstractMutationTest() {
     

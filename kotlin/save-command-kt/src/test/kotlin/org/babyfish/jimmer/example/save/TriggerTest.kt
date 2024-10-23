@@ -8,11 +8,11 @@ import java.math.BigDecimal
 
 
 /**
- * Recommended learning sequence: 7
+ * Recommended learning sequence: 8
  *
  *
  * SaveModeTest -> IncompleteObjectTest -> ManyToOneTest ->
- * OneToManyTest -> ManyToManyTest -> RecursiveTest -> [Current: TriggerTest]
+ * OneToManyTest -> ManyToManyTest -> BulkTest -> RecursiveTest -> [Current: TriggerTest]
  */
 class TriggerTest : AbstractMutationWithTriggerTest() {
     

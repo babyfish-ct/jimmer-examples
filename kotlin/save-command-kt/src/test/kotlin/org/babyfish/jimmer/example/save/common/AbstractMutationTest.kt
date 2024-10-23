@@ -174,7 +174,16 @@ abstract class AbstractMutationTest {
 
         @JvmStatic
         protected fun String.toOneLine(): String =
-            replace("\n", "")
+            replace("--->", "")
+                .replace("\n", "")
                 .replace("\r", "")
+
+        @JvmStatic
+        protected fun assertContent(
+            expected: String,
+            obj: Any
+        ) {
+            Assertions.assertEquals(expected.toOneLine(), obj.toString())
+        }
     }
 }
