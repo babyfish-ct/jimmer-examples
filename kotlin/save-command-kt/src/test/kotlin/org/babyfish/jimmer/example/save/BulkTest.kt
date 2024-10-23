@@ -21,11 +21,11 @@ class BulkTest : AbstractMutationTest() {
     fun testBulkSave() {
 
         /**
-         * 1. Old tree
+         * 1. Old trees
          *
-         * +---O'REILLY
-         * |
-         * +-+-MANNING
+         * ----O'REILLY
+         *
+         * --+-MANNING
          *   |
          *   +-+-GraphQL in Action(edition 1)
          *   | |
@@ -75,7 +75,7 @@ class BulkTest : AbstractMutationTest() {
         )
 
         /**
-         * 2. New tree
+         * 2. New trees
          */
         val stores = listOf(
             BookStore {
@@ -114,7 +114,7 @@ class BulkTest : AbstractMutationTest() {
         )
 
         /**
-         * 3. Replace whole tree
+         * 3. Replace all trees
          */
         sql.saveEntities(stores)
 
