@@ -3,9 +3,7 @@ package org.babyfish.jimmer.example.save
 import org.babyfish.jimmer.example.save.common.AbstractMutationTest
 import org.babyfish.jimmer.example.save.common.ExecutedStatement
 import org.babyfish.jimmer.example.save.model.*
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
-import java.awt.print.Book
 import java.math.BigDecimal
 
 /**
