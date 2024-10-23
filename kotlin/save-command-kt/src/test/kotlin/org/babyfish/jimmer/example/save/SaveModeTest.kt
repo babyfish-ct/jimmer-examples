@@ -3,8 +3,6 @@ package org.babyfish.jimmer.example.save
 import org.babyfish.jimmer.example.save.common.AbstractMutationTest
 import org.babyfish.jimmer.example.save.common.ExecutedStatement
 import org.babyfish.jimmer.example.save.model.Book
-import org.babyfish.jimmer.example.save.model.by
-import org.babyfish.jimmer.kt.new
 import org.babyfish.jimmer.sql.ast.mutation.SaveMode
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
@@ -23,7 +21,7 @@ class SaveModeTest : AbstractMutationTest() {
     @Test
     fun testInsertOnly() {
         val result = sql.save(
-            new(Book::class).by {
+            Book {
                 name = "SQL in Action"
                 edition = 1
                 price = BigDecimal(49)
@@ -56,7 +54,7 @@ class SaveModeTest : AbstractMutationTest() {
         )
 
         val result = sql.save(
-            new(Book::class).by {
+            Book {
                 id = 10L
                 name = "SQL in Action"
                 edition = 2
@@ -86,7 +84,7 @@ class SaveModeTest : AbstractMutationTest() {
         )
 
         val result = sql.save(
-            new(Book::class).by {
+            Book {
                 name = "SQL in Action"
                 edition = 1
                 price = BigDecimal(49)
@@ -113,7 +111,7 @@ class SaveModeTest : AbstractMutationTest() {
     fun testUpdateNonExistingDataByKey() {
 
         val result = sql.save(
-            new(Book::class).by {
+            Book {
                 name = "SQL in Action"
                 edition = 1
                 price = BigDecimal(49)
@@ -146,7 +144,7 @@ class SaveModeTest : AbstractMutationTest() {
         )
 
         val result = sql.save(
-            new(Book::class).by {
+            Book {
                 id = 1L
                 name = "PL/SQL in Action"
                 edition = 2
@@ -172,7 +170,7 @@ class SaveModeTest : AbstractMutationTest() {
             10L, "SQL in Action", 1, BigDecimal(45)
         )
         val result = sql.save(
-            new(Book::class).by {
+            Book {
                 name = "SQL in Action"
                 edition = 1
                 price = BigDecimal(49)
@@ -196,7 +194,7 @@ class SaveModeTest : AbstractMutationTest() {
     @Test
     fun testUpsertNonExistingDataById() {
         val result = sql.save(
-            new(Book::class).by {
+            Book {
                 id = 10L
                 name = "SQL in Action"
                 edition = 2
@@ -222,7 +220,7 @@ class SaveModeTest : AbstractMutationTest() {
     @Test
     fun testUpsertNonExistingDataByKey() {
         val result = sql.save(
-            new(Book::class).by {
+            Book {
                 name = "SQL in Action"
                 edition = 1
                 price = BigDecimal(49)

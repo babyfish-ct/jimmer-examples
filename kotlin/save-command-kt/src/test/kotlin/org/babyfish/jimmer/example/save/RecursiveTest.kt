@@ -4,8 +4,6 @@ import org.babyfish.jimmer.example.save.common.AbstractMutationTest
 import org.babyfish.jimmer.example.save.common.ExecutedStatement
 import org.babyfish.jimmer.example.save.model.TreeNode
 import org.babyfish.jimmer.example.save.model.addBy
-import org.babyfish.jimmer.example.save.model.by
-import org.babyfish.jimmer.kt.new
 import org.junit.jupiter.api.Test
 
 
@@ -41,7 +39,7 @@ class RecursiveTest : AbstractMutationTest() {
              * However, the `parentNode` of ROOT cannot be specified implicitly,
              * so that it must be specified manually
              */
-            new(TreeNode::class).by {
+            TreeNode {
                 parentNode = null
                 name = "root"
                 childNodes().addBy {
@@ -216,7 +214,7 @@ class RecursiveTest : AbstractMutationTest() {
             // Please view the comment of `testCreateTree` to understand
             // why `parentNode` is a key property of `TreeNode`
             // but only the root node needs it.
-            new(TreeNode::class).by {
+            TreeNode {
                 parentNode = null
                 name = "root"
                 childNodes().addBy {

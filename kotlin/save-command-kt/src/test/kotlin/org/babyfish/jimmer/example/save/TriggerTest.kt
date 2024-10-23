@@ -3,8 +3,6 @@ package org.babyfish.jimmer.example.save
 import org.babyfish.jimmer.example.save.common.AbstractMutationWithTriggerTest
 import org.babyfish.jimmer.example.save.model.BookStore
 import org.babyfish.jimmer.example.save.model.addBy
-import org.babyfish.jimmer.example.save.model.by
-import org.babyfish.jimmer.kt.new
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 
@@ -49,7 +47,7 @@ class TriggerTest : AbstractMutationWithTriggerTest() {
         )
         
         sql.save(
-            new(BookStore::class).by {
+            BookStore {
                 name = "TURING"
                 books().addBy {
                     name = "Microservices Security in Action"

@@ -27,7 +27,7 @@ class IncompleteObjectTest : AbstractMutationTest() {
         )
 
         val result = sql.save(
-            new(BookStore::class).by {
+            BookStore {
                 id = 1L
                 name = "O'REILLY+"
 
@@ -73,7 +73,7 @@ class IncompleteObjectTest : AbstractMutationTest() {
         )
 
         val result = sql.save(
-            new(BookStore::class).by {
+            BookStore {
                 id = 1L
                 name = "O'REILLY+"
 

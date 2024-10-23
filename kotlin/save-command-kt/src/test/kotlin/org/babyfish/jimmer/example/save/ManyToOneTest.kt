@@ -4,10 +4,7 @@ import org.babyfish.jimmer.example.save.common.AbstractMutationTest
 import org.babyfish.jimmer.example.save.common.ExecutedStatement
 import org.babyfish.jimmer.example.save.model.Book
 import org.babyfish.jimmer.example.save.model.BookStore
-import org.babyfish.jimmer.example.save.model.by
 import org.babyfish.jimmer.kt.makeIdOnly
-import org.babyfish.jimmer.kt.new
-import org.babyfish.jimmer.sql.runtime.ExecutionException
 import org.babyfish.jimmer.sql.runtime.SaveException
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
@@ -39,7 +36,7 @@ class ManyToOneTest : AbstractMutationTest() {
             1L, "SQL in Action", 1, BigDecimal(45)
         )
         val result = sql.save(
-            new(Book::class).by {
+            Book {
                 name = "SQL in Action"
                 edition = 1
                 price = BigDecimal(49)
@@ -74,7 +71,7 @@ class ManyToOneTest : AbstractMutationTest() {
 
         val ex = Assertions.assertThrows(SaveException::class.java) {
             sql.save(
-                new(Book::class).by {
+                Book {
                     name = "SQL in Action"
                     edition = 1
                     price = BigDecimal(49)
@@ -125,7 +122,7 @@ class ManyToOneTest : AbstractMutationTest() {
         )
 
         val result = sql.save(
-            new(Book::class).by {
+            Book {
                 name = "SQL in Action"
                 edition = 1
                 price = BigDecimal(49)
@@ -176,7 +173,7 @@ class ManyToOneTest : AbstractMutationTest() {
         )
         
         val result = sql.save(
-            new(Book::class).by {
+            Book {
                 name = "SQL in Action"
                 edition = 1
                 price = BigDecimal(49)
@@ -223,7 +220,7 @@ class ManyToOneTest : AbstractMutationTest() {
         )
 
         val result = sql.save(
-            new(Book::class).by {
+            Book {
                 name = "SQL in Action"
                 edition = 1
                 price = BigDecimal(49)

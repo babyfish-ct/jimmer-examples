@@ -5,8 +5,6 @@ import org.babyfish.jimmer.example.save.common.ExecutedStatement
 import org.babyfish.jimmer.example.save.model.Book
 import org.babyfish.jimmer.example.save.model.BookStore
 import org.babyfish.jimmer.example.save.model.addBy
-import org.babyfish.jimmer.example.save.model.by
-import org.babyfish.jimmer.kt.new
 import org.babyfish.jimmer.sql.DissociateAction
 import org.babyfish.jimmer.sql.runtime.SaveException
 import org.junit.jupiter.api.Assertions
@@ -42,7 +40,7 @@ class OneToManyTest() : AbstractMutationTest() {
         )
 
         val result = sql.save(
-            new(BookStore::class).by {
+            BookStore {
                 name = "MANNING"
                 books().addBy {
                     id = 1L
@@ -117,7 +115,7 @@ class OneToManyTest() : AbstractMutationTest() {
         )
 
         val result = sql.save(
-            new(BookStore::class).by {
+            BookStore {
                 name = "MANNING"
                 books().addBy {
                     name = "SQL in Action"
@@ -201,7 +199,7 @@ class OneToManyTest() : AbstractMutationTest() {
         )
 
         val result = sql.save(
-            new(BookStore::class).by {
+            BookStore {
                 name = "MANNING"
                 books().addBy {
                     name = "SQL in Action"
@@ -275,7 +273,7 @@ class OneToManyTest() : AbstractMutationTest() {
         jdbc("insert into book_store(id, name) values(?, ?)", 1L, "MANNING")
 
         val result = sql.save(
-            new(BookStore::class).by {
+            BookStore {
                 name = "MANNING"
                 books().addBy {
                     name = "SQL in Action"
@@ -366,7 +364,7 @@ class OneToManyTest() : AbstractMutationTest() {
 
         val ex = Assertions.assertThrows(SaveException::class.java) {
             sql.save(
-                new(BookStore::class).by {
+                BookStore {
                     name = "MANNING"
                     books().addBy {
                         id = 1L
@@ -459,7 +457,7 @@ class OneToManyTest() : AbstractMutationTest() {
         )
 
         val result = sql.save(
-            new(BookStore::class).by {
+            BookStore {
                 name = "MANNING"
                 books().addBy {
                     id = 1L
@@ -525,7 +523,7 @@ class OneToManyTest() : AbstractMutationTest() {
         )
 
         val result = sql.save(
-            new(BookStore::class).by {
+            BookStore {
                 name = "MANNING"
                 books().addBy {
                     id = 1L

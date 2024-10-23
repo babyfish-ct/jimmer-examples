@@ -3,7 +3,6 @@ package org.babyfish.jimmer.example.save
 import org.babyfish.jimmer.example.save.common.AbstractMutationTest
 import org.babyfish.jimmer.example.save.common.ExecutedStatement
 import org.babyfish.jimmer.example.save.model.*
-import org.babyfish.jimmer.kt.new
 import org.babyfish.jimmer.sql.runtime.SaveException
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
@@ -47,7 +46,7 @@ class ManyToManyTest : AbstractMutationTest() {
         )
         
         val result = sql.save(
-            new(Book::class).by {
+            Book {
                 name = "SQL in Action"
                 edition = 1
                 price = BigDecimal(49)
@@ -121,7 +120,7 @@ class ManyToManyTest : AbstractMutationTest() {
         jdbc("insert into book_author_mapping(book_id, author_id) values(?, ?)", 1L, 3L)
 
         val result = sql.save(
-            new(Book::class).by {
+            Book {
                 name = "LINQ in Action"
                 edition = 1
                 price = BigDecimal(49)
@@ -179,7 +178,7 @@ class ManyToManyTest : AbstractMutationTest() {
 
         val ex = Assertions.assertThrows(SaveException::class.java) {
             sql.save(
-                new(Book::class).by {
+                Book {
                     name = "LINQ in Action"
                     edition = 1
                     price = BigDecimal(49)
@@ -251,7 +250,7 @@ class ManyToManyTest : AbstractMutationTest() {
         )
 
         val result = sql.save(
-            new(Book::class).by {
+            Book {
                 name = "LINQ in Action"
                 edition = 1
                 price = BigDecimal(49)
