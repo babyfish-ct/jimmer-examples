@@ -120,9 +120,10 @@ class BulkTest : AbstractMutationTest() {
 
         /**
          * 4. Validate DML
-         *    For every level
+         *
+         *    For each level
          *    -   Use database-level upsert
-         *    -   Batch DML
+         *    -   Use Batch DML
          */
         assertExecutedStatements(
 
