@@ -13,7 +13,7 @@ import java.math.BigDecimal
  *
  *
  * SaveModeTest -> IncompleteObjectTest -> ManyToOneTest ->
- * OneToManyTest -> ManyToManyTest -> [current: BulkTest] -> BulkTest -> RecursiveTest -> TriggerTest
+ * OneToManyTest -> ManyToManyTest -> [current: BulkTest] -> RecursiveTest -> TriggerTest
  */
 class BulkTest : AbstractMutationTest() {
 
