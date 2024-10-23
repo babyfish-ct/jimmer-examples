@@ -21,7 +21,7 @@ class BulkTest : AbstractMutationTest() {
     fun testBulkSave() {
 
         /**
-         * Old tree
+         * 1. Old tree
          *
          * +---O'REILLY
          * |
@@ -42,7 +42,7 @@ class BulkTest : AbstractMutationTest() {
          *     \---Steve Eichert
          *
          * ----Jim Wooley (id = 4, Alone object)
-         * 
+         *
          * ----Vajo Lukic (id = 5, Alone object)
          */
         jdbc(
@@ -74,6 +74,9 @@ class BulkTest : AbstractMutationTest() {
             3L, 2L, 3L, 3L
         )
 
+        /**
+         * 2. New tree
+         */
         val stores = listOf(
             BookStore {
                 name = "MANNING"
@@ -110,8 +113,17 @@ class BulkTest : AbstractMutationTest() {
             }
         )
 
+        /**
+         * 3. Replace whole tree
+         */
         sql.saveEntities(stores)
 
+        /**
+         * 4. Validate DML
+         *    For every level
+         *    -   Use database-level upsert
+         *    -   Batch DML
+         */
         assertExecutedStatements(
 
             ExecutedStatement.batchOf(
@@ -174,6 +186,9 @@ class BulkTest : AbstractMutationTest() {
             )
         )
 
+        /**
+         * 5. Refetch tree and assert it
+         */
         val refetchedStores = sql.executeQuery(BookStore::class) {
             select(
                 table.fetchBy {
