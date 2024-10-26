@@ -8,8 +8,7 @@ import org.babyfish.jimmer.sql.example.kt.model.by
 import org.babyfish.jimmer.sql.example.kt.service.dto.FlatTreeNodeView
 import org.babyfish.jimmer.sql.example.kt.service.dto.RecursiveTreeInput
 import org.babyfish.jimmer.sql.kt.fetcher.newFetcher
-import org.babyfish.jimmer.sql.runtime.SaveErrorCode
-import org.babyfish.jimmer.sql.runtime.SaveException
+import org.babyfish.jimmer.sql.exception.SaveException
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.*
 
@@ -39,7 +38,7 @@ class TreeService(
     @GetMapping("/roots/recursive")
     fun findRootTrees(
         @RequestParam(required = false) rootName: String?
-    ): List<@FetchBy("RECURSIVE_FETCHER") TreeNode> = // ❶
+    ): List<@FetchBy("RECURSIVE_FETCHER") TreeNode> = // (1)
         treeNodeRepository.findByParentIsNullAndName(rootName, RECURSIVE_FETCHER)
 
     @GetMapping("/node/{id}")
@@ -51,7 +50,7 @@ class TreeService(
     @PutMapping("/root/recursive")
     @Throws(SaveException::class)
     fun saveTree(
-        @RequestBody input: RecursiveTreeInput // ❷
+        @RequestBody input: RecursiveTreeInput // (2)
     ): TreeNode {
         val treeNode = new(TreeNode::class).by(
             input.toEntity()
@@ -95,9 +94,9 @@ class TreeService(
 }
 
 /*----------------Documentation Links----------------
-❶ https://babyfish-ct.github.io/jimmer/docs/spring/client/api#declare-fetchby
+(1) https://babyfish-ct.github.io/jimmer/docs/spring/client/api#declare-fetchby
   https://babyfish-ct.github.io/jimmer/docs/query/object-fetcher/recursive
 
-❷ https://babyfish-ct.github.io/jimmer/docs/mutation/save-command/input-dto/
+(2) https://babyfish-ct.github.io/jimmer/docs/mutation/save-command/input-dto/
   https://babyfish-ct.github.io/jimmer/docs/object/view/dto-language#92-recursive-association
 ---------------------------------------------------*/

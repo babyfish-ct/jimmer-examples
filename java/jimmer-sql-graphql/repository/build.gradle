@@ -9,9 +9,7 @@ repositories {
 dependencies {
 
     api project(":model")
-    api ("org.babyfish.jimmer:jimmer-spring-boot-starter:${jimmerVersion}") {
-        exclude group:"org.antlr", module: "antlr4-runtime"
-    }
+    api ("org.babyfish.jimmer:jimmer-spring-boot-starter:${jimmerVersion}")
 }
 
 java {

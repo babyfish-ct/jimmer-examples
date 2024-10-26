@@ -14,9 +14,7 @@ dependencies {
 	implementation project(":repository")
 	implementation project(":runtime")
 
-	implementation("org.babyfish.jimmer:jimmer-spring-boot-starter:${jimmerVersion}") {
-		exclude group:"org.antlr", module: "antlr4-runtime"
-	}
+	implementation("org.babyfish.jimmer:jimmer-spring-boot-starter:${jimmerVersion}")
 
 	annotationProcessor "org.babyfish.jimmer:jimmer-apt:${jimmerVersion}"
 

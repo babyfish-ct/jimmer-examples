@@ -15,15 +15,15 @@ interface Author : BaseEntity {
     // It is inappropriate to use `firstName` and `lastName`
     // as keys in actual project, but this is just a small demo.
 
-    @Key // ❶
+    @Key // (1)
     val firstName: String
 
-    @Key // ❷
+    @Key // (2)
     val lastName: String
 
     val gender: Gender
 
-    @ManyToMany(mappedBy = "authors") // ❸
+    @ManyToMany(mappedBy = "authors") // (3)
     val books: List<Book>
 
     // -----------------------------
@@ -43,7 +43,7 @@ interface Author : BaseEntity {
     // complex calculated properties, you can view `BookStore.avgPrice` and
     // `BookStore.newestBooks`
     // -----------------------------
-    @Formula(dependencies = ["firstName", "lastName"]) // ❹
+    @Formula(dependencies = ["firstName", "lastName"]) // (4)
     val fullName: String
         get() = "$firstName $lastName"
 
@@ -55,7 +55,7 @@ interface Author : BaseEntity {
 }
 
 /*----------------Documentation Links----------------
-❶ ❷ https://babyfish-ct.github.io/jimmer/docs/mapping/advanced/key
-❸ https://babyfish-ct.github.io/jimmer/docs/mapping/base/association/many-to-many
-❹ https://babyfish-ct.github.io/jimmer/docs/mapping/advanced/calculated/formula
+(1) (2) https://babyfish-ct.github.io/jimmer/docs/mapping/advanced/key
+(3) https://babyfish-ct.github.io/jimmer/docs/mapping/base/association/many-to-many
+(4) https://babyfish-ct.github.io/jimmer/docs/mapping/advanced/calculated/formula
 ---------------------------------------------------*/

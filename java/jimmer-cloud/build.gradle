@@ -1,5 +1,9 @@
 ext {
-    jimmerVersion = "0.9.1"
+    jimmerVersion = "0.9.3"
+
+    // Jimmer remote associations require ANTLR
+    antlrVersion = "4.13.1"
+
     springBootVersion = "2.7.0"
     springCloudVersion = "2021.0.3"
 }
