@@ -13,7 +13,7 @@ class NotUniqueExceptionTranslator() : ExceptionTranslator<NotUnique> {
         if (ex.isMatched(TreeNode::parent, TreeNode::name)) {
             throw IllegalArgumentException(
                 "The tree node with parent id \"" +
-                    ex.getValue(TreeNodeProps.PARENT)?.id +
+                    ex[TreeNode::parent]?.id +
                     "\" and name \"" +
                     ex[TreeNode::name] +
                     "\" already exists"
