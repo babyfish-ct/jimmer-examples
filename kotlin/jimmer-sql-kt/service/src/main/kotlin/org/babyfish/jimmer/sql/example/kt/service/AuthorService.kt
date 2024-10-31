@@ -8,8 +8,7 @@ import org.babyfish.jimmer.sql.example.kt.model.by
 import org.babyfish.jimmer.sql.example.kt.service.dto.AuthorInput
 import org.babyfish.jimmer.sql.example.kt.service.dto.AuthorSpecification
 import org.babyfish.jimmer.sql.kt.fetcher.newFetcher
-import org.babyfish.jimmer.sql.runtime.SaveErrorCode
-import org.babyfish.jimmer.sql.runtime.SaveException
+import org.babyfish.jimmer.sql.exception.SaveException
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.*
 

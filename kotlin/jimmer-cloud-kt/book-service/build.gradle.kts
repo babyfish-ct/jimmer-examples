@@ -9,6 +9,10 @@ plugins {
 }
 
 val jimmerVersion: String by rootProject.extra
+
+// Jimmer remote associations require ANTLR
+val antlrVersion: String by rootProject.extra
+
 val springCloudVersion: String by rootProject.extra
 
 repositories {
@@ -26,6 +30,7 @@ dependencies {
     ksp("org.babyfish.jimmer:jimmer-ksp:${jimmerVersion}")
 
     implementation("org.babyfish.jimmer:jimmer-spring-boot-starter:$jimmerVersion")
+    runtimeOnly("org.antlr:antlr4-runtime:$antlrVersion")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
     implementation("org.springframework.cloud:spring-cloud-starter-loadbalancer")

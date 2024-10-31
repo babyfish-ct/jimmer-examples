@@ -1,20 +1,26 @@
 package org.babyfish.jimmer.example.save.common
 
+import org.babyfish.jimmer.meta.ImmutableProp
 import org.babyfish.jimmer.sql.dialect.H2Dialect
 import org.babyfish.jimmer.sql.kt.KSqlClient
 import org.babyfish.jimmer.sql.kt.cfg.KSqlClientDsl
 import org.babyfish.jimmer.sql.kt.newKSqlClient
 import org.babyfish.jimmer.sql.runtime.DefaultExecutor
+import org.babyfish.jimmer.sql.runtime.ExecutionPurpose
 import org.babyfish.jimmer.sql.runtime.Executor
+import org.babyfish.jimmer.sql.runtime.Executor.BatchContext
+import org.babyfish.jimmer.sql.runtime.JSqlClientImplementor
 import org.h2.Driver
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import java.io.IOException
 import java.io.InputStreamReader
+import java.lang.Exception
 import java.sql.Connection
 import java.sql.SQLException
 import java.util.*
+import java.util.function.BiFunction
 import kotlin.math.min
 
 abstract class AbstractMutationTest {
@@ -36,13 +42,44 @@ abstract class AbstractMutationTest {
             setConnectionManager {
                 proceed(connection)
             }
+            setTargetTransferable(true)
             setExecutor(
                 object : Executor {
                     override fun <R : Any?> execute(args: Executor.Args<R>): R {
                         executedStatements.add(
-                            ExecutedStatement(args.sql, *args.variables.toTypedArray())
+                            ExecutedStatement.of(args.sql, *args.variables.toTypedArray())
                         )
                         return DefaultExecutor.INSTANCE.execute(args)
+                    }
+
+                    override fun executeBatch(
+                        con: Connection,
+                        sql: String,
+                        generatedIdProp: ImmutableProp?,
+                        purpose: ExecutionPurpose,
+                        sqlClient: JSqlClientImplementor
+                    ): BatchContext {
+                        val variableLists = mutableListOf<List<Any>>()
+                        val raw = DefaultExecutor.INSTANCE.executeBatch(
+                            con,
+                            sql,
+                            generatedIdProp,
+                            purpose,
+                            sqlClient
+                        )
+                        return object : BatchContext by (raw) {
+                            override fun add(variables: List<Any>) {
+                                variableLists.add(variables)
+                                raw.add(variables)
+                            }
+
+                            override fun execute(
+                                exceptionTranslator: BiFunction<SQLException, BatchContext, Exception>?
+                            ): IntArray {
+                                executedStatements.add(ExecutedStatement.batchOf(sql, *variableLists.toTypedArray()))
+                                return raw.execute(exceptionTranslator)
+                            }
+                        }
                     }
                 }
             )
@@ -77,10 +114,17 @@ abstract class AbstractMutationTest {
                 "Failed to assert sql of statements[$i]"
             )
             Assertions.assertEquals(
-                executedStatements[i].variables,
-                this.executedStatements[i].variables,
-                "Failed to assert variables of statements[$i]"
+                executedStatements[i].variableLists.size,
+                this.executedStatements[i].variableLists.size,
+                "Failed to assert batch row count of statements[$i]"
             )
+            for (ii in 0 until executedStatements[i].variableLists.size) {
+                Assertions.assertEquals(
+                    executedStatements[i].variableLists[ii],
+                    this.executedStatements[i].variableLists[ii],
+                    "Failed to assert variables of statements[$i][$ii]"
+                )
+            }
         }
         Assertions.assertEquals(
             executedStatements.size,
@@ -126,6 +170,20 @@ abstract class AbstractMutationTest {
             } catch (ex: SQLException) {
                 Assertions.fail("Failed to initialize database", ex)
             }
+        }
+
+        @JvmStatic
+        protected fun String.toOneLine(): String =
+            replace("--->", "")
+                .replace("\n", "")
+                .replace("\r", "")
+
+        @JvmStatic
+        protected fun assertContent(
+            expected: String,
+            obj: Any
+        ) {
+            Assertions.assertEquals(expected.toOneLine(), obj.toString())
         }
     }
 }

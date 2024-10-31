@@ -24,7 +24,7 @@ public class App {
         /*
          * First step, create new object from scratch
          */
-        Book book = Objects.createBook(b -> {
+        Book book = Immutables.createBook(b -> {
             b.setName("book");
             b.applyStore(s -> {
                 s.setName("store");
@@ -40,7 +40,7 @@ public class App {
         /*
          * Second step, make some "changes" based on the existing object to get a new object.
          */
-        Book newBook = Objects.createBook(book, b -> {
+        Book newBook = Immutables.createBook(book, b -> {
 
             b.setName(b.name() + "!");
             b.setLastModifiedTime(LocalDateTime.now());
@@ -66,7 +66,7 @@ public class App {
         /*
          * First step, create new object from scratch
          */
-        TreeNode treeNode = Objects.createTreeNode(root -> {
+        TreeNode treeNode = Immutables.createTreeNode(root -> {
             root.setName("Root").addIntoChildNodes(food -> {
                 food
                         .setName("Food")
@@ -87,7 +87,7 @@ public class App {
         /*
          * Second step, make some "changes" based on the existing object to get a new object.
          */
-        TreeNode newTreeNode = Objects.createTreeNode(
+        TreeNode newTreeNode = Immutables.createTreeNode(
                 treeNode, // existing object
                 root -> {
                     root

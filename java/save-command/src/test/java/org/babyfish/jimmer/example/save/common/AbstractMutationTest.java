@@ -1,9 +1,12 @@
 package org.babyfish.jimmer.example.save.common;
 
+import org.babyfish.jimmer.meta.ImmutableProp;
 import org.babyfish.jimmer.sql.JSqlClient;
 import org.babyfish.jimmer.sql.dialect.H2Dialect;
 import org.babyfish.jimmer.sql.runtime.*;
 import org.h2.Driver;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,7 +21,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import java.util.function.Function;
+import java.util.function.BiFunction;
 
 public abstract class AbstractMutationTest {
 
@@ -36,8 +39,9 @@ public abstract class AbstractMutationTest {
         JSqlClient.Builder builder = JSqlClient
                 .newBuilder()
                 .setDialect(new H2Dialect())
+                .setTargetTransferable(true)
                 .setExecutor(new RecordSqlExecutor())
-                .setConnectionManager(new ExistsConnectionManager());
+                .setConnectionManager(ConnectionManager.singleConnectionManager(connection));
         customize(builder);
         sqlClient = builder.build();
     }
@@ -62,8 +66,8 @@ public abstract class AbstractMutationTest {
                 statement.setObject(i + 1, args[i]);
             }
             statement.execute();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException ex) {
+            throw new IllegalArgumentException(ex);
         }
     }
 
@@ -76,10 +80,22 @@ public abstract class AbstractMutationTest {
                     "Failed to assert sql of statements[" + i + "]"
             );
             Assertions.assertEquals(
-                    executedStatements[i].getVariables(),
-                    this.executedStatements.get(i).getVariables(),
-                    "Failed to assert variables of statements[" + i + "]"
+                    executedStatements[i].getVariableLists().size(),
+                    this.executedStatements.get(i).getVariableLists().size(),
+                    "Failed to assert batch row count of statements[" + i + "]"
             );
+            Assertions.assertEquals(
+                    executedStatements[i].getSql(),
+                    this.executedStatements.get(i).getSql(),
+                    "Failed to assert sql of statements[" + i + "]"
+            );
+            for (int ii = 0; ii < executedStatements[i].getVariableLists().size(); ii++) {
+                Assertions.assertEquals(
+                        executedStatements[i].getVariableLists().get(ii),
+                        this.executedStatements.get(i).getVariableLists().get(ii),
+                        "Failed to assert variables of statements[" + i + "][" + ii + "]"
+                );
+            }
         }
         Assertions.assertEquals(
                 executedStatements.length,
@@ -127,20 +143,105 @@ public abstract class AbstractMutationTest {
         @Override
         public <R> R execute(Args<R> args) {
             executedStatements.add(
-                    new ExecutedStatement(
+                    ExecutedStatement.of(
                             args.sql,
                             args.variables.toArray(new Object[0])
                     )
             );
             return DefaultExecutor.INSTANCE.execute(args);
         }
+
+        public Executor.BatchContext executeBatch(
+                Connection con,
+                String sql,
+                @Nullable ImmutableProp generatedIdProp,
+                @NotNull ExecutionPurpose purpose,
+                @NotNull JSqlClientImplementor sqlClient
+        ) {
+            BatchContext raw = DefaultExecutor.INSTANCE.executeBatch(
+                    con,
+                    sql,
+                    generatedIdProp,
+                    purpose,
+                    sqlClient
+            );
+            return new BatchContextWrapper(raw, sql, executedStatements);
+        }
     }
 
-    private class ExistsConnectionManager implements ConnectionManager {
+    private static class BatchContextWrapper implements Executor.BatchContext {
+
+        private final Executor.BatchContext raw;
+
+        private final String sql;
+
+        private final List<ExecutedStatement> executedStatements;
+
+        private final List<List<Object>> variableLists = new ArrayList<>();
+
+        BatchContextWrapper(
+                Executor.BatchContext raw,
+                String sql,
+                List<ExecutedStatement> executedStatements
+        ) {
+            this.raw = raw;
+            this.sql = sql;
+            this.executedStatements = executedStatements;
+        }
 
         @Override
-        public <R> R execute(Function<Connection, R> block) {
-            return block.apply(connection);
+        public JSqlClientImplementor sqlClient() {
+            return raw.sqlClient();
+        }
+
+        @Override
+        public String sql() {
+            return raw.sql();
+        }
+
+        @Override
+        public ExecutionPurpose purpose() {
+            return raw.purpose();
+        }
+
+        @Override
+        public ExecutorContext ctx() {
+            return raw.ctx();
+        }
+
+        @Override
+        public void add(List<Object> variables) {
+            variableLists.add(variables);
+            raw.add(variables);
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public int[] execute(
+                BiFunction<SQLException, Executor.BatchContext, Exception> exceptionTranslator
+        ) {
+            executedStatements.add(
+                    ExecutedStatement.batchOf(
+                            sql,
+                            variableLists.toArray((List<Object>[])new List[0])
+                    )
+            );
+            return raw.execute(exceptionTranslator);
+        }
+
+        @Override
+        public Object[] generatedIds() {
+            return raw.generatedIds();
+        }
+
+        @Override
+        public void addExecutedListener(Runnable listener) {
+            raw.addExecutedListener(listener);
+        }
+
+        @Override
+        public void close() {
+            raw.close();
         }
     }
 }

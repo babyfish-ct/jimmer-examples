@@ -77,7 +77,7 @@ export class AuthorService {
     readonly saveAuthor: (options: AuthorServiceOptions['saveAuthor']) => Promise<
         Dynamic_Author
     > = async(options) => {
-        let _uri = '/author/';
+        let _uri = '/author';
         return (await this.executor({uri: _uri, method: 'PUT', body: options.body})) as Promise<Dynamic_Author>;
     }
 }

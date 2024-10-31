@@ -9,7 +9,7 @@ repositories {
 dependencies {
 
     api project(":model")
-    api "org.babyfish.jimmer:jimmer-spring-boot-starter:${jimmerVersion}"
+    api ("org.babyfish.jimmer:jimmer-spring-boot-starter:${jimmerVersion}")
 }
 
 java {

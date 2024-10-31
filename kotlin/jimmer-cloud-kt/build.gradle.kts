@@ -1,4 +1,8 @@
-val jimmerVersion by extra { "0.8.155" }
+val jimmerVersion by extra { "0.9.4" }
+
+// Jimmer remote associations require ANTLR
+val antlrVersion by extra { "4.13.2"}
+
 val springCloudVersion by extra { "2021.0.3" }
 
 allprojects {

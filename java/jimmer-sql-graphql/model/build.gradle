@@ -7,7 +7,9 @@ repositories {
 }
 
 dependencies {
-    implementation "org.babyfish.jimmer:jimmer-sql:${jimmerVersion}"
+    implementation ("org.babyfish.jimmer:jimmer-sql:${jimmerVersion}") {
+        exclude group:"org.antlr", module: "antlr4-runtime"
+    }
     annotationProcessor "org.babyfish.jimmer:jimmer-apt:${jimmerVersion}"
 
     // In order to work with java-8, caffeine 2.x must be used

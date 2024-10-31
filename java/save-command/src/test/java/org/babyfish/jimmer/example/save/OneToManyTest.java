@@ -2,20 +2,26 @@ package org.babyfish.jimmer.example.save;
 
 import org.babyfish.jimmer.example.save.common.AbstractMutationTest;
 import org.babyfish.jimmer.example.save.common.ExecutedStatement;
-import org.babyfish.jimmer.example.save.model.*;
+import org.babyfish.jimmer.example.save.model.Book;
+import org.babyfish.jimmer.example.save.model.BookProps;
+import org.babyfish.jimmer.example.save.model.BookStore;
+import org.babyfish.jimmer.example.save.model.BookStoreDraft;
 import org.babyfish.jimmer.sql.DissociateAction;
 import org.babyfish.jimmer.sql.ast.mutation.SimpleSaveResult;
-import org.babyfish.jimmer.sql.runtime.SaveException;
+import org.babyfish.jimmer.sql.exception.SaveException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * Recommended learning sequence: 4
  *
- * <p>SaveModeTest -> IncompleteObjectTest -> ManyToOneTest ->
- * [current: OneToManyTest] -> ManyToManyTest -> RecursiveTest -> TriggerTest</p>
+ *
+ * SaveModeTest -> IncompleteObjectTest -> ManyToOneTest ->
+ * [current: OneToManyTest] -> ManyToManyTest -> RecursiveTest -> TriggerTest
  */
 public class OneToManyTest extends AbstractMutationTest {
 
@@ -27,43 +33,62 @@ public class OneToManyTest extends AbstractMutationTest {
      */
 
     @Test
-    public void testAttachChildByShortAssociation() {
+    public void  testAttachChildByShortAssociation() {
 
         jdbc(
                 "insert into book(id, name, edition, price) values(?, ?, ?, ?)",
-                10L,
+                1L,
                 "SQL in Action",
                 1,
                 new BigDecimal(45)
         );
 
-        SimpleSaveResult<BookStore> result = sql().getEntities().save(
-                BookStoreDraft.$.produce(store -> {
-                    store.setName("MANNING");
-                    store.addIntoBooks(book -> book.setId(10L));
+        SimpleSaveResult<BookStore> result = sql().save(
+                BookStoreDraft.$.produce(draft -> {
+                    draft.setName("MANNING");
+                    draft.addIntoBooks(book -> book.setId(1L));
                 })
         );
 
         assertExecutedStatements(
 
-                // Select aggregate-root by key
-                new ExecutedStatement(
-                        "select tb_1_.ID, tb_1_.NAME " +
-                                "from BOOK_STORE tb_1_ " +
-                                "where tb_1_.NAME = ?",
+                // Merge aggregate-root
+                ExecutedStatement.of(
+                        "merge into BOOK_STORE(NAME) key(NAME) values(?)",
                         "MANNING"
                 ),
 
-                // Aggregate does not exist, insert it
-                new ExecutedStatement(
-                        "insert into BOOK_STORE(NAME) values(?)",
-                        "MANNING"
+                // Merged aggregate-root
+                ExecutedStatement.of(
+                        "merge into BOOK(ID, STORE_ID) " +
+                                "key(ID) values(?, ?)",
+                        1L, 100L
                 ),
 
-                // Change the foreign key of child object
-                new ExecutedStatement(
-                        "update BOOK set STORE_ID = ? where ID = ?",
-                        1L, 10L
+                // Before detach unnecessary books, the associations
+                // based on `Book.authors` need to be detached first.
+                // However, nothing will be deleted in this case
+                ExecutedStatement.of(
+                        "delete from BOOK_AUTHOR_MAPPING tb_1_ " +
+                                "where exists (" +
+                                "--->select * " +
+                                "--->from BOOK tb_2_ " +
+                                "--->where " +
+                                "--->--->tb_1_.BOOK_ID = tb_2_.ID " +
+                                "--->and " +
+                                "--->--->STORE_ID = ? " +
+                                "--->and " +
+                                "--->--->not (ID = any(?))" +
+                                ")",
+                        100L, Arrays.asList(1L)
+                ),
+
+                // Detach unnecessary books.
+                // However, nothing will be deleted in this case
+                ExecutedStatement.of(
+                        "delete from BOOK " +
+                                "where STORE_ID = ? and not (ID = any(?))",
+                        100L, Collections.singletonList(1L)
                 )
         );
 
@@ -73,194 +98,266 @@ public class OneToManyTest extends AbstractMutationTest {
     }
 
     @Test
-    public void testAttachChildByAssociationBasedOnKey() {
+    public void  testAttachChildByAssociationBasedOnKey() {
 
         jdbc(
                 "insert into book(id, name, edition, price) values(?, ?, ?, ?)",
-                10,
+                1,
                 "SQL in Action",
                 1,
-                new BigDecimal(45)
+                new BigDecimal(49)
         );
 
-        SimpleSaveResult<BookStore> result = sql().getEntities().save(
-                BookStoreDraft.$.produce(store -> {
-                    store.setName("MANNING");
-                    store.addIntoBooks(book -> book.setName("SQL in Action").setEdition(1));
+        jdbc(
+                "insert into book(id, name, edition, price) values(?, ?, ?, ?)",
+                2,
+                "Redis in Action",
+                1,
+                new BigDecimal(39)
+        );
+
+        SimpleSaveResult<BookStore> result = sql().save(
+                BookStoreDraft.$.produce(draft -> {
+                    draft.setName("MANNING");
+                    draft.addIntoBooks(book -> {
+                        book.setName("SQL in Action");
+                        book.setEdition(1);
+                    });
+                    draft.addIntoBooks(book -> {
+                        book.setName("Redis in Action");
+                        book.setEdition(1);
+                    });
                 })
         );
 
         assertExecutedStatements(
 
-                // Select aggregate-root by key
-                new ExecutedStatement(
-                        "select tb_1_.ID, tb_1_.NAME " +
-                                "from BOOK_STORE tb_1_ " +
-                                "where tb_1_.NAME = ?",
+                // Merge aggregate-root
+                ExecutedStatement.of(
+                        "merge into BOOK_STORE(NAME) key(NAME) values(?)",
                         "MANNING"
                 ),
 
-                // Aggregate does not exist, insert it
-                new ExecutedStatement(
-                        "insert into BOOK_STORE(NAME) values(?)",
-                        "MANNING"
+                // Merge associated objects
+                ExecutedStatement.batchOf(
+                        "merge into BOOK(NAME, EDITION, STORE_ID) " +
+                                "key(NAME, EDITION) " +
+                                "values(?, ?, ?)",
+                        Arrays.asList("SQL in Action", 1, 100L),
+                        Arrays.asList("Redis in Action", 1, 100L)
                 ),
 
-                // Select child object by key
-                new ExecutedStatement(
-                        "select tb_1_.ID, tb_1_.NAME, tb_1_.EDITION " +
-                                "from BOOK tb_1_ " +
-                                "where tb_1_.NAME = ? and tb_1_.EDITION = ?",
-                        "SQL in Action", 1
+                // Before detach unnecessary books, the associations
+                // based on `Book.authors` need to be detached first.
+                // However, nothing will be deleted in this case
+                ExecutedStatement.of(
+                        "delete from BOOK_AUTHOR_MAPPING tb_1_ " +
+                        "where exists (" +
+                        "--->select * " +
+                        "--->from BOOK tb_2_ " +
+                        "--->where " +
+                        "--->--->tb_1_.BOOK_ID = tb_2_.ID " +
+                        "--->and " +
+                        "--->--->STORE_ID = ? " +
+                        "--->and " +
+                        "--->--->not (ID = any(?))" +
+                        ")",
+                        100L, Arrays.asList(1L, 2L)
                 ),
 
-                // Child object exists, update it, include foreign key
-                new ExecutedStatement(
-                        "update BOOK set STORE_ID = ? where ID = ?",
-                        1L, 10L
+                // Detach unnecessary books.
+                // However, nothing will be deleted in this case
+                ExecutedStatement.of(
+                        "delete from BOOK " +
+                                "where STORE_ID = ? and not (ID = any(?))",
+                        100L, Arrays.asList(1L, 2L)
                 )
         );
 
-        Assertions.assertEquals(2, result.getTotalAffectedRowCount());
+        Assertions.assertEquals(3, result.getTotalAffectedRowCount());
         Assertions.assertEquals(1, result.getAffectedRowCount(BookStore.class));
-        Assertions.assertEquals(1, result.getAffectedRowCount(Book.class));
+        Assertions.assertEquals(2, result.getAffectedRowCount(Book.class));
     }
 
     @Test
-    public void testUpdateWithAssociation() {
+    public void  testUpdateWithAssociation() {
 
         jdbc("insert into book_store(id, name) values(?, ?)", 1L, "MANNING");
         jdbc(
                 "insert into book(id, name, edition, price, store_id) values(?, ?, ?, ?, ?)",
-                10,
+                1,
                 "SQL in Action",
                 1,
                 new BigDecimal(45),
                 1L
         );
+        jdbc(
+                "insert into book(id, name, edition, price, store_id) values(?, ?, ?, ?, ?)",
+                2,
+                "Redis in Action",
+                1,
+                new BigDecimal(35),
+                1L
+        );
 
-        SimpleSaveResult<BookStore> result = sql().getEntities().save(
-                BookStoreDraft.$.produce(store -> {
-                    store.setName("MANNING");
-                    store.addIntoBooks(book -> {
+        SimpleSaveResult<BookStore> result = sql().save(
+                BookStoreDraft.$.produce(draft -> {
+                    draft.setName("MANNING");
+                    draft.addIntoBooks(book -> {
                         book.setName("SQL in Action");
                         book.setEdition(1);
                         book.setPrice(new BigDecimal(49));
+                    });
+                    draft.addIntoBooks(book -> {
+                        book.setName("Redis in Action");
+                        book.setEdition(1);
+                        book.setPrice(new BigDecimal(39));
                     });
                 })
         );
 
         assertExecutedStatements(
 
-                // Select aggregate-root by key
-                new ExecutedStatement(
-                        "select tb_1_.ID, tb_1_.NAME from BOOK_STORE tb_1_ " +
-                                "where tb_1_.NAME = ?",
+                // Merge aggregate-root
+                //
+                // Even if no data is actually modified, performing an upsert on the
+                // underlying database(i.e: `merge` of `H2`) will still cause the
+                // affected row count of the table to increase.
+                ExecutedStatement.of(
+                        "merge into BOOK_STORE(NAME) key(NAME) values(?)",
                         "MANNING"
                 ),
 
-                // Aggregate-root exists, but not changed, do nothing
-
-                // Select child object by key
-                new ExecutedStatement(
-                        "select tb_1_.ID, tb_1_.NAME, tb_1_.EDITION " +
-                                "from BOOK tb_1_ " +
-                                "where tb_1_.NAME = ? and tb_1_.EDITION = ?",
-                        "SQL in Action", 1
+                // Merge associated objects
+                ExecutedStatement.batchOf(
+                        "merge into BOOK(NAME, EDITION, PRICE, STORE_ID) " +
+                                "key(NAME, EDITION) " +
+                                "values(?, ?, ?, ?)",
+                        Arrays.asList("SQL in Action", 1, new BigDecimal(49), 1L),
+                        Arrays.asList("Redis in Action", 1, new BigDecimal(39), 1L)
                 ),
 
-                // Child object exists, update it, include foreign key
-                new ExecutedStatement(
-                        "update BOOK set PRICE = ?, STORE_ID = ? where ID = ?",
-                        new BigDecimal(49), 1L, 10L
+                // Before detach unnecessary books, the associations
+                // based on `Book.authors` need to be detached first.
+                // However, nothing will be deleted in this case
+                ExecutedStatement.of(
+                        "delete from BOOK_AUTHOR_MAPPING tb_1_ " +
+                        "where exists (" +
+                        "--->select * " +
+                        "--->from BOOK tb_2_ " +
+                        "--->where " +
+                        "--->--->tb_1_.BOOK_ID = tb_2_.ID " +
+                        "--->and " +
+                        "--->--->STORE_ID = ? " +
+                        "--->and " +
+                        "--->--->not (ID = any(?))" +
+                        ")",
+                        1L, Arrays.asList(1L, 2L)
                 ),
 
-                // The aggregate-root exists, so there may be more child objects in the database,
-                // query whether there are other child objects that need to be dissociated
-                // besides the saved child objects
-                //
-                // In this test case, no more child objects will be found
-                new ExecutedStatement(
-                        "select 1 from BOOK " +
-                                "where STORE_ID = ? and ID <> ? " +
-                                "limit ?",
-                        1L, 10L, 1
+                // Detach unnecessary books.
+                // However, nothing will be deleted in this case
+                ExecutedStatement.of(
+                        "delete from BOOK " +
+                                "where STORE_ID = ? and not (ID = any(?))",
+                        1L, Arrays.asList(1L, 2L)
                 )
         );
 
-        Assertions.assertEquals(1, result.getTotalAffectedRowCount());
+        Assertions.assertEquals(3, result.getTotalAffectedRowCount());
+        Assertions.assertEquals(1, result.getAffectedRowCount(BookStore.class));
+        Assertions.assertEquals(2, result.getAffectedRowCount(Book.class));
     }
 
     @Test
-    public void testAttachChild() {
+    public void  testAttachChild() {
 
         jdbc("insert into book_store(id, name) values(?, ?)", 1L, "MANNING");
 
         SimpleSaveResult<BookStore> result = sql().save(
-                BookStoreDraft.$.produce(store -> {
-                    store.setName("MANNING");
-                    store.addIntoBooks(book -> {
+                BookStoreDraft.$.produce(draft -> {
+                    draft.setName("MANNING");
+                    draft.addIntoBooks(book -> {
                         book.setName("SQL in Action");
                         book.setEdition(1);
                         book.setPrice(new BigDecimal(49));
+                    });
+                    draft.addIntoBooks(book -> {
+                        book.setName("Redis in Action");
+                        book.setEdition(1);
+                        book.setPrice(new BigDecimal(39));
                     });
                 })
         );
 
         assertExecutedStatements(
 
-                // Select aggregate-root by key
-                new ExecutedStatement(
-                        "select tb_1_.ID, tb_1_.NAME from BOOK_STORE tb_1_ " +
-                                "where tb_1_.NAME = ?",
+                // Merge aggregate-root
+                //
+                // Even if no data is actually modified, performing an upsert on the
+                // underlying database(i.e: `merge` of `H2`) will still cause the
+                // affected row count of the table to increase.
+                ExecutedStatement.of(
+                        "merge into BOOK_STORE(NAME) key(NAME) values(?)",
                         "MANNING"
                 ),
 
-                // Aggregate-root exists, but not changed, do nothing
-
-                // Select child object by key
-                new ExecutedStatement(
-                        "select " +
-                                "tb_1_.ID, tb_1_.NAME, tb_1_.EDITION " +
-                                "from BOOK tb_1_ " +
-                                "where tb_1_.NAME = ? and tb_1_.EDITION = ?",
-                        "SQL in Action", 1
+                // Merge associated objects
+                ExecutedStatement.batchOf(
+                        "merge into BOOK(NAME, EDITION, PRICE, STORE_ID) " +
+                                "key(NAME, EDITION) " +
+                                "values(?, ?, ?, ?)",
+                        Arrays.asList("SQL in Action", 1, new BigDecimal(49), 1L),
+                        Arrays.asList("Redis in Action", 1, new BigDecimal(39), 1L)
                 ),
 
-                // Child object does not exist, insert it
-                new ExecutedStatement(
-                        "insert into BOOK(NAME, EDITION, PRICE, STORE_ID) values(?, ?, ?, ?)",
-                        "SQL in Action", 1, new BigDecimal(49), 1L
+                // Before detach unnecessary books, the associations
+                // based on `Book.authors` need to be detached first.
+                // However, nothing will be deleted in this case
+                ExecutedStatement.of(
+                        "delete from BOOK_AUTHOR_MAPPING tb_1_ " +
+                        "where exists (" +
+                        "--->select * " +
+                        "--->from BOOK tb_2_ " +
+                        "--->where " +
+                        "--->--->tb_1_.BOOK_ID = tb_2_.ID " +
+                        "--->and " +
+                        "--->--->STORE_ID = ? " +
+                        "--->and " +
+                        "--->--->not (ID = any(?))" +
+                        ")",
+                        1L, Arrays.asList(100L, 101L)
                 ),
 
-                // The aggregate-root exists, so there may be more child objects in the database,
-                // query whether there are other child objects that need to be dissociated
-                // besides the saved child objects
-                //
-                // In this test case, no more child objects will be found
-                new ExecutedStatement(
-                        "select 1 from BOOK where STORE_ID = ? and ID <> ? limit ?",
-                        1L, 10L, 1
+                // Detach unnecessary books.
+                // However, nothing will be deleted in this case
+                ExecutedStatement.of(
+                        "delete from BOOK " +
+                                "where STORE_ID = ? and not (ID = any(?))",
+                        1L, Arrays.asList(100L, 101L)
                 )
         );
 
-        Assertions.assertEquals(1, result.getTotalAffectedRowCount());
+        Assertions.assertEquals(3, result.getTotalAffectedRowCount());
+        Assertions.assertEquals(1, result.getAffectedRowCount(BookStore.class));
+        Assertions.assertEquals(2, result.getAffectedRowCount(Book.class));
     }
-    
+
     @Test
-    public void testDetachChildFailed() {
+    public void  testDetachChildFailed() {
 
         jdbc("insert into book_store(id, name) values(?, ?)", 1L, "MANNING");
         jdbc(
                 "insert into book(id, name, edition, price) values(?, ?, ?, ?)",
-                10,
+                1L,
                 "SQL in Action",
                 1,
                 new BigDecimal(45)
         );
+
         jdbc(
                 "insert into book(id, name, edition, price, store_id) values(?, ?, ?, ?, ?)",
-                20,
+                21,
                 "GraphQL in Action",
                 1,
                 new BigDecimal(39),
@@ -268,58 +365,72 @@ public class OneToManyTest extends AbstractMutationTest {
         );
 
         SaveException ex = Assertions.assertThrows(SaveException.class, () -> {
-            sql().getEntities().save(
-                    BookStoreDraft.$.produce(store -> {
-                        store.setName("MANNING");
-                        store.addIntoBooks(book -> book.setId(10L));
-                    })
-            );
+            sql()
+                    .getEntities()
+                    .saveCommand(
+                            BookStoreDraft.$.produce(draft -> {
+                                draft.setName("MANNING");
+                                draft.addIntoBooks(book -> {book.setId(1L);});
+                            })
+                    )
+                    .setDissociateAction(BookProps.STORE, DissociateAction.NONE)
+                    .execute();
         });
+
         Assertions.assertEquals(
                 "Save error caused by the path: \"<root>.books\": " +
-                        "Cannot dissociate child objects because the dissociation action of the many-to-one property " +
-                        "\"org.babyfish.jimmer.example.save.model.Book.store\" is not configured as \"set null\" or \"cascade\". " +
+                        "Cannot dissociate child objects because the " +
+                        "dissociation action of the many-to-one property " +
+                        "\"org.babyfish.jimmer.example.save.model.Book.store\" " +
+                        "is not configured as \"set null\" or \"cascade\". " +
                         "There are two ways to resolve this issue: " +
-                        "Decorate the many-to-one property \"org.babyfish.jimmer.example.save.model.Book.store\" " +
+                        "Decorate the many-to-one property " +
+                        "\"org.babyfish.jimmer.example.save.model.Book.store\" " +
                         "by @org.babyfish.jimmer.sql.OnDissociate whose argument is " +
-                        "`DissociateAction.SET_NULL` or `DissociateAction.DELETE` , " +
+                        "`DissociateAction.SET_NULL` or `DissociateAction.DELETE`, " +
                         "or use save command's runtime configuration to override it",
                 ex.getMessage()
         );
 
         assertExecutedStatements(
 
-                // Query aggregate-root by key
-                new ExecutedStatement(
-                        "select tb_1_.ID, tb_1_.NAME from BOOK_STORE tb_1_ where tb_1_.NAME = ?",
+                // Merge aggregate-root by key
+                //
+                // Even if no data is actually modified, performing an upsert on the
+                // underlying database(i.e: `merge` of `H2`) will still cause the
+                // affected row count of the table to increase.
+                ExecutedStatement.of(
+                        "merge into BOOK_STORE(NAME) key(NAME) values(?)",
                         "MANNING"
                 ),
 
-                // Aggregate-root exists, but not changed, do nothing
-
-                // Update the foreign key of child object(s)
-                new ExecutedStatement(
-                        "update BOOK set STORE_ID = ? where ID = ?",
-                        1L, 10L
+                // Merge associated objects
+                ExecutedStatement.of(
+                        "merge into BOOK(ID, STORE_ID) key(ID) values(?, ?)",
+                        1L, 1L
                 ),
 
-                // The aggregate-root exists, so there may be more child objects in the database,
-                // query whether there are other child objects that need to be dissociated
-                // besides the saved child objects
-                //
-                // In this test case, child objects will be found but jimmer doesn't know
-                // how to dissociate them so that error is raised
-                new ExecutedStatement(
-                        "select 1 from BOOK " +
-                                "where STORE_ID = ? and ID <> ? " +
-                                "limit ?",
-                        1L, 10L, 1
+                // The dissociate action of `Book.store` is `NONE`,
+                // In the current global configuration, `NONE` is
+                // treated as `CHECKING`. That means detaching old
+                // child objects is not supported. Jimmer uses
+                // select statement to check whether there are some
+                // child objects need to be detached(unsupported),
+                // if yes, then throws exception.
+                ExecutedStatement.of(
+                        "select tb_1_.ID from BOOK tb_1_ " +
+                        "where " +
+                        "--->tb_1_.STORE_ID = ? " +
+                        "and " +
+                        "--->tb_1_.ID <> ? " +
+                        "limit ?",
+                        1L, 1L, 1
                 )
         );
     }
 
     @Test
-    public void testDetachChildByClearingForeignKey() {
+    public void  testDetachChildByClearingForeignKey() {
 
         jdbc("insert into book_store(id, name) values(?, ?)", 1L, "MANNING");
         jdbc(
@@ -331,8 +442,16 @@ public class OneToManyTest extends AbstractMutationTest {
         );
         jdbc(
                 "insert into book(id, name, edition, price, store_id) values(?, ?, ?, ?, ?)",
-                20L,
+                1L,
                 "GraphQL in Action",
+                1,
+                new BigDecimal(49),
+                1L
+        );
+        jdbc(
+                "insert into book(id, name, edition, price, store_id) values(?, ?, ?, ?, ?)",
+                2L,
+                "Redis in Action",
                 1,
                 new BigDecimal(39),
                 1L
@@ -341,9 +460,11 @@ public class OneToManyTest extends AbstractMutationTest {
         SimpleSaveResult<BookStore> result = sql()
                 .getEntities()
                 .saveCommand(
-                        BookStoreDraft.$.produce(store -> {
-                            store.setName("MANNING");
-                            store.addIntoBooks(book -> book.setId(10L));
+                        BookStoreDraft.$.produce(draft -> {
+                            draft.setName("MANNING");
+                            draft.addIntoBooks(book -> {
+                                book.setId(1L);
+                            });
                         })
                 )
                 .setDissociateAction(BookProps.STORE, DissociateAction.SET_NULL)
@@ -351,48 +472,53 @@ public class OneToManyTest extends AbstractMutationTest {
 
         assertExecutedStatements(
 
-                // Query aggregate-root by key
-                new ExecutedStatement(
-                        "select tb_1_.ID, tb_1_.NAME from BOOK_STORE tb_1_ where tb_1_.NAME = ?",
+                // Merge aggregate-root
+                //
+                // Even if no data is actually modified, performing an upsert on the
+                // underlying database(i.e: `merge` of `H2`) will still cause the
+                // affected row count of the table to increase.
+                ExecutedStatement.of(
+                        "merge into BOOK_STORE(NAME) key(NAME) values(?)",
                         "MANNING"
                 ),
 
-                // Aggregate-root exists, but not changed, do nothing
-
-                // Update foreign key of child object(s)
-                new ExecutedStatement(
-                        "update BOOK set STORE_ID = ? where ID = ?",
-                        1L, 10L
+                // Merge associated objects
+                ExecutedStatement.of(
+                        "merge into BOOK(ID, STORE_ID) key(ID) values(?, ?)",
+                        1L, 1L
                 ),
 
-                // The aggregate-root exists, so there may be more child objects in the database,
-                // clear the foreign key of them.
-                new ExecutedStatement(
+                // Detached the unnecessary associated object(s)
+                // in this example, detaching behavior is
+                // configured as `SET_NULL`, here, the foreign
+                // key of unnecessary associated objects will
+                // be set to null
+                ExecutedStatement.of(
                         "update BOOK set STORE_ID = null " +
-                                "where STORE_ID = ? and ID <> ?",
-                        1L, 10L
+                                "where STORE_ID = ? and not (ID = any(?))",
+                        1L, Collections.singletonList(1L)
                 )
         );
 
-        Assertions.assertEquals(2, result.getTotalAffectedRowCount());
-        Assertions.assertEquals(0, result.getAffectedRowCount(BookStore.class));
+        Assertions.assertEquals(3, result.getTotalAffectedRowCount());
+        Assertions.assertEquals(1, result.getAffectedRowCount(BookStore.class));
         Assertions.assertEquals(2, result.getAffectedRowCount(Book.class));
     }
 
     @Test
-    public void testDetachChildByDeletingChild() {
+    public void  testDetachChildByDeletingChild() {
 
         jdbc("insert into book_store(id, name) values(?, ?)", 1L, "MANNING");
         jdbc(
                 "insert into book(id, name, edition, price) values(?, ?, ?, ?)",
-                10L,
+                1L,
                 "SQL in Action",
                 1,
                 new BigDecimal(45)
         );
         jdbc(
                 "insert into book(id, name, edition, price, store_id) values(?, ?, ?, ?, ?)",
-                20L,
+                2L,
                 "GraphQL in Action",
                 1,
                 new BigDecimal(39),
@@ -402,9 +528,11 @@ public class OneToManyTest extends AbstractMutationTest {
         SimpleSaveResult<BookStore> result = sql()
                 .getEntities()
                 .saveCommand(
-                        BookStoreDraft.$.produce(store -> {
-                            store.setName("MANNING");
-                            store.addIntoBooks(book -> book.setId(10L));
+                        BookStoreDraft.$.produce(draft -> {
+                            draft.setName("MANNING");
+                            draft.addIntoBooks(book -> {
+                                book.setId(1L);
+                            });
                         })
                 )
                 .setDissociateAction(BookProps.STORE, DissociateAction.DELETE)
@@ -412,44 +540,49 @@ public class OneToManyTest extends AbstractMutationTest {
 
         assertExecutedStatements(
 
-                // Query aggregate-root by key
-                new ExecutedStatement(
-                        "select tb_1_.ID, tb_1_.NAME from BOOK_STORE tb_1_ where tb_1_.NAME = ?",
+                // Merge aggregate-root
+                //
+                // Even if no data is actually modified, performing an upsert on the
+                // underlying database(i.e: `merge` of `H2`) will still cause the
+                // affected row count of the table to increase.
+                ExecutedStatement.of(
+                        "merge into BOOK_STORE(NAME) key(NAME) values(?)",
                         "MANNING"
                 ),
 
-                // Aggregate-root exists, but not changed, do nothing
-
-                // Update foreign key of child objects.
-                new ExecutedStatement(
-                        "update BOOK set STORE_ID = ? where ID = ?",
-                        1L, 10L
+                // Marge associated objects
+                ExecutedStatement.of(
+                        "merge into BOOK(ID, STORE_ID) key(ID) values(?, ?)",
+                        1L, 1L
                 ),
 
-                // The aggregate-root exists, so there may be more child objects in the database,
-                // select id of them.
-                new ExecutedStatement(
-                        "select ID from BOOK where STORE_ID = ? and ID <> ?",
-                        1L, 10L
-                ),
-
-                // Jimmer found `book-20` must be deleted,
-                // Before doing this, the reference to `books-20` in the middle table of
-                // the many-to-many association `Book.authors` must be removed.
-                new ExecutedStatement(
-                        "delete from BOOK_AUTHOR_MAPPING where BOOK_ID = ?",
-                        20L
+                // `book{id:2}` will be detached, before doing that,
+                // its associations bases on `Book.authors` must be
+                // detached at first.
+                ExecutedStatement.of(
+                        "delete from BOOK_AUTHOR_MAPPING tb_1_ " +
+                        "where exists (" +
+                        "--->select * " +
+                        "--->from BOOK tb_2_ " +
+                        "--->where " +
+                        "--->--->tb_1_.BOOK_ID = tb_2_.ID " +
+                        "--->and STORE_ID = ? " +
+                        "--->and " +
+                        "--->--->not (ID = any(?))" +
+                        ")",
+                        1L, Collections.singletonList(1L)
                 ),
 
                 // Now, `book-20` can be deleted safely
-                new ExecutedStatement(
-                        "delete from BOOK where ID = ?",
-                        20L
+                ExecutedStatement.of(
+                        "delete from BOOK " +
+                                "where STORE_ID = ? and not (ID = any(?))",
+                        1L, Collections.singletonList(1L)
                 )
         );
 
-        Assertions.assertEquals(2, result.getTotalAffectedRowCount());
-        Assertions.assertEquals(0, result.getAffectedRowCount(BookStore.class));
+        Assertions.assertEquals(3, result.getTotalAffectedRowCount());
+        Assertions.assertEquals(1, result.getAffectedRowCount(BookStore.class));
         Assertions.assertEquals(2, result.getAffectedRowCount(Book.class));
     }
 }

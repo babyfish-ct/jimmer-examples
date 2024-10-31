@@ -81,7 +81,7 @@ public interface BookRepository extends JRepository<Book, Long>, Tables {
                         .groupBy(table.storeId())
                         .select(
                                 table.storeId(),
-                                table.price().avg()
+                                table.price().avgAsDecimal()
                         )
                         .execute()
         );
@@ -92,12 +92,13 @@ public interface BookRepository extends JRepository<Book, Long>, Tables {
                 sql()
                         .createQuery(table)
                         .where(
-                                Expression.tuple(table.name(), table.edition()).in(
+                                Expression.tuple(table.storeId(), table.name(), table.edition()).in(
                                         sql().createSubQuery(table)
                                                 // Apply root predicate to sub query is faster here.
                                                 .where(table.storeId().in(storeIds))
-                                                .groupBy(table.name())
+                                                .groupBy(table.storeId(), table.name())
                                                 .select(
+                                                        table.storeId(),
                                                         table.name(),
                                                         table.edition().max()
                                                 )

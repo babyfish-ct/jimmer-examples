@@ -8,7 +8,7 @@ import org.babyfish.jimmer.example.save.model.BookDraft;
 import org.babyfish.jimmer.example.save.model.BookProps;
 import org.babyfish.jimmer.example.save.model.BookStore;
 import org.babyfish.jimmer.sql.ast.mutation.SimpleSaveResult;
-import org.babyfish.jimmer.sql.runtime.SaveException;
+import org.babyfish.jimmer.sql.exception.SaveException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -17,8 +17,9 @@ import java.math.BigDecimal;
 /**
  * Recommended learning sequence: 3
  *
- * <p>SaveModeTest -> IncompleteObjectTest -> [current: ManyToOneTest] ->
- * OneToManyTest -> ManyToManyTest -> RecursiveTest -> TriggerTest</p>
+ *
+ * SaveModeTest -> IncompleteObjectTest -> [current: ManyToOneTest] ->
+ * OneToManyTest -> ManyToManyTest -> RecursiveTest -> TriggerTest
  */
 public class ManyToOneTest extends AbstractMutationTest {
 
@@ -30,200 +31,139 @@ public class ManyToOneTest extends AbstractMutationTest {
      */
 
     @Test
-    public void testShortAssociation() {
+    public void  testShortAssociation() {
 
         jdbc("insert into book_store(id, name) values(?, ?)", 1L, "MANNING");
         jdbc(
                 "insert into book(id, name, edition, price) values(?, ?, ?, ?)",
-                10L, "SQL in Action", 1, new BigDecimal(45));
-
+                1L, "SQL in Action", 1, new BigDecimal(45)
+        );
         SimpleSaveResult<Book> result = sql()
                 .getEntities()
-                .save(
-                        BookDraft.$.produce(book -> {
-                            book.setName("SQL in Action");
-                            book.setEdition(1);
-                            book.setPrice(new BigDecimal(49));
-                            book.setStore(
-                                    ImmutableObjects.makeIdOnly(BookStore.class, 1L)
-                            );
+                .saveCommand(
+                        BookDraft.$.produce(draft -> {
+                            draft.setName("SQL in Action");
+                            draft.setEdition(1);
+                            draft.setPrice(new BigDecimal(49));
+                            draft.setStoreId(1L);
                         })
-                );
+                )
+                .execute();
 
         assertExecutedStatements(
 
-                // Select data by id
-                new ExecutedStatement(
-                        "select tb_1_.ID, tb_1_.NAME, tb_1_.EDITION " +
-                                "from BOOK tb_1_ " +
-                                "where tb_1_.NAME = ? and tb_1_.EDITION = ?",
-                        "SQL in Action", 1
-                ),
-
-                // Data exists, update it.
-                // The foreign key `store_id` is updated.
-                new ExecutedStatement(
-                        "update BOOK set PRICE = ?, STORE_ID = ? where ID = ?",
-                        new BigDecimal(49), 1L, 10L
+                // Merge the associated object.
+                //
+                // Associated object is parent object but aggregate-root is child object,
+                // so it is handled before aggregate-root
+                ExecutedStatement.of(
+                        "merge into BOOK(NAME, EDITION, PRICE, STORE_ID) " +
+                                "key(NAME, EDITION) " +
+                                "values(?, ?, ?, ?)",
+                        "SQL in Action", 1, new BigDecimal(49), 1L
                 )
         );
-
         Assertions.assertEquals(1, result.getTotalAffectedRowCount());
+        Assertions.assertEquals(1, result.getAffectedRowCount(Book.class));
     }
 
     @Test
-    public void testIllegalShortAssociation() {
+    public void  testIllegalShortAssociation() {
 
         jdbc(
                 "insert into book(id, name, edition, price) values(?, ?, ?, ?)",
-                10L, "SQL in Action", 1, new BigDecimal(45));
+                10L, "SQL in Action", 1, new BigDecimal(45)
+        );
 
         SaveException ex = Assertions.assertThrows(SaveException.class, () -> {
             sql()
                     .getEntities()
                     .saveCommand(
-                            BookDraft.$.produce(book -> {
-                                book.setName("SQL in Action");
-                                book.setEdition(1);
-                                book.setPrice(new BigDecimal(49));
-                                book.setStore(
-                                        ImmutableObjects.makeIdOnly(BookStore.class, 99999L)
-                                );
+                            BookDraft.$.produce(draft -> {
+                                draft.setName("GraphQL in Action");
+                                draft.setEdition(1);
+                                draft.setPrice(new BigDecimal(49));
+                                draft.setStoreId(99999L);
                             })
                     )
-                    /*
-                     * You can also use `setAutoIdOnlyTargetCheckingAll()`.
-                     *
-                     * If you use jimmer-spring-starter, it is unnecessary to
-                     * do it because this switch is turned on.
-                     *
-                     * If the underlying `BOOK.STORE_ID` has foreign key constraints,
-                     * even if this configuration is not used, error still will be
-                     * raised by database so that you can choose not to use this
-                     * configuration when you have strict performance requirements.
-                     * However, this configuration can bring better error message.
-                     *
-                     * Sometimes it is not possible to add foreign key constraints,
-                     * such table sharding. At this time, this configuration is
-                     * very important.
-                     */
-                    .setAutoIdOnlyTargetChecking(BookProps.STORE)
                     .execute();
         });
+
         Assertions.assertEquals(
-                "Save error caused by the path: " +
-                        "\"<root>.store\": Illegal ids: [99999]",
+                "Save error caused by the path: \"<root>.store\": " +
+                        "Cannot save the entity, the associated id of the reference property " +
+                        "\"org.babyfish.jimmer.example.save.model.Book.store\" is \"99999\" " +
+                        "but there is no corresponding associated object in the database",
                 ex.getMessage()
         );
 
         assertExecutedStatements(
 
-                // Is target id valid?
-                new ExecutedStatement(
-                        "select tb_1_.ID from BOOK_STORE tb_1_ where tb_1_.ID = ?",
+                // Merge the associated object.
+                //
+                // Associated object is parent object but aggregate-root is child object,
+                // so it is handled before aggregate-root
+                ExecutedStatement.of(
+                        "merge into BOOK(NAME, EDITION, PRICE, STORE_ID) " +
+                                "key(NAME, EDITION) " +
+                                "values(?, ?, ?, ?)",
+                        "GraphQL in Action", 1, new BigDecimal(49), 99999L
+                ),
+
+                // Investigate why the database throws
+                // error about constraint violation
+                ExecutedStatement.of(
+                        "select tb_1_.ID " +
+                                "from BOOK_STORE tb_1_ " +
+                                "where tb_1_.ID = ?",
                         99999L
                 )
         );
     }
 
     @Test
-    public void testAssociationByKey() {
+    public void  testAssociationByKey() {
 
         jdbc("insert into book_store(id, name) values(?, ?)", 1L, "MANNING");
         jdbc(
                 "insert into book(id, name, edition, price) values(?, ?, ?, ?)",
-                10L, "SQL in Action", 1, new BigDecimal(45));
-
-        SimpleSaveResult<Book> result = sql()
-                .getEntities()
-                .save(
-                        BookDraft.$.produce(book -> {
-                            book.setName("SQL in Action");
-                            book.setEdition(1);
-                            book.setPrice(new BigDecimal(49));
-                            book.applyStore(store -> {
-                                store.setName("MANNING");
-                            });
-                        })
-                );
-
-        assertExecutedStatements(
-
-                // Select parent object by key.
-                new ExecutedStatement(
-                        "select tb_1_.ID, tb_1_.NAME " +
-                                "from BOOK_STORE tb_1_ " +
-                                "where tb_1_.NAME = ?",
-                        "MANNING"
-                ),
-
-                // select aggregation-root object by key
-                new ExecutedStatement(
-                        "select tb_1_.ID, tb_1_.NAME, tb_1_.EDITION " +
-                                "from BOOK tb_1_ " +
-                                "where tb_1_.NAME = ? and tb_1_.EDITION = ?",
-                        "SQL in Action", 1
-                ),
-
-                // Aggregation-root object exists, update it, include the foreign key
-                new ExecutedStatement(
-                        "update BOOK set PRICE = ?, STORE_ID = ? where ID = ?",
-                        new BigDecimal(49), 1L, 10L
-                )
+                1L, "SQL in Action", 1, new BigDecimal(45)
         );
 
-        Assertions.assertEquals(1, result.getTotalAffectedRowCount());
-    }
-
-    @Test
-    public void testAssociationByExistingParent() {
-
-        jdbc("insert into book_store(id, name) values(?, ?)", 1L, "MANNING");
-        jdbc(
-                "insert into book(id, name, edition, price) values(?, ?, ?, ?)",
-                10L, "SQL in Action", 1, new BigDecimal(45));
-
-        SimpleSaveResult<Book> result = sql().getEntities().save(
-                BookDraft.$.produce(book -> {
-                    book.setName("SQL in Action");
-                    book.setEdition(1);
-                    book.setPrice(new BigDecimal(49));
-                    book.applyStore(store -> {
+        SimpleSaveResult<Book> result = sql().save(
+                BookDraft.$.produce(draft -> {
+                    draft.setName("SQL in Action");
+                    draft.setEdition(1);
+                    draft.setPrice(new BigDecimal(49));
+                    draft.applyStore(store -> {
                         store.setName("MANNING");
-                        store.setWebsite("https://www.manning.com");
                     });
                 })
         );
 
         assertExecutedStatements(
 
-                // Select parent by key
-                new ExecutedStatement(
-                        "select tb_1_.ID, tb_1_.NAME " +
-                                "from BOOK_STORE tb_1_ " +
-                                "where tb_1_.NAME = ?",
+                // Merge the associated object.
+                //
+                // Associated object is parent object but aggregate-root is child object,
+                // so it is handled before aggregate-root.
+                //
+                // Even if no data is actually modified, performing an upsert on the
+                // underlying database(i.e: `merge` of `H2`) will still cause the
+                // affected row count of the table to increase.
+                ExecutedStatement.of(
+                        "merge into BOOK_STORE(NAME) " +
+                                "key(NAME) " +
+                                "values(?)",
                         "MANNING"
                 ),
 
-                // Parent exists, update it
-                new ExecutedStatement(
-                        "update BOOK_STORE set WEBSITE = ? where ID = ?",
-                        "https://www.manning.com",
-                        1L
-                ),
-
-                // Select aggregate-root object by key
-                new ExecutedStatement(
-                        "select tb_1_.ID, tb_1_.NAME, tb_1_.EDITION " +
-                                "from BOOK tb_1_ " +
-                                "where tb_1_.NAME = ? and tb_1_.EDITION = ?",
-                        "SQL in Action", 1
-                ),
-
-                // Aggregate-root object exists, update it
-                new ExecutedStatement(
-                        "update BOOK set PRICE = ?, STORE_ID = ? where ID = ?",
-                        new BigDecimal(49), 1L, 10L
+                // Merge aggregation-root
+                ExecutedStatement.of(
+                        "merge into BOOK(NAME, EDITION, PRICE, STORE_ID) " +
+                                "key(NAME, EDITION) " +
+                                "values(?, ?, ?, ?)",
+                        "SQL in Action", 1, new BigDecimal(49), 1L
                 )
         );
 
@@ -233,56 +173,100 @@ public class ManyToOneTest extends AbstractMutationTest {
     }
 
     @Test
-    public void testAttachParent() {
+    public void  testAssociationByExistingParent() {
 
+        jdbc("insert into book_store(id, name) values(?, ?)", 1L, "MANNING");
         jdbc(
                 "insert into book(id, name, edition, price) values(?, ?, ?, ?)",
-                10L, "SQL in Action", 1, new BigDecimal(45));
-
-        SimpleSaveResult<Book> result = sql().save(
-                BookDraft.$.produce(book -> {
-                    book.setName("SQL in Action");
-                    book.setEdition(1);
-                    book.setPrice(new BigDecimal(49));
-                    book.applyStore(store -> {
-                        store.setName("TURING");
-                        store.setWebsite("https://www.turing.com");
-                    });
-                })
+                1L, "SQL in Action", 1, new BigDecimal(45)
         );
+
+        SimpleSaveResult<Book> result = sql()
+                .getEntities()
+                .saveCommand(
+                        BookDraft.$.produce(draft -> {
+                            draft.setName("SQL in Action");
+                            draft.setEdition(1);
+                            draft.setPrice(new BigDecimal(49));
+                            draft.applyStore(store -> {
+                                store.setName("MANNING");
+                                store.setWebsite("https://www.manning.com");
+                            });
+                        })
+                )
+                .execute();
 
         assertExecutedStatements(
 
-                // Select parent by key
-                new ExecutedStatement(
-                        "select tb_1_.ID, tb_1_.NAME " +
-                                "from BOOK_STORE tb_1_ " +
-                                "where tb_1_.NAME = ?",
-                        "TURING"
+                // Merge the associated object.
+                //
+                // Associated object is parent object but aggregate-root is child object,
+                // so it is handled before aggregate-root.
+                ExecutedStatement.of(
+                        "merge into BOOK_STORE(NAME, WEBSITE) " +
+                                "key(NAME) " +
+                                "values(?, ?)",
+                        "MANNING", "https://www.manning.com"
                 ),
 
-                // Parent does not exist, however, the switch to automatically create
-                // associated objects has not been turned on, so insert parent object.
-                new ExecutedStatement(
-                        "insert into BOOK_STORE(NAME, WEBSITE) values(?, ?)",
-                        "TURING", "https://www.turing.com"
-                ),
-
-                // Select the aggregate-root by key
-                new ExecutedStatement(
-                        "select tb_1_.ID, tb_1_.NAME, tb_1_.EDITION " +
-                                "from BOOK tb_1_ " +
-                                "where tb_1_.NAME = ? and tb_1_.EDITION = ?",
-                        "SQL in Action", 1
-                ),
-
-                // Aggregate-root exists, update it, include the foreign key
-                new ExecutedStatement(
-                        "update BOOK set PRICE = ?, STORE_ID = ? where ID = ?",
-                        new BigDecimal(49), 1L, 10L
+                // Merge aggregation-root
+                ExecutedStatement.of(
+                        "merge into BOOK(NAME, EDITION, PRICE, STORE_ID) " +
+                                "key(NAME, EDITION) " +
+                                "values(?, ?, ?, ?)",
+                        "SQL in Action", 1, new BigDecimal(49), 1L
                 )
         );
 
+        Assertions.assertEquals(2, result.getTotalAffectedRowCount());
+        Assertions.assertEquals(1, result.getAffectedRowCount(BookStore.class));
+        Assertions.assertEquals(1, result.getAffectedRowCount(Book.class));
+    }
+
+    @Test
+    public void  testAttachParent() {
+
+        jdbc(
+                "insert into book(id, name, edition, price) values(?, ?, ?, ?)",
+                1L, "SQL in Action", 1, new BigDecimal(45)
+        );
+
+        SimpleSaveResult<Book> result = sql()
+                .getEntities()
+                .saveCommand(
+                        BookDraft.$.produce(draft -> {
+                            draft.setName("SQL in Action");
+                            draft.setEdition(1);
+                            draft.setPrice(new BigDecimal(49));
+                            draft.applyStore(store -> {
+                                store.setName("TURING");
+                                store.setWebsite("https://www.turing.com");
+                            });
+                        })
+                )
+                .execute();
+
+        assertExecutedStatements(
+
+                // Merge the associated object.
+                //
+                // Associated object is parent object but aggregate-root is child object,
+                // so it is handled before aggregate-root.
+                ExecutedStatement.of(
+                        "merge into BOOK_STORE(NAME, WEBSITE) " +
+                                "key(NAME) " +
+                                "values(?, ?)",
+                        "TURING", "https://www.turing.com"
+                ),
+
+                // Merge aggregate-root
+                ExecutedStatement.of(
+                        "merge into BOOK(NAME, EDITION, PRICE, STORE_ID) " +
+                                "key(NAME, EDITION) " +
+                                "values(?, ?, ?, ?)",
+                        "SQL in Action", 1, new BigDecimal(49), 100L
+                )
+        );
         Assertions.assertEquals(2, result.getTotalAffectedRowCount());
         Assertions.assertEquals(1, result.getAffectedRowCount(BookStore.class));
         Assertions.assertEquals(1, result.getAffectedRowCount(Book.class));

@@ -1,23 +1,14 @@
-package org.babyfish.jimmer.example.save
-
-import org.babyfish.jimmer.example.save.common.AbstractMutationWithTriggerTest
-import org.babyfish.jimmer.example.save.model.BookStore
-import org.babyfish.jimmer.example.save.model.addBy
-import org.junit.jupiter.api.Test
-import java.math.BigDecimal
-
-
 /**
- * Recommended learning sequence: 8
+ * Recommended learning sequence: 7
  *
  *
  * SaveModeTest -> IncompleteObjectTest -> ManyToOneTest ->
- * OneToManyTest -> ManyToManyTest -> BulkTest -> RecursiveTest -> [Current: TriggerTest]
+ * OneToManyTest -> ManyToManyTest -> RecursiveTest -> [Current: TriggerTest]
  */
-class TriggerTest : AbstractMutationWithTriggerTest() {
+public class TriggerTest extends AbstractMutationWithTriggerTest {
     
     @Test
-    fun test() {
+    public void test() {
         
         jdbc("insert into book_store(id, name) values(?, ?)", 1L, "MANNING")
         jdbc(
@@ -46,36 +37,26 @@ class TriggerTest : AbstractMutationWithTriggerTest() {
             2L, 3L, 2L, 4L, 2L, 5L
         )
         
-        sql.save(
-            BookStore {
-                name = "TURING"
-                books().addBy {
-                    name = "Microservices Security in Action"
-                    edition = 1
-                    price = BigDecimal("43.59")
-                    authors().addBy {
-                        id = 1L
-                    }
-                    authors().addBy {
-                        id = 2L
-                    }
-                    authors().addBy {
-                        id = 3L
-                    }
-                }
-                books().addBy {
-                    name = "LINQ in Action"
-                    edition = 1
-                    price = BigDecimal("31.59")
-                    authors().addBy {
-                        id = 4L
-                    }
-                    authors().addBy {
-                        id = 5L
-                    }
-                }
-            }
-        )
+        sql().save(
+                BookStoreDraft.$.produce(turing -> {
+                    turing.setName("TURING");
+                    turing.addIntoBooks(security -> {
+                        security.setName("Microservices Security in Action");
+                        security.setEdition(1);
+                        security.setPrice(new BigDecimal("43.59"));
+                        security.addIntoAuthors(author -> author.setId(100L));
+                        security.addIntoAuthors(author -> author.setId(200L));
+                        security.addIntoAuthors(author -> author.setId(300L));
+                    });
+                    turing.addIntoBooks(linq -> {
+                        linq.setName("LINQ in Action");
+                        linq.setEdition(1);
+                        linq.setPrice(new BigDecimal("31.59"));
+                        linq.addIntoAuthors(author -> author.setId(400L));
+                        linq.addIntoAuthors(author -> author.setId(500L));
+                    });
+                })
+        );
 
         /*
          * This example focuses on triggers, so we don't assert SQL statements,

@@ -12,17 +12,17 @@ interface Book : BaseEntity, TenantAware {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long
 
-    @Key // ❶
+    @Key // (1)
     val name: String
 
-    @Key // ❷
+    @Key // (2)
     val edition: Int
     val price: BigDecimal
 
-    @ManyToOne // ❸
+    @ManyToOne // (3)
     val store: BookStore?
 
-    @ManyToMany // ❹
+    @ManyToMany // (4)
     @JoinTable(
         name = "BOOK_AUTHOR_MAPPING",
         joinColumnName = "BOOK_ID",
@@ -36,18 +36,18 @@ interface Book : BaseEntity, TenantAware {
 
     // Optional property `storeId`
     // If this property is deleted, please add `BookInput.Mapper.toBookStore(Long)`
-    @IdView // ❺
+    @IdView // (5)
     val storeId: Long?
 
     // Optional property `authorIds`
     // If this property is deleted, please add `BookInputMapper.toAuthor(Long)`
-    @IdView("authors") // ❻
+    @IdView("authors") // (6)
     val authorIds: List<Long>
 }
 
 /*----------------Documentation Links----------------
-❶ ❷ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/advanced/key
-❸ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/base/association/many-to-one
-❹ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/base/association/many-to-many
-❺ ❻ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/advanced/view/id-view
+(1) (2) https://babyfish-ct.github.io/jimmer-doc/docs/mapping/advanced/key
+(3) https://babyfish-ct.github.io/jimmer-doc/docs/mapping/base/association/many-to-one
+(4) https://babyfish-ct.github.io/jimmer-doc/docs/mapping/base/association/many-to-many
+(5) (6) https://babyfish-ct.github.io/jimmer-doc/docs/mapping/advanced/view/id-view
 ---------------------------------------------------*/

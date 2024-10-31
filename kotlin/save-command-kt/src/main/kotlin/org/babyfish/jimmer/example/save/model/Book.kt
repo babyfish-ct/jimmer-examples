@@ -4,9 +4,10 @@ import org.babyfish.jimmer.sql.*
 import java.math.BigDecimal
 
 @Entity
+@KeyUniqueConstraint
 interface Book {
 
-    @Id //`identity(10, 10)` in database, so it is 10, 20, 30 ...
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long
 
@@ -19,6 +20,7 @@ interface Book {
     val price: BigDecimal
 
     @ManyToOne
+    @OnDissociate(DissociateAction.DELETE)
     val store: BookStore?
 
     @ManyToMany

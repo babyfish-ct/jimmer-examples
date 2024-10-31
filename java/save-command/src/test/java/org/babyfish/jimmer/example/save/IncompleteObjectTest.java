@@ -9,11 +9,13 @@ import org.babyfish.jimmer.sql.ast.mutation.SimpleSaveResult;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+
 /**
  * Recommended learning sequence: 2
  *
- * <p>SaveModeTest -> [Current: IncompleteObjectTest] -> ManyToOneTest ->
- * OneToManyTest -> ManyToManyTest -> RecursiveTest -> TriggerTest</p>
+ *
+ * SaveModeTest -> [Current: IncompleteObjectTest] -> ManyToOneTest ->
+ * OneToManyTest -> ManyToManyTest -> RecursiveTest -> TriggerTest
  */
 public class IncompleteObjectTest extends AbstractMutationTest {
 
@@ -28,18 +30,34 @@ public class IncompleteObjectTest extends AbstractMutationTest {
         SimpleSaveResult<BookStore> result = sql()
                 .getEntities()
                 .saveCommand(
-                        BookStoreDraft.$.produce(store -> {
-                            store.setId(1L);
-                            store.setName("O'REILLY+");
-                            store.setWebsite(null); // `website` is specified
+                        BookStoreDraft.$.produce(draft -> {
+                            draft.setId(1L);
+                            draft.setName("O'REILLY+");
+
+                            /*
+                             * Jimmer determines how to save data based
+                             * on the shape of the object, rather than
+                             * simply using "update not null".
+                             *
+                             * Instead, it leverages the dynamic ability
+                             * of Jimmer entities. It focuses on whether
+                             * a property of an object has been specified,
+                             * rather than whether the value of the property
+                             * is null.
+                             *
+                             * In this example, `Book.store` being specified
+                             * as null indicates that this foreign key will
+                             * be updated to null.
+                             */
+                            draft.setWebsite(null);
                         })
                 )
                 .setMode(SaveMode.UPDATE_ONLY)
                 .execute();
 
         assertExecutedStatements(
-                // `WEBSITE` is updated to be null
-                new ExecutedStatement(
+
+                ExecutedStatement.of(
                         "update BOOK_STORE " +
                                 "set NAME = ?, WEBSITE = ? " +
                                 "where ID = ?",
@@ -52,7 +70,6 @@ public class IncompleteObjectTest extends AbstractMutationTest {
 
     @Test
     public void testIncompleteObject() {
-
         jdbc(
                 "insert into book_store(id, name, website) values(?, ?, ?)",
                 1, "O'REILLY", "http://www.oreilly.com"
@@ -61,39 +78,41 @@ public class IncompleteObjectTest extends AbstractMutationTest {
         SimpleSaveResult<BookStore> result = sql()
                 .getEntities()
                 .saveCommand(
-                        BookStoreDraft.$.produce(store -> {
-                            store.setId(1L);
-                            store.setName("O'REILLY+");
+                        BookStoreDraft.$.produce(draft -> {
+                            draft.setId(1L);
+                            draft.setName("O'REILLY+");
 
-                            // `website` is not specified,
-                            // this does NOT mean null, but UNKNOWN
+                            // `website` is not specified
+                            /*
+                             * Jimmer determines how to save data based
+                             * on the shape of the object, rather than
+                             * simply using "update not null".
+                             *
+                             * Instead, it leverages the dynamic ability
+                             * of Jimmer entities. It focuses on whether
+                             * a property of an object has been specified,
+                             * rather than whether the value of the property
+                             * is null.
+                             *
+                             * In this example, `Book.store` being not
+                             * specifie indicates that this foreign key
+                             * will not be updated.
+                             */
                         })
                 )
                 .setMode(SaveMode.UPDATE_ONLY)
                 .execute();
 
         assertExecutedStatements(
+
                 // Unspecified property `website` will not be updated
-                new ExecutedStatement(
+                ExecutedStatement.of(
                         "update BOOK_STORE " +
                                 "set NAME = ? " +
                                 "where ID = ?",
                         "O'REILLY+", 1L
                 )
         );
-
-        /*
-         * Objects can be incomplete, and unspecified properties will not be updated.
-         *
-         * This is a very important feature.
-         *
-         * - In traditional ORM, if you want to modify some properties of an object,
-         *   you need to query the old object, modify the properties you want to modify,
-         *   and finally save it.
-         *
-         * In Jimmer, create an object and specify the properties you want to modify,
-         * save it.
-         */
 
         Assertions.assertEquals(1, result.getTotalAffectedRowCount());
     }
