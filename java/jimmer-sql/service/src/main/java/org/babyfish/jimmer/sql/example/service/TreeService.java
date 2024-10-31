@@ -68,7 +68,7 @@ public class TreeService implements Fetchers {
 
     @PutMapping("/root/recursive")
     public TreeNode saveTree(@RequestBody RecursiveTreeInput input) throws SaveException {
-        TreeNode rootNode = Objects.createTreeNode(
+        TreeNode rootNode = Immutables.createTreeNode(
 
                 input.toEntity(),
 
