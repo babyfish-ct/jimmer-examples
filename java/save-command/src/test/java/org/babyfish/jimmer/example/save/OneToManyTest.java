@@ -8,7 +8,7 @@ import org.babyfish.jimmer.example.save.model.BookStore;
 import org.babyfish.jimmer.example.save.model.BookStoreDraft;
 import org.babyfish.jimmer.sql.DissociateAction;
 import org.babyfish.jimmer.sql.ast.mutation.SimpleSaveResult;
-import org.babyfish.jimmer.sql.runtime.SaveException;
+import org.babyfish.jimmer.sql.exception.SaveException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

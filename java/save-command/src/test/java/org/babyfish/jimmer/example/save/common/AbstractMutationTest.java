@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 public abstract class AbstractMutationTest {
 

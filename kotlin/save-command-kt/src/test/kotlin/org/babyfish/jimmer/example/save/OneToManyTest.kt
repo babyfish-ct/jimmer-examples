@@ -6,7 +6,7 @@ import org.babyfish.jimmer.example.save.model.Book
 import org.babyfish.jimmer.example.save.model.BookStore
 import org.babyfish.jimmer.example.save.model.addBy
 import org.babyfish.jimmer.sql.DissociateAction
-import org.babyfish.jimmer.sql.runtime.SaveException
+import org.babyfish.jimmer.sql.exception.SaveException
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
