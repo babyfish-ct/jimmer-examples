@@ -52,7 +52,7 @@ public interface Author extends BaseEntity {
 }
 
 /*----------------Documentation Links----------------
-❶ ❷ https://babyfish-ct.github.io/jimmer/docs/mapping/advanced/key
-❸ https://babyfish-ct.github.io/jimmer/docs/mapping/base/association/many-to-many
-❹ https://babyfish-ct.github.io/jimmer/docs/mapping/advanced/calculated/formula
+❶ ❷ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/advanced/key
+❸ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/base/association/many-to-many
+❹ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/advanced/calculated/formula
 ---------------------------------------------------*/

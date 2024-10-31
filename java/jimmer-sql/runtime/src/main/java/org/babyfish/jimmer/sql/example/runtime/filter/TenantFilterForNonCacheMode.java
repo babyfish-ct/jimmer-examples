@@ -32,5 +32,5 @@ public class TenantFilterForNonCacheMode implements Filter<TenantAwareProps> { /
 }
 
 /*----------------Documentation Links----------------
-❶ https://babyfish-ct.github.io/jimmer/docs/query/global-filter/user-filter
+❶ https://babyfish-ct.github.io/jimmer-doc/docs/query/global-filter/user-filter
 ---------------------------------------------------*/
