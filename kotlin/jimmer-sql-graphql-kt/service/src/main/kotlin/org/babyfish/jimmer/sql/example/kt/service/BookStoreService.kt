@@ -42,7 +42,7 @@ class BookStoreService(
     @MutationMapping
     @Transactional
     fun saveBookStore(@Argument input: BookStoreInput): BookStore =
-        bookStoreRepository.save(input)
+        bookStoreRepository.save(input).modifiedEntity
 
     @MutationMapping
     @Transactional

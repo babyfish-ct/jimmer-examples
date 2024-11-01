@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
 	kotlin("jvm") version "1.9.21"
+	kotlin("plugin.allopen") version "1.9.21"
 }
 
 val jimmerVersion: String by rootProject.extra
@@ -10,6 +11,10 @@ java.sourceCompatibility = JavaVersion.VERSION_1_8
 
 repositories {
 	mavenCentral()
+}
+
+allOpen {
+	annotation("org.springframework.stereotype.Repository")
 }
 
 dependencies {

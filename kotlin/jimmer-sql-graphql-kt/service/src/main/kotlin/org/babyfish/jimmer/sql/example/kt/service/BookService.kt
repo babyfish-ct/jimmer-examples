@@ -68,12 +68,12 @@ class BookService(
     @MutationMapping
     @Transactional
     fun saveBook(@Argument input: BookInput): Book =
-        bookRepository.save(input)
+        bookRepository.save(input).modifiedEntity
 
     @MutationMapping
     @Transactional
     fun saveCompositeBook(@Argument input: CompositeBookInput): Book =
-        bookRepository.save(input)
+        bookRepository.save(input).modifiedEntity
 
     @MutationMapping
     @Transactional

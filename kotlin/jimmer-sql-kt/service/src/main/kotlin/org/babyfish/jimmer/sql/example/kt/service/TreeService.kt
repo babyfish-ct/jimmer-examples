@@ -45,7 +45,7 @@ class TreeService(
     fun findNodeById(
         @PathVariable id: Long
     ): @FetchBy("DETAIL_FETCHER") TreeNode? =
-        treeNodeRepository.findNullable(id, DETAIL_FETCHER)
+        treeNodeRepository.findById(id, DETAIL_FETCHER)
 
     @PutMapping("/root/recursive")
     @Throws(SaveException::class)
@@ -70,7 +70,7 @@ class TreeService(
              */
             parent = null
         }
-        return treeNodeRepository.save(treeNode)
+        return treeNodeRepository.save(treeNode).modifiedEntity
     }
 
     @DeleteMapping("/tree/{id}")

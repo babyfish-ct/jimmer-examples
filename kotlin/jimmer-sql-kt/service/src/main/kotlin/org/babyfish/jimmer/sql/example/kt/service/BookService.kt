@@ -85,17 +85,17 @@ class BookService(
     fun findComplexBook(
         @PathVariable id: Long,
     ): @FetchBy("COMPLEX_FETCHER") Book? = // (3)
-        bookRepository.findNullable(id, COMPLEX_FETCHER)
+        bookRepository.findById(id, COMPLEX_FETCHER)
 
     @PutMapping
     @Throws(SaveException::class) // (4)
     fun saveBook(@RequestBody input: BookInput): Book = // (5)
-        bookRepository.save(input)
+        bookRepository.save(input).modifiedEntity
 
     @PutMapping("/composite")
     @Throws(SaveException::class) // (6)
     fun saveBook(@RequestBody input: CompositeBookInput): Book = // (7)
-        bookRepository.save(input)
+        bookRepository.save(input).modifiedEntity
 
     @DeleteMapping("/{id}")
     fun deleteBook(@PathVariable id: Long) {

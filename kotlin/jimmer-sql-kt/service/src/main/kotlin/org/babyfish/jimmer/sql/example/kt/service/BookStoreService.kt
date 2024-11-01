@@ -50,18 +50,18 @@ class BookStoreService(
     fun findComplexStoreWithAllBooks(
         @PathVariable id: Long
     ): @FetchBy("WITH_ALL_BOOKS_FETCHER") BookStore? = // (4)
-        bookStoreRepository.findNullable(id, WITH_ALL_BOOKS_FETCHER)
+        bookStoreRepository.findById(id, WITH_ALL_BOOKS_FETCHER)
 
     @GetMapping("/{id}/withNewestBooks")
     fun findComplexStoreWithNewestBooks(
         @PathVariable id: Long
     ): @FetchBy("WITH_NEWEST_BOOKS_FETCHER") BookStore? = // (5)
-        bookStoreRepository.findNullable(id, WITH_NEWEST_BOOKS_FETCHER)
+        bookStoreRepository.findById(id, WITH_NEWEST_BOOKS_FETCHER)
 
     @PutMapping
     @Throws(SaveException::class) // (6)
     fun saveBookStore(@RequestBody input: BookStoreInput): BookStore = // (7)
-        bookStoreRepository.save(input)
+        bookStoreRepository.save(input).modifiedEntity
 
     @DeleteMapping("{id}")
     fun deleteBookStore(@PathVariable id: Long) {

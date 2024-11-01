@@ -7,6 +7,7 @@ import org.babyfish.jimmer.sql.event.EntityEvent
 import org.babyfish.jimmer.sql.example.kt.model.Book
 import org.babyfish.jimmer.sql.example.kt.model.BookStore
 import org.babyfish.jimmer.sql.example.kt.repository.BookRepository
+import org.babyfish.jimmer.sql.kt.KSqlClient
 import org.babyfish.jimmer.sql.kt.KTransientResolver
 import org.babyfish.jimmer.sql.kt.event.*
 import org.springframework.stereotype.Component
@@ -14,15 +15,14 @@ import java.util.*
 
 @Component
 class BookStoreNewestBooksResolver(
+    private val sql: KSqlClient,
     private val bookRepository: BookRepository
-) : KTransientResolver<Long, List<Long>> { // ❶
+) : KTransientResolver<Long, List<Long>> { // (1)
 
-    private val sqlClient = bookRepository.sql
-
-    override fun resolve(ids: Collection<Long>): Map<Long, List<Long>> = // ❷
+    override fun resolve(ids: Collection<Long>): Map<Long, List<Long>> = // (2)
         bookRepository.findNewestIdsGroupByStoreIds(ids)
 
-    override fun getDefaultValue(): List<Long> = // ❸
+    override fun getDefaultValue(): List<Long> = // (3)
         emptyList()
 
     // -----------------------------
@@ -46,16 +46,16 @@ class BookStoreNewestBooksResolver(
     // Since it is multi-view cache, sub key is needed.
     // Here, we make the calculated cache `BookStore.newestBooks` have the same sub key as the
     // association cache `BookStore.books`, which is `{"tenant": ...}`
-    override fun getParameterMapRef(): Ref<SortedMap<String, Any>?>? { // ❹
-        return sqlClient.filters.getTargetParameterMapRef(BookStore::books)
+    override fun getParameterMapRef(): Ref<SortedMap<String, Any>?>? { // (4)
+        return sql.filters.getTargetParameterMapRef(BookStore::books)
     }
 
     // When a one-to-many association `BookStore.books` is modified
     // (for some records in the BOOK table, whether by modifying the foreign key field `STORE_ID` or
     // the field `TENANT` that the `TenantFilter` cares about),
     // the cache of the calculated property `BookStore.newestBooks` should be invalidated.
-    override fun getAffectedSourceIds(e: AssociationEvent): Collection<*>? { // ❺
-        return if (sqlClient.caches.isAffectedBy(e) && e.immutableProp === BookStore::books.toImmutableProp()) {
+    override fun getAffectedSourceIds(e: AssociationEvent): Collection<*>? { // (5)
+        return if (sql.caches.isAffectedBy(e) && e.immutableProp === BookStore::books.toImmutableProp()) {
             listOf(e.sourceId)
         } else null
     }
@@ -63,8 +63,8 @@ class BookStoreNewestBooksResolver(
     // Given that the foreign key `STORE_ID` of the current `Book` is not null and has not been modified,
     // if the `edition` of the current `Book` changes, the cache of the computed property `BookStore.newestBooks`
     // corresponding to `STORE_ID` should be invalidated.
-    override fun getAffectedSourceIds(e: EntityEvent<*>): Collection<*>? { // ❻
-        if (sqlClient.caches.isAffectedBy(e) &&
+    override fun getAffectedSourceIds(e: EntityEvent<*>): Collection<*>? { // (6)
+        if (sql.caches.isAffectedBy(e) &&
             !e.isEvict &&
             e.getImmutableType().javaClass == Book::class.java
         ) {
@@ -78,7 +78,7 @@ class BookStoreNewestBooksResolver(
 }
 
 /*----------------Documentation Links----------------
-❶ ❷ ❸ https://babyfish-ct.github.io/jimmer/docs/mapping/advanced/calculated/transient#scalar-calculation-bookstoreavgprice
-❹ https://babyfish-ct.github.io/jimmer/docs/cache/multiview-cache/user-filter#subkey-of-calculated-properties
-❺ ❻ https://babyfish-ct.github.io/jimmer/docs/cache/multiview-cache/user-filter#consistency
+(1) (2) (3) https://babyfish-ct.github.io/jimmer/docs/mapping/advanced/calculated/transient#scalar-calculation-bookstoreavgprice
+(4) https://babyfish-ct.github.io/jimmer/docs/cache/multiview-cache/user-filter#subkey-of-calculated-properties
+(5) (6) https://babyfish-ct.github.io/jimmer/docs/cache/multiview-cache/user-filter#consistency
 ---------------------------------------------------*/

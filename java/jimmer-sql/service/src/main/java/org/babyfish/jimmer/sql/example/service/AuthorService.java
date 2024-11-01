@@ -57,7 +57,7 @@ public class AuthorService implements Fetchers {
     public @FetchBy("COMPLEX_FETCHER") Author findComplexAuthor(
             @PathVariable("id") long id
     ) {
-        return authorRepository.findNullable(id, COMPLEX_FETCHER);
+        return authorRepository.findById(id, COMPLEX_FETCHER);
     }
 
     private static final Fetcher<Author> SIMPLE_FETCHER =
@@ -85,7 +85,7 @@ public class AuthorService implements Fetchers {
 
     @PutMapping
     public Author saveAuthor(@RequestBody AuthorInput input) throws SaveException {
-        return authorRepository.save(input);
+        return authorRepository.save(input).getModifiedEntity();
     }
 
     @DeleteMapping("/{id}")

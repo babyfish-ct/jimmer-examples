@@ -52,12 +52,12 @@ class AuthorService(
     fun findComplexAuthor(
         @PathVariable id: Long
     ): @FetchBy("COMPLEX_FETCHER") Author? =
-        authorRepository.findNullable(id, COMPLEX_FETCHER)
+        authorRepository.findById(id, COMPLEX_FETCHER)
 
     @PutMapping
     @Throws(SaveException::class)
     fun saveAuthor(@RequestBody input: AuthorInput): Author =
-        authorRepository.save(input)
+        authorRepository.save(input).modifiedEntity
 
     @DeleteMapping("/{id}")
     fun deleteAuthor(@PathVariable id: Long) {

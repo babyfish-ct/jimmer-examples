@@ -61,7 +61,7 @@ public class BookStoreService implements Fetchers {
     public @FetchBy("WITH_ALL_BOOKS_FETCHER") BookStore findComplexStoreWithAllBooks(
             @PathVariable("id") long id
     ) {
-        return bookStoreRepository.findNullable(id, WITH_ALL_BOOKS_FETCHER);
+        return bookStoreRepository.findById(id, WITH_ALL_BOOKS_FETCHER);
     }
 
     @GetMapping("/{id}/withNewestBooks")
@@ -69,7 +69,7 @@ public class BookStoreService implements Fetchers {
     public @FetchBy("WITH_NEWEST_BOOKS_FETCHER") BookStore findComplexStoreWithNewestBooks(
             @PathVariable("id") long id
     ) {
-        return bookStoreRepository.findNullable(id, WITH_NEWEST_BOOKS_FETCHER);
+        return bookStoreRepository.findById(id, WITH_NEWEST_BOOKS_FETCHER);
     }
 
     /**
@@ -136,7 +136,7 @@ public class BookStoreService implements Fetchers {
 
     @PutMapping
     public BookStore saveBookStore(@RequestBody BookStoreInput input) {
-        return bookStoreRepository.save(input);
+        return bookStoreRepository.save(input).getModifiedEntity();
     }
 
     @DeleteMapping("/{id}")

@@ -63,7 +63,7 @@ public class TreeService implements Fetchers {
     public @FetchBy("DETAIL_FETCHER") TreeNode findNodeById(
             @PathVariable long id
     ) {
-        return treeNodeRepository.findNullable(id, DETAIL_FETCHER);
+        return treeNodeRepository.findById(id, DETAIL_FETCHER);
     }
 
     @PutMapping("/root/recursive")
@@ -87,7 +87,7 @@ public class TreeService implements Fetchers {
                  */
                 draft -> draft.setParent(null)
         );
-        return treeNodeRepository.save(rootNode);
+        return treeNodeRepository.save(rootNode).getModifiedEntity();
     }
 
     @DeleteMapping("/{id}")

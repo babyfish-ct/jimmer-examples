@@ -39,7 +39,7 @@ class AuthorService(
     fun saveAuthor(
         @Argument input: AuthorInput
     ): Author =
-        authorRepository.save(input)
+        authorRepository.save(input).modifiedEntity
 
     @MutationMapping
     fun deleteAuthor(@Argument id: Long): Int {

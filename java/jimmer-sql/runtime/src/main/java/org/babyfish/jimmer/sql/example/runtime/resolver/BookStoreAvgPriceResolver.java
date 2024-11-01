@@ -11,6 +11,7 @@ import org.babyfish.jimmer.sql.example.model.BookProps;
 import org.babyfish.jimmer.sql.example.model.BookStore;
 import org.babyfish.jimmer.sql.example.model.BookStoreProps;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -20,25 +21,24 @@ import java.util.Map;
 import java.util.SortedMap;
 
 @Component
-public class BookStoreAvgPriceResolver implements TransientResolver<Long, BigDecimal> { // ❶
+public class BookStoreAvgPriceResolver implements TransientResolver<Long, BigDecimal> { // (1)
+
+    private final JSqlClient sql;
 
     private final BookRepository bookRepository;
 
-    public BookStoreAvgPriceResolver(BookRepository bookRepository) {
+    public BookStoreAvgPriceResolver(JSqlClient sql, BookRepository bookRepository) {
+        this.sql = sql;
         this.bookRepository = bookRepository;
     }
 
-    private JSqlClient sqlClient() {
-        return bookRepository.sql();
-    }
-
     @Override
-    public Map<Long, BigDecimal> resolve(Collection<Long> ids) { // ❷
+    public Map<Long, BigDecimal> resolve(Collection<Long> ids) { // (2)
         return bookRepository.findAvgPriceGroupByStoreId(ids);
     }
 
     @Override
-    public BigDecimal getDefaultValue() { // ❸
+    public BigDecimal getDefaultValue() { // (3)
         return BigDecimal.ZERO;
     }
 
@@ -65,8 +65,8 @@ public class BookStoreAvgPriceResolver implements TransientResolver<Long, BigDec
     // Here, we make the calculated cache `BookStore.avgPrice` have the same sub key as the
     // association cache `BookStore.books`, which is `{"tenant": ...}`
     @Override
-    public Ref<SortedMap<String, Object>> getParameterMapRef() { // ❹
-        return sqlClient().getFilters().getTargetParameterMapRef(BookStoreProps.BOOKS);
+    public Ref<SortedMap<String, Object>> getParameterMapRef() { // (4)
+        return sql.getFilters().getTargetParameterMapRef(BookStoreProps.BOOKS);
     }
 
     // When a one-to-many association `BookStore.books` is modified
@@ -74,8 +74,8 @@ public class BookStoreAvgPriceResolver implements TransientResolver<Long, BigDec
     // the field `TENANT` that the `TenantFilter` cares about),
     // the cache of the calculated property `BookStore.avgPrice` should be invalidated.
     @Override
-    public Collection<?> getAffectedSourceIds(@NotNull AssociationEvent e) { // ❺
-        if (sqlClient().getCaches().isAffectedBy(e) && e.getImmutableProp() == BookStoreProps.BOOKS.unwrap()) {
+    public Collection<?> getAffectedSourceIds(@NotNull AssociationEvent e) { // (5)
+        if (sql.getCaches().isAffectedBy(e) && e.getImmutableProp() == BookStoreProps.BOOKS.unwrap()) {
             return Collections.singletonList(e.getSourceId());
         }
         return null;
@@ -85,8 +85,8 @@ public class BookStoreAvgPriceResolver implements TransientResolver<Long, BigDec
     // if the `price` of the current `Book` changes, the cache of the computed property `BookStore.avgPrice`
     // corresponding to `STORE_ID` should be invalidated.
     @Override
-    public Collection<?> getAffectedSourceIds(@NotNull EntityEvent<?> e) { // ❻
-        if (sqlClient().getCaches().isAffectedBy(e) &&
+    public Collection<?> getAffectedSourceIds(@NotNull EntityEvent<?> e) { // (6)
+        if (sql.getCaches().isAffectedBy(e) &&
                 !e.isEvict() &&
                 e.getImmutableType().getJavaClass() == Book.class) {
 
@@ -100,7 +100,7 @@ public class BookStoreAvgPriceResolver implements TransientResolver<Long, BigDec
 }
 
 /*----------------Documentation Links----------------
-❶ ❷ ❸ https://babyfish-ct.github.io/jimmer/docs/mapping/advanced/calculated/transient#scalar-calculation-bookstoreavgprice
-❹ https://babyfish-ct.github.io/jimmer/docs/cache/multiview-cache/user-filter#subkey-of-calculated-properties
-❺ ❻ https://babyfish-ct.github.io/jimmer/docs/cache/multiview-cache/user-filter#consistency
+(1) (2) (3) https://babyfish-ct.github.io/jimmer/docs/mapping/advanced/calculated/transient#scalar-calculation-bookstoreavgprice
+(4) https://babyfish-ct.github.io/jimmer/docs/cache/multiview-cache/user-filter#subkey-of-calculated-properties
+(5) (6) https://babyfish-ct.github.io/jimmer/docs/cache/multiview-cache/user-filter#consistency
 ---------------------------------------------------*/

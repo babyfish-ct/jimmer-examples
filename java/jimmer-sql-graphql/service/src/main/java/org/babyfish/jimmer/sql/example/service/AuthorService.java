@@ -46,7 +46,7 @@ public class AuthorService {
 
     @MutationMapping
     public Author saveAuthor(@Argument AuthorInput input) {
-        return authorRepository.save(input);
+        return authorRepository.save(input).getModifiedEntity();
     }
 
     @MutationMapping

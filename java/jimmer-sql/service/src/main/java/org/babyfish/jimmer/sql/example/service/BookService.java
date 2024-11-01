@@ -95,7 +95,7 @@ public class BookService implements Fetchers {
     public @FetchBy("COMPLEX_FETCHER") Book findComplexBook(
             @PathVariable("id") long id
     ) {
-        return bookRepository.findNullable(id, COMPLEX_FETCHER);
+        return bookRepository.findById(id, COMPLEX_FETCHER);
     }
 
     /**
@@ -150,12 +150,12 @@ public class BookService implements Fetchers {
 
     @PutMapping
     public Book saveBook(@RequestBody BookInput input) throws SaveException {
-        return bookRepository.save(input);
+        return bookRepository.save(input).getModifiedEntity();
     }
 
     @PutMapping("/composite")
     public Book saveCompositeBook(@RequestBody CompositeBookInput input) throws SaveException {
-        return bookRepository.save(input);
+        return bookRepository.save(input).getModifiedEntity();
     }
 
     @DeleteMapping("/{id}")

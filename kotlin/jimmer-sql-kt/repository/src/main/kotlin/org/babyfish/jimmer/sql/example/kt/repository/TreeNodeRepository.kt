@@ -1,12 +1,23 @@
 package org.babyfish.jimmer.sql.example.kt.repository
 
 import org.babyfish.jimmer.View
+import org.babyfish.jimmer.spring.repo.support.AbstractKotlinRepository
 import org.babyfish.jimmer.spring.repository.KRepository
 import org.babyfish.jimmer.sql.example.kt.model.TreeNode
+import org.babyfish.jimmer.sql.example.kt.model.name
 import org.babyfish.jimmer.sql.fetcher.Fetcher
+import org.babyfish.jimmer.sql.kt.KSqlClient
+import org.babyfish.jimmer.sql.kt.ast.expression.eq
+import org.babyfish.jimmer.sql.kt.ast.expression.`eq?`
+import org.babyfish.jimmer.sql.kt.ast.expression.isNull
+import org.springframework.stereotype.Repository
+import java.awt.print.Book
 import kotlin.reflect.KClass
 
-interface TreeNodeRepository : KRepository<TreeNode, Long> { // ❶
+@Repository
+class TreeNodeRepository(
+    sql: KSqlClient
+) : AbstractKotlinRepository<TreeNode, Long>(sql) {
 
     /*
      * This approach is very special, the rest query methods of the project returns 'dynamic object + @FetchBy',
@@ -18,21 +29,23 @@ interface TreeNodeRepository : KRepository<TreeNode, Long> { // ❶
      * However, a better development experience is to determine the shape of the data structure
      * at the business layer, not the data layer. So, let's define the parameter `viewType`
      */
-    fun <V: View<TreeNode>> findByNameLikeIgnoreCase( // ❷
+    fun <V: View<TreeNode>> findByNameLikeIgnoreCase(
         name: String?,
-        viewType: KClass<V> // ❸
-    ): List<V>
+        viewType: KClass<V>
+    ): List<V> =
+        sql.executeQuery(TreeNode::class) {
+            where(table.name `eq?` name)
+            select(table.fetch(viewType))
+        }
 
-    fun findByParentIsNullAndName( // ❹
+    fun findByParentIsNullAndName(
         name: String?,
         fetcher: Fetcher<TreeNode>?
-    ): List<TreeNode>
+    ): List<TreeNode> =
+        sql.executeQuery(TreeNode::class) {
+            where(table.name.isNull())
+            where(table.name `eq?` name)
+            select(table.fetch(fetcher))
+        }
 }
 
-/*----------------Documentation Links----------------
-❶ https://babyfish-ct.github.io/jimmer/docs/spring/repository/concept
-❷ ❹ https://babyfish-ct.github.io/jimmer/docs/spring/repository/abstract
-
-❸ https://babyfish-ct.github.io/jimmer/docs/spring/repository/dto
-  https://babyfish-ct.github.io/jimmer/docs/query/object-fetcher/dto
----------------------------------------------------*/

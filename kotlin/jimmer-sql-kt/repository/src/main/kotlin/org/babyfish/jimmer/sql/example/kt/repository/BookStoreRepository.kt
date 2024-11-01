@@ -1,6 +1,11 @@
 package org.babyfish.jimmer.sql.example.kt.repository
 
-import org.babyfish.jimmer.spring.repository.KRepository
+import org.babyfish.jimmer.spring.repo.support.AbstractKotlinRepository
 import org.babyfish.jimmer.sql.example.kt.model.BookStore
+import org.babyfish.jimmer.sql.kt.KSqlClient
+import org.springframework.stereotype.Repository
 
-interface BookStoreRepository : KRepository<BookStore, Long>
+@Repository
+class BookStoreRepository(
+    sql: KSqlClient
+) : AbstractKotlinRepository<BookStore, Long>(sql)

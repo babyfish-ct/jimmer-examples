@@ -12,31 +12,29 @@ import org.babyfish.jimmer.sql.example.model.BookStore;
 import org.babyfish.jimmer.sql.example.model.BookStoreProps;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
 
 @Component
-public class BookStoreNewestBooksResolver implements TransientResolver<Long, List<Long>> { // ❶
+public class BookStoreNewestBooksResolver implements TransientResolver<Long, List<Long>> { // (1)
+
+    private final JSqlClient sql;
 
     private final BookRepository bookRepository;
 
-    public BookStoreNewestBooksResolver(BookRepository bookRepository) {
+    public BookStoreNewestBooksResolver(JSqlClient sql, BookRepository bookRepository) {
+        this.sql = sql;
         this.bookRepository = bookRepository;
     }
 
-    private JSqlClient sqlClient() {
-        return bookRepository.sql();
-    }
-
     @Override
-    public Map<Long, List<Long>> resolve(Collection<Long> ids) { // ❷
+    public Map<Long, List<Long>> resolve(Collection<Long> ids) { // (2)
         return bookRepository.findNewestIdsGroupByStoreId(ids);
     }
 
     @Override
-    public List<Long> getDefaultValue() { // ❸
+    public List<Long> getDefaultValue() { // (3)
         return Collections.emptyList();
     }
 
@@ -59,8 +57,8 @@ public class BookStoreNewestBooksResolver implements TransientResolver<Long, Lis
     // Here, we make the calculated cache `BookStore.newestBooks` have the same sub key as the
     // association cache `BookStore.books`, which is `{"tenant": ...}`
     @Override
-    public Ref<SortedMap<String, Object>> getParameterMapRef() { // ❹
-        return sqlClient().getFilters().getTargetParameterMapRef(BookStoreProps.BOOKS);
+    public Ref<SortedMap<String, Object>> getParameterMapRef() { // (4)
+        return sql.getFilters().getTargetParameterMapRef(BookStoreProps.BOOKS);
     }
 
     // When a one-to-many association `BookStore.books` is modified
@@ -69,8 +67,8 @@ public class BookStoreNewestBooksResolver implements TransientResolver<Long, Lis
     // the cache of the calculated property `BookStore.newestBooks` should be invalidated.
     @Nullable
     @Override
-    public Collection<?> getAffectedSourceIds(@NotNull AssociationEvent e) { // ❺
-        if (sqlClient().getCaches().isAffectedBy(e) && e.getImmutableProp() == BookStoreProps.BOOKS.unwrap()) {
+    public Collection<?> getAffectedSourceIds(@NotNull AssociationEvent e) { // (5)
+        if (sql.getCaches().isAffectedBy(e) && e.getImmutableProp() == BookStoreProps.BOOKS.unwrap()) {
             return Collections.singletonList(e.getSourceId());
         }
         return null;
@@ -81,8 +79,8 @@ public class BookStoreNewestBooksResolver implements TransientResolver<Long, Lis
     // corresponding to `STORE_ID` should be invalidated.
     @Nullable
     @Override
-    public Collection<?> getAffectedSourceIds(@NotNull EntityEvent<?> e) { // ❻
-        if (sqlClient().getCaches().isAffectedBy(e) &&
+    public Collection<?> getAffectedSourceIds(@NotNull EntityEvent<?> e) { // (6)
+        if (sql.getCaches().isAffectedBy(e) &&
                 !e.isEvict() &&
                 e.getImmutableType().getJavaClass() == Book.class) {
 
@@ -96,7 +94,7 @@ public class BookStoreNewestBooksResolver implements TransientResolver<Long, Lis
 }
 
 /*----------------Documentation Links----------------
-❶ ❷ ❸ https://babyfish-ct.github.io/jimmer/docs/mapping/advanced/calculated/transient#associative-calculation-bookstorenewestbooks
-❹ https://babyfish-ct.github.io/jimmer/docs/cache/multiview-cache/user-filter#subkey-of-calculated-properties
-❺ ❻ https://babyfish-ct.github.io/jimmer/docs/cache/multiview-cache/user-filter#consistency
+(1) (2) (3) https://babyfish-ct.github.io/jimmer/docs/mapping/advanced/calculated/transient#associative-calculation-bookstorenewestbooks
+(4)) https://babyfish-ct.github.io/jimmer/docs/cache/multiview-cache/user-filter#subkey-of-calculated-properties
+(5) (6) https://babyfish-ct.github.io/jimmer/docs/cache/multiview-cache/user-filter#consistency
 ---------------------------------------------------*/

@@ -80,13 +80,13 @@ public class BookService {
     @MutationMapping
     @Transactional
     public Book saveBook(@Argument BookInput input) {
-        return bookRepository.save(input);
+        return bookRepository.save(input).getModifiedEntity();
     }
 
     @MutationMapping
     @Transactional
     public Book saveCompositeBook(@Argument CompositeBookInput input) {
-        return bookRepository.save(input);
+        return bookRepository.save(input).getModifiedEntity();
     }
 
     @MutationMapping

@@ -50,7 +50,7 @@ public class BookStoreService {
     @MutationMapping
     @Transactional
     public BookStore saveBookStore(@Argument BookStoreInput input) {
-        return bookStoreRepository.save(input);
+        return bookStoreRepository.save(input).getModifiedEntity();
     }
 
     @MutationMapping
