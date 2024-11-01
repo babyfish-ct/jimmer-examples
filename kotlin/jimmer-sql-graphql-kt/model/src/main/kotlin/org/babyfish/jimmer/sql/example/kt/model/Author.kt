@@ -55,7 +55,7 @@ interface Author : BaseEntity {
 }
 
 /*----------------Documentation Links----------------
-(1) (2) https://babyfish-ct.github.io/jimmer/docs/mapping/advanced/key
-(3) https://babyfish-ct.github.io/jimmer/docs/mapping/base/association/many-to-many
-(4) https://babyfish-ct.github.io/jimmer/docs/mapping/advanced/calculated/formula
+(1) (2) https://babyfish-ct.github.io/jimmer-doc/docs/mapping/advanced/key
+(3) https://babyfish-ct.github.io/jimmer-doc/docs/mapping/base/association/many-to-many
+(4) https://babyfish-ct.github.io/jimmer-doc/docs/mapping/advanced/calculated/formula
 ---------------------------------------------------*/

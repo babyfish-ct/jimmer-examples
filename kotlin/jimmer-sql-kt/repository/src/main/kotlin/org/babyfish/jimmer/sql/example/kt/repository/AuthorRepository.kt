@@ -1,7 +1,6 @@
 package org.babyfish.jimmer.sql.example.kt.repository
 
 import org.babyfish.jimmer.spring.repo.support.AbstractKotlinRepository
-import org.babyfish.jimmer.spring.repository.KRepository
 import org.babyfish.jimmer.spring.repository.orderBy
 import org.babyfish.jimmer.sql.example.kt.model.Author
 import org.babyfish.jimmer.sql.fetcher.Fetcher
@@ -20,11 +19,10 @@ class AuthorRepository(
         sort: Sort,
         fetcher: Fetcher<Author>?
     ): List<Author> =
-        sql
-            .createQuery(Author::class) {
-                where(specification)
-                orderBy(sort) // ❻
-                select(table.fetch(fetcher))
-            }
-            .execute()
+        sql.executeQuery(Author::class) {
+            where(specification)
+            orderBy(sort)
+            select(table.fetch(fetcher))
+        }
 }
+

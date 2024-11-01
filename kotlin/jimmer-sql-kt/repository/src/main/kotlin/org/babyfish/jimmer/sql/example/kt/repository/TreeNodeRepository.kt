@@ -2,16 +2,13 @@ package org.babyfish.jimmer.sql.example.kt.repository
 
 import org.babyfish.jimmer.View
 import org.babyfish.jimmer.spring.repo.support.AbstractKotlinRepository
-import org.babyfish.jimmer.spring.repository.KRepository
 import org.babyfish.jimmer.sql.example.kt.model.TreeNode
 import org.babyfish.jimmer.sql.example.kt.model.name
 import org.babyfish.jimmer.sql.fetcher.Fetcher
 import org.babyfish.jimmer.sql.kt.KSqlClient
-import org.babyfish.jimmer.sql.kt.ast.expression.eq
 import org.babyfish.jimmer.sql.kt.ast.expression.`eq?`
 import org.babyfish.jimmer.sql.kt.ast.expression.isNull
 import org.springframework.stereotype.Repository
-import java.awt.print.Book
 import kotlin.reflect.KClass
 
 @Repository

@@ -54,9 +54,9 @@ public interface Book extends BaseEntity, TenantAware {
 }
 
 /*----------------Documentation Links----------------
-❶ ❷ https://babyfish-ct.github.io/jimmer/docs/mapping/advanced/key
-❸ https://babyfish-ct.github.io/jimmer/docs/mapping/base/nullity
-❹ https://babyfish-ct.github.io/jimmer/docs/mapping/base/association/many-to-one
-❺ https://babyfish-ct.github.io/jimmer/docs/mapping/base/association/many-to-many
-❻ ❼https://babyfish-ct.github.io/jimmer/docs/mapping/advanced/view/id-view
+❶ ❷ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/advanced/key
+❸ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/base/nullity
+❹ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/base/association/many-to-one
+❺ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/base/association/many-to-many
+❻ ❼https://babyfish-ct.github.io/jimmer-doc/docs/mapping/advanced/view/id-view
 ---------------------------------------------------*/

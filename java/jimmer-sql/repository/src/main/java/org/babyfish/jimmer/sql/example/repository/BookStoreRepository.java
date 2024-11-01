@@ -12,3 +12,4 @@ public class BookStoreRepository extends AbstractJavaRepository<BookStore, Long>
         super(sql);
     }
 }
+

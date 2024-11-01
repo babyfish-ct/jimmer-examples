@@ -100,7 +100,7 @@ public class BookStoreAvgPriceResolver implements TransientResolver<Long, BigDec
 }
 
 /*----------------Documentation Links----------------
-(1) (2) (3) https://babyfish-ct.github.io/jimmer/docs/mapping/advanced/calculated/transient#scalar-calculation-bookstoreavgprice
-(4) https://babyfish-ct.github.io/jimmer/docs/cache/multiview-cache/user-filter#subkey-of-calculated-properties
-(5) (6) https://babyfish-ct.github.io/jimmer/docs/cache/multiview-cache/user-filter#consistency
+(1) (2) (3) https://babyfish-ct.github.io/jimmer-doc/docs/mapping/advanced/calculated/transient#scalar-calculation-bookstoreavgprice
+(4) https://babyfish-ct.github.io/jimmer-doc/docs/cache/multiview-cache/user-filter#subkey-of-calculated-properties
+(5) (6) https://babyfish-ct.github.io/jimmer-doc/docs/cache/multiview-cache/user-filter#consistency
 ---------------------------------------------------*/
