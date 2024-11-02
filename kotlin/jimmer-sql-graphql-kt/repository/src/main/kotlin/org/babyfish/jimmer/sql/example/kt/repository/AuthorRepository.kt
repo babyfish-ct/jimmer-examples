@@ -9,6 +9,7 @@ import org.babyfish.jimmer.sql.example.kt.model.lastName
 import org.babyfish.jimmer.sql.fetcher.Fetcher
 import org.babyfish.jimmer.sql.kt.KSqlClient
 import org.babyfish.jimmer.sql.kt.ast.expression.eq
+import org.babyfish.jimmer.sql.kt.ast.expression.`eq?`
 import org.babyfish.jimmer.sql.kt.ast.expression.or
 import org.babyfish.jimmer.sql.kt.ast.query.specification.KSpecification
 import org.springframework.data.domain.Sort
@@ -20,15 +21,13 @@ class AuthorRepository(
 ) : AbstractKotlinRepository<Author, Long>(sql) {
 
     fun findByName(name: String?, fetcher: Fetcher<Author>?): List<Author> =
-        sql.executeQuery(Author::class) {
-            name?.let {
-                where(
-                    or(
-                        table.firstName eq it,
-                        table.lastName eq it
-                    )
+        executeQuery {
+            where(
+                or(
+                    table.firstName `eq?` name,
+                    table.lastName `eq?` name
                 )
-            }
+            )
             select(table.fetch(fetcher))
         }
 }

@@ -1,12 +1,12 @@
 package org.babyfish.jimmer.sql.example.repository;
 
+import org.babyfish.jimmer.Specification;
 import org.babyfish.jimmer.spring.repo.support.AbstractJavaRepository;
 import org.babyfish.jimmer.spring.repository.SpringOrders;
 import org.babyfish.jimmer.sql.JSqlClient;
 import org.babyfish.jimmer.sql.ast.Expression;
 import org.babyfish.jimmer.sql.ast.Predicate;
 import org.babyfish.jimmer.sql.ast.query.Order;
-import org.babyfish.jimmer.sql.ast.query.specification.JSpecification;
 import org.babyfish.jimmer.sql.ast.tuple.Tuple2;
 import org.babyfish.jimmer.sql.example.model.Book;
 import org.babyfish.jimmer.sql.example.model.BookTable;
@@ -33,7 +33,7 @@ public class BookRepository extends AbstractJavaRepository<Book, Long> {
      * Manually implement complex query.
      *
      * <p>The functionality of this method is the same as the super QBE method
-     * {@link #find(JSpecification, Sort, Fetcher)} </p>
+     * {@link #find(Specification, Sort, Fetcher)} </p>
      */
     public List<Book> findBooks(
             @Nullable String name,
@@ -69,7 +69,7 @@ public class BookRepository extends AbstractJavaRepository<Book, Long> {
      * {@link #findBooks(String, BigDecimal, BigDecimal, String, String, String, Fetcher)}</p>
      */
     public List<Book> find(
-            JSpecification<Book, BookTable> specification,
+            Specification<Book> specification,
             Sort sort,
             Fetcher<Book> fetcher
     ) {

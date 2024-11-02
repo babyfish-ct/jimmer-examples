@@ -17,7 +17,7 @@ class BookStoreRepository(
         name: String?,
         fetcher: Fetcher<BookStore>?
     ): List<BookStore> =
-        sql.executeQuery(BookStore::class) {
+        executeQuery {
             where(table.name `eq?` name)
             select(table.fetch(fetcher))
         }

@@ -1,5 +1,6 @@
 package org.babyfish.jimmer.sql.example.kt.repository
 
+import org.babyfish.jimmer.Specification
 import org.babyfish.jimmer.spring.repo.support.AbstractKotlinRepository
 import org.babyfish.jimmer.spring.repository.fetchSpringPage
 import org.babyfish.jimmer.spring.repository.orderBy
@@ -7,7 +8,6 @@ import org.babyfish.jimmer.sql.example.kt.model.*
 import org.babyfish.jimmer.sql.fetcher.Fetcher
 import org.babyfish.jimmer.sql.kt.KSqlClient
 import org.babyfish.jimmer.sql.kt.ast.expression.*
-import org.babyfish.jimmer.sql.kt.ast.query.specification.KSpecification
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Repository
@@ -32,7 +32,7 @@ class BookRepository(
         authorName: String?,
         fetcher: Fetcher<Book>?
     ): Page<Book> =
-        sql.createQuery(Book::class) {
+        createQuery {
             where(table.name `eq?` name)
             where(table.price.`between?`(minPrice, maxPrice))
             where(table.store.name `eq?` storeName)
@@ -54,16 +54,16 @@ class BookRepository(
      */
     fun find(
         pageable: Pageable,
-        specification: KSpecification<Book>,
+        specification: Specification<Book>,
         fetcher: Fetcher<Book>?
     ): Page<Book> =
-        sql.createQuery(Book::class) {
+        createQuery {
             where(specification)
             select(table.fetch(fetcher))
         }.fetchSpringPage(pageable)
 
     fun findAvgPriceGroupByStoreIds(storeIds: Collection<Long>): Map<Long, BigDecimal> =
-        sql.executeQuery(Book::class) {
+        executeQuery {
             where(table.storeId valueIn storeIds)
             groupBy(table.storeId)
             select(
@@ -75,7 +75,7 @@ class BookRepository(
         }
 
     fun findNewestIdsGroupByStoreIds(storeIds: Collection<Long>): Map<Long, List<Long>> =
-        sql.executeQuery(Book::class ) {
+        executeQuery {
             where(
                 tuple(table.storeId, table.name, table.edition) valueIn subQuery(Book::class) {
                     // Apply `filter` for sub query is better.

@@ -1,9 +1,9 @@
 package org.babyfish.jimmer.sql.example.repository;
 
+import org.babyfish.jimmer.Specification;
 import org.babyfish.jimmer.spring.repo.support.AbstractJavaRepository;
 import org.babyfish.jimmer.spring.repository.SpringOrders;
 import org.babyfish.jimmer.sql.JSqlClient;
-import org.babyfish.jimmer.sql.ast.query.specification.JSpecification;
 import org.babyfish.jimmer.sql.example.model.Author;
 import org.babyfish.jimmer.sql.example.model.AuthorTable;
 import org.babyfish.jimmer.sql.fetcher.Fetcher;
@@ -22,7 +22,7 @@ public class AuthorRepository extends AbstractJavaRepository<Author, Long> {
     }
 
     public List<Author> find(
-            JSpecification<?, AuthorTable> specification,
+            Specification<Author> specification,
             Sort sort,
             Fetcher<Author> fetcher
     ) {

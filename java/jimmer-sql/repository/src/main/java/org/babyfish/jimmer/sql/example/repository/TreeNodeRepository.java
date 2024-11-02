@@ -36,7 +36,7 @@ public class TreeNodeRepository extends AbstractJavaRepository<TreeNode, Long> {
     ) {
         return sql
                 .createQuery(table)
-                .where(table.name().eqIf(name))
+                .where(table.name().likeIf(name))
                 .select(table.fetch(viewType))
                 .execute();
     }

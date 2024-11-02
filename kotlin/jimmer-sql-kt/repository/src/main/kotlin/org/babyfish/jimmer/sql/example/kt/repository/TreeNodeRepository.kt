@@ -8,6 +8,7 @@ import org.babyfish.jimmer.sql.fetcher.Fetcher
 import org.babyfish.jimmer.sql.kt.KSqlClient
 import org.babyfish.jimmer.sql.kt.ast.expression.`eq?`
 import org.babyfish.jimmer.sql.kt.ast.expression.isNull
+import org.babyfish.jimmer.sql.kt.ast.expression.`like?`
 import org.springframework.stereotype.Repository
 import kotlin.reflect.KClass
 
@@ -30,8 +31,8 @@ class TreeNodeRepository(
         name: String?,
         viewType: KClass<V>
     ): List<V> =
-        sql.executeQuery(TreeNode::class) {
-            where(table.name `eq?` name)
+        executeQuery {
+            where(table.name `like?` name)
             select(table.fetch(viewType))
         }
 
@@ -39,7 +40,7 @@ class TreeNodeRepository(
         name: String?,
         fetcher: Fetcher<TreeNode>?
     ): List<TreeNode> =
-        sql.executeQuery(TreeNode::class) {
+        executeQuery {
             where(table.name.isNull())
             where(table.name `eq?` name)
             select(table.fetch(fetcher))

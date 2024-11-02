@@ -1,12 +1,12 @@
 package org.babyfish.jimmer.sql.example.kt.repository
 
+import org.babyfish.jimmer.Specification
 import org.babyfish.jimmer.spring.repo.support.AbstractKotlinRepository
 import org.babyfish.jimmer.spring.repository.orderBy
 import org.babyfish.jimmer.sql.example.kt.model.*
 import org.babyfish.jimmer.sql.fetcher.Fetcher
 import org.babyfish.jimmer.sql.kt.KSqlClient
 import org.babyfish.jimmer.sql.kt.ast.expression.*
-import org.babyfish.jimmer.sql.kt.ast.query.specification.KSpecification
 import org.babyfish.jimmer.sql.kt.ast.table.makeOrders
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Repository
@@ -31,7 +31,7 @@ class BookRepository(
         sortCode: String?,
         fetcher: Fetcher<Book>?
     ): List<Book> =
-        sql.executeQuery(Book::class) {
+        executeQuery {
             where(table.name `eq?` name)
             where(table.price.`between?`(minPrice, maxPrice))
             where(table.store.name `eq?` storeName)
@@ -52,18 +52,18 @@ class BookRepository(
      * </p>
      */
     fun find(
-        specification: KSpecification<Book>,
+        specification: Specification<Book>,
         sort: Sort,
         fetcher: Fetcher<Book>?
     ): List<Book> =
-        sql.executeQuery(Book::class) {
+        executeQuery {
             where(specification)
             orderBy(sort)
             select(table.fetch(fetcher))
         }
 
     fun findAvgPriceGroupByStoreIds(storeIds: Collection<Long>): Map<Long, BigDecimal> =
-        sql.executeQuery(Book::class) {
+        executeQuery {
             where(table.storeId valueIn storeIds)
             groupBy(table.storeId)
             select(
@@ -75,7 +75,7 @@ class BookRepository(
         }
 
     fun findNewestIdsGroupByStoreIds(storeIds: Collection<Long>): Map<Long, List<Long>> =
-        sql.executeQuery(Book::class) {
+        executeQuery {
             where(
                 tuple(table.storeId, table.name, table.edition) valueIn subQuery(Book::class) {
                     // Apply `filter` for sub query is better.
