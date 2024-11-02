@@ -21,7 +21,7 @@
 <tr>
 <td rowspan="3">model</td>
 <td>
-<a href="https://babyfish-ct.gitee.io/jimmer-doc/docs/overview/apt-ksp">在定义实体的项目中使用APT</a>
+<a href="https://babyfish-ct.gitee.io/jimmer-doc/docs/overview/apt-ksp">在定义实体的项目中使用KSP</a>
 </td>
 </tr>
 <tr>
@@ -70,7 +70,7 @@
 </td>
 </tr>
 <tr>
-<td><a href="https://babyfish-ct.gitee.io/jimmer-doc/docs/overview/apt-ksp">在定义DTO文件的项目中使用APT</a></td>
+<td><a href="https://babyfish-ct.gitee.io/jimmer-doc/docs/overview/apt-ksp">在定义DTO文件的项目中使用KSP</a></td>
 </tr>
 <tr>
 <td>

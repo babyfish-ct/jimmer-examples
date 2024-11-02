@@ -19,7 +19,7 @@ This example involves multiple features.
 <tr>
 <td rowspan="3">model</td>
 <td>
-<a href="https://babyfish-ct.github.io/jimmer-doc/docs/overview/apt-ksp">Using APT in the project defining entities</a>
+<a href="https://babyfish-ct.github.io/jimmer-doc/docs/overview/apt-ksp">Using KSP in the project defining entities</a>
 </td>
 </tr>
 <tr>
@@ -68,7 +68,7 @@ This example involves multiple features.
 </td>
 </tr>
 <tr>
-<td><a href="https://babyfish-ct.github.io/jimmer-doc/docs/overview/apt-ksp">Using APT in the project defining DTOs</a></td>
+<td><a href="https://babyfish-ct.github.io/jimmer-doc/docs/overview/apt-ksp">Using KSP in the project defining DTOs</a></td>
 </tr>
 <tr>
 <td>
