@@ -31,7 +31,6 @@ spring:
 # generated TypeScript code contain the DTO model hidden by jimmer backend
 
 jimmer:
-  dialect: org.babyfish.jimmer.sql.dialect.H2Dialect
   offset-optimizing-threshold: 10
   id-only-target-checking-level: ALL
   database-validation-mode: ERROR
