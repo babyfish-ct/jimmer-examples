@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.babyfish.jimmer.example</groupId>
-    <artifactId>jimmer-core</artifactId>
-    <version>0.9.27</version>
+    <artifactId>save-command</artifactId>
+    <version>0.9.31</version>
 
     <properties>
-        <jimmer.version>0.9.27</jimmer.version>
+        <jimmer.version>0.9.31</jimmer.version>
         <junit.version>5.8.1</junit.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>

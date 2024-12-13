@@ -110,7 +110,17 @@ public class ManyToOneTest extends AbstractMutationTest {
                         "GraphQL in Action", 1, new BigDecimal(49), 99999L
                 ),
 
-                // Investigate why the database throws
+                // Try to investigate why the database throws
+                // error about constraint violation
+                // (This is not necessary, it will be deleted in next version)
+                ExecutedStatement.of(
+                        "select tb_1_.ID, tb_1_.NAME, tb_1_.EDITION " +
+                                "from BOOK tb_1_ " +
+                                "where (tb_1_.NAME, tb_1_.EDITION) = (?, ?)",
+                        "GraphQL in Action", 1
+                ),
+
+                // Try to investigate why the database throws
                 // error about constraint violation
                 ExecutedStatement.of(
                         "select tb_1_.ID " +
