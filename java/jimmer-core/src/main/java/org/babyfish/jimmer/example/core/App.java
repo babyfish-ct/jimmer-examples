@@ -3,6 +3,7 @@ package org.babyfish.jimmer.example.core;
 import org.babyfish.jimmer.example.core.model.*;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
 public class App {
 
@@ -24,6 +25,7 @@ public class App {
         /*
          * First step, create new object from scratch
          */
+//      Choice-1: Lambda Style
         Book book = Immutables.createBook(b -> {
             b.setName("book");
             b.applyStore(s -> {
@@ -36,6 +38,19 @@ public class App {
                 a.setName("author-2");
             });
         });
+//      Choice-2: Builder Style
+//        Book book = new BookDraft.Builder()
+//                .name("book")
+//                .store(
+//                        new BookStoreDraft.Builder().name("store").build()
+//                )
+//                .authors(
+//                        Arrays.asList(
+//                                new AuthorDraft.Builder().name("author-1").build(),
+//                                new AuthorDraft.Builder().name("author-2").build()
+//                        )
+//                )
+//                .build();
 
         /*
          * Second step, make some "changes" based on the existing object to get a new object.
