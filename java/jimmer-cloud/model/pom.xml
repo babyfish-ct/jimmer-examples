@@ -6,7 +6,8 @@
     <parent>
         <groupId>org.babyfish.jimmer.sql.example.cloud</groupId>
         <artifactId>jimmer-sql-cloud</artifactId>
-        <version>0.9.41</version>
+        <version>0.9.42
+</version>
     </parent>
 
     <artifactId>model</artifactId>
