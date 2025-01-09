@@ -9,7 +9,7 @@
     <version>0.9.43</version>
 
     <properties>
-        <jimmer.version>0.9.42</jimmer.version>
+        <jimmer.version>0.9.43</jimmer.version>
         <junit.version>5.8.1</junit.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
