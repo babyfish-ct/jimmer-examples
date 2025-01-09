@@ -5,7 +5,6 @@ HELP.md
 .DS_Store
 build/
 target/
-.mvn
 !.mvn/wrapper/maven-wrapper.jar
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
