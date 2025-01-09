@@ -3,8 +3,7 @@ plugins {
 }
 
 ext {
-    jimmerVersion = "0.9.42
-"
+    jimmerVersion = "0.9.42"
 }
 
 group 'org.babyfish.jimmer.example.core'
