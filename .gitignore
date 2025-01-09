@@ -6,6 +6,7 @@ HELP.md
 build/
 target/
 .mvn
+!.mvn/wrapper/maven-wrapper.jar
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
