@@ -5,11 +5,8 @@ import org.babyfish.jimmer.sql.dialect.H2Dialect
 import org.babyfish.jimmer.sql.kt.KSqlClient
 import org.babyfish.jimmer.sql.kt.cfg.KSqlClientDsl
 import org.babyfish.jimmer.sql.kt.newKSqlClient
-import org.babyfish.jimmer.sql.runtime.DefaultExecutor
-import org.babyfish.jimmer.sql.runtime.ExecutionPurpose
-import org.babyfish.jimmer.sql.runtime.Executor
+import org.babyfish.jimmer.sql.runtime.*
 import org.babyfish.jimmer.sql.runtime.Executor.BatchContext
-import org.babyfish.jimmer.sql.runtime.JSqlClientImplementor
 import org.h2.Driver
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
@@ -74,7 +71,7 @@ abstract class AbstractMutationTest {
                             }
 
                             override fun execute(
-                                exceptionTranslator: BiFunction<SQLException, BatchContext, Exception>?
+                                exceptionTranslator: BiFunction<SQLException, ExceptionTranslator.Args, Exception>?
                             ): IntArray {
                                 executedStatements.add(ExecutedStatement.batchOf(sql, *variableLists.toTypedArray()))
                                 return raw.execute(exceptionTranslator)

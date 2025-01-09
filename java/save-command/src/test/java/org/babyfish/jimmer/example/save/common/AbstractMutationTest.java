@@ -218,7 +218,7 @@ public abstract class AbstractMutationTest {
         @SuppressWarnings("unchecked")
         @Override
         public int[] execute(
-                BiFunction<SQLException, Executor.BatchContext, Exception> exceptionTranslator
+                BiFunction<SQLException, ExceptionTranslator.Args, Exception> exceptionTranslator
         ) {
             executedStatements.add(
                     ExecutedStatement.batchOf(

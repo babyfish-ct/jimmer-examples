@@ -17,7 +17,7 @@ dependencyManagement {
 dependencies {
 
     implementation "org.babyfish.jimmer:jimmer-spring-boot-starter:$jimmerVersion"
-    implementation "org.antlr:antlr4-runtime:4.13.2$antlrVersion"
+    implementation "org.antlr:antlr4-runtime:$antlrVersion"
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
@@ -29,6 +29,12 @@ dependencies {
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+}
+
+java {
+    toolchain { 
+        languageVersion = JavaLanguageVersion.of(8)
+    }
 }
 
 test {
