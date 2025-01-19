@@ -15,19 +15,25 @@ public interface Book extends BaseEntity, TenantAware {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id();
 
-    @Key // ❶
+    /**
+     * The name of Book, a property of Natural key `[name, edition]`
+     */
+    @Key // (1)
     String name();
 
-    @Key // ❷
+    /**
+     * The edition of Book, a property of Natural key `[name, edition]`
+     */
+    @Key // (2)
     int edition();
 
     BigDecimal price();
 
-    @Nullable // ❸ Null property, Java API requires this annotation, but kotlin API does not
-    @ManyToOne // ❹
+    @Nullable // (3) Null property, Java API requires this annotation, but kotlin API does not
+    @ManyToOne // (4)
     BookStore store();
 
-    @ManyToMany(orderedProps = { // ❺
+    @ManyToMany(orderedProps = { // (5)
             @OrderedProp("firstName"),
             @OrderedProp("lastName")
     })
@@ -42,21 +48,26 @@ public interface Book extends BaseEntity, TenantAware {
     // Optional properties
     // -----------------------------
 
-    // Optional property `storeId`
-    // If this property is deleted, please add `BookInput.Mapper.toBookStore(Long)`
-    @IdView  // ❻
+    /**
+     * Optional id-view property `storeId`
+     *
+     * <p>For reference association, even if this id-view property is not declared,
+     * the SQL DSL can still use the associated id property "storeId"</p>
+     */
+    @IdView  // (6)
     Long storeId();
 
-    // Optional property `authorIds`
-    // If this property is deleted, please add `BookInputMapper.toAuthor(Long)`
-    @IdView("authors") // ❼
+    /**
+     * Optional id-view property `authorIds`
+     */
+    @IdView("authors") // (7)
     List<Long> authorIds();
 }
 
 /*----------------Documentation Links----------------
-❶ ❷ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/advanced/key
-❸ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/base/nullity
-❹ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/base/association/many-to-one
-❺ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/base/association/many-to-many
-❻ ❼https://babyfish-ct.github.io/jimmer-doc/docs/mapping/advanced/view/id-view
+(1) (2) https://babyfish-ct.github.io/jimmer-doc/docs/mapping/advanced/key
+(3) https://babyfish-ct.github.io/jimmer-doc/docs/mapping/base/nullity
+(4) https://babyfish-ct.github.io/jimmer-doc/docs/mapping/base/association/many-to-one
+(5) https://babyfish-ct.github.io/jimmer-doc/docs/mapping/base/association/many-to-many
+(6) (7) https://babyfish-ct.github.io/jimmer-doc/docs/mapping/advanced/view/id-view
 ---------------------------------------------------*/
