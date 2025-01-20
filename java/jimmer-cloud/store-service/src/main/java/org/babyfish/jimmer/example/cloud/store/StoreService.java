@@ -6,11 +6,13 @@ import org.babyfish.jimmer.example.cloud.model.BookFetcher;
 import org.babyfish.jimmer.example.cloud.model.BookStore;
 import org.babyfish.jimmer.example.cloud.model.BookStoreFetcher;
 import org.babyfish.jimmer.sql.fetcher.Fetcher;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@Transactional
 public class StoreService {
 
     private final StoreRepository storeRepository;

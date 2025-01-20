@@ -5,12 +5,14 @@ import org.babyfish.jimmer.example.cloud.kt.model.Book
 import org.babyfish.jimmer.example.cloud.kt.model.by
 import org.babyfish.jimmer.sql.kt.fetcher.newFetcher
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.client.RestTemplate
 
 @RestController
+@Transactional
 class BookService(
     private val bookRepository: BookRepository,
     private val client: LoadBalancerClient,

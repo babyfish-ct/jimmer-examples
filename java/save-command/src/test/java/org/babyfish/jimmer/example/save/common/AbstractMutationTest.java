@@ -34,6 +34,7 @@ public abstract class AbstractMutationTest {
     @BeforeEach
     public void beforeTest() throws SQLException {
         connection = createConnection();
+        connection.setAutoCommit(false);
         createDatabase(connection);
         executedStatements = new ArrayList<>();
         JSqlClient.Builder builder = JSqlClient
@@ -51,6 +52,7 @@ public abstract class AbstractMutationTest {
         sqlClient = null;
         Connection con = connection;
         if (con != null) {
+            con.rollback();
             connection = null;
             con.close();
         }

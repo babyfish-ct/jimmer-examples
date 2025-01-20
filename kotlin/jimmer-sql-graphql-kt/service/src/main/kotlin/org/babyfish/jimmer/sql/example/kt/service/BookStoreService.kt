@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional
  * decorated by `@Controller`, not `@Service`.
  */
 @Controller
+@Transactional
 class BookStoreService(
     private val bookStoreRepository: BookStoreRepository
 ) {

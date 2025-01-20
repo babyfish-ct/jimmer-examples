@@ -32,6 +32,7 @@ abstract class AbstractMutationTest {
     @Throws(SQLException::class)
     fun beforeTest() {
         connection = createConnection()
+        connection.autoCommit = false
         createDatabase(connection)
         executedStatements = mutableListOf()
         sqlClient = newKSqlClient {
@@ -87,6 +88,7 @@ abstract class AbstractMutationTest {
     @AfterEach
     @Throws(SQLException::class)
     fun afterTest() {
+        connection.rollback()
         connection.close()
     }
 

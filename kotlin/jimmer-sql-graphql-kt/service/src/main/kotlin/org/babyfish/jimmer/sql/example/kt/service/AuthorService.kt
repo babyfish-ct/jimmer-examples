@@ -9,6 +9,7 @@ import org.springframework.graphql.data.method.annotation.Argument
 import org.springframework.graphql.data.method.annotation.MutationMapping
 import org.springframework.graphql.data.method.annotation.QueryMapping
 import org.springframework.stereotype.Controller
+import org.springframework.transaction.annotation.Transactional
 
 /**
  * A real project should be a three-tier architecture consisting
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Controller
  * decorated by `@Controller`, not `@Service`.
  */
 @Controller
+@Transactional
 class AuthorService(
     private val authorRepository: AuthorRepository
 ) {

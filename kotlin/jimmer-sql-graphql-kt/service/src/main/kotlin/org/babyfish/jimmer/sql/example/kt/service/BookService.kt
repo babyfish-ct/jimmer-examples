@@ -25,6 +25,7 @@ import java.math.BigDecimal
  * decorated by `@Controller`, not `@Service`.
  */
 @Controller
+@Transactional
 class BookService(
     private val bookRepository: BookRepository
 ) {

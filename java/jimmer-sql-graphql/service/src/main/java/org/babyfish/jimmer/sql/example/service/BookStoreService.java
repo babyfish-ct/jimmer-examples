@@ -24,6 +24,7 @@ import java.util.List;
  * decorated by `@Controller`, not `@Service`.
  */
 @Controller
+@Transactional
 public class BookStoreService {
 
     private final BookStoreRepository bookStoreRepository;
