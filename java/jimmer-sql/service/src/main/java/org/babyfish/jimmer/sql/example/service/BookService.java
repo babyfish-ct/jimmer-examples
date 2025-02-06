@@ -9,6 +9,7 @@ import org.babyfish.jimmer.sql.example.service.dto.BookSpecification;
 import org.babyfish.jimmer.sql.example.service.dto.CompositeBookInput;
 import org.babyfish.jimmer.sql.fetcher.Fetcher;
 import org.babyfish.jimmer.sql.exception.SaveException;
+import org.babyfish.jimmer.sql.fetcher.ReferenceFetchType;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
