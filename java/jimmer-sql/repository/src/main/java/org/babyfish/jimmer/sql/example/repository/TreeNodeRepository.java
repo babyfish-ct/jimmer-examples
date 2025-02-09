@@ -47,7 +47,7 @@ public class TreeNodeRepository extends AbstractJavaRepository<TreeNode, Long> {
     ) {
         return sql
                 .createQuery(table)
-                .where(table.parent().isNull())
+                .where(table.parentId().isNull())
                 .where(table.name().eqIf(name))
                 .select(table.fetch(fetcher))
                 .execute();

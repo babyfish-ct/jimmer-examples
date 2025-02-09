@@ -4,6 +4,7 @@ import org.babyfish.jimmer.View
 import org.babyfish.jimmer.spring.repo.support.AbstractKotlinRepository
 import org.babyfish.jimmer.sql.example.kt.model.TreeNode
 import org.babyfish.jimmer.sql.example.kt.model.name
+import org.babyfish.jimmer.sql.example.kt.model.parentId
 import org.babyfish.jimmer.sql.fetcher.Fetcher
 import org.babyfish.jimmer.sql.kt.KSqlClient
 import org.babyfish.jimmer.sql.kt.ast.expression.`eq?`
@@ -41,7 +42,7 @@ class TreeNodeRepository(
         fetcher: Fetcher<TreeNode>?
     ): List<TreeNode> =
         executeQuery {
-            where(table.name.isNull())
+            where(table.parentId.isNull())
             where(table.name `eq?` name)
             select(table.fetch(fetcher))
         }
