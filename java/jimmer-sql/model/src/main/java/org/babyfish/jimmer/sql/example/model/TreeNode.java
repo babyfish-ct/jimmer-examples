@@ -8,7 +8,34 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+/*
+ * In this example, `@KeyConstraint` will not take effect,
+ * meaning it won't utilize the database's upsert capability.
+ * Instead, it will use a select query to determine whether
+ * the subsequent operation should be an insert or update.
+ *
+ * This is due to:
+ *
+ * 1. For the root object being saved, the use of
+ *    `DraftInterceptor` will trigger a query
+ *
+ * 2. For the associated child objects being saved, in
+ *    addition to reason #1, there's also the fact that
+ *    by default, the `Transferable` capability of child
+ *    objects is not enabled. This means that by default,
+ *    a parent object cannot take child objects from
+ *    other parent objects.
+ *
+ * However, in actual projects, it is still recommended
+ * to specify `@KeyConstraint` for each entity.
+ */
 @Entity
+@KeyUniqueConstraint(
+        // Only for mysql
+        noMoreUniqueConstraints = true,
+        // Only for postgres
+        isNullNotDistinct = true
+)
 public interface TreeNode extends BaseEntity {
 
     @Id
@@ -16,27 +43,39 @@ public interface TreeNode extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id();
 
-    @Key // ❶
+    /**
+     * The name of current TreeNode.
+     *
+     * <p>This property forms a unique constraint together with
+     * the {@link #parent()} property, which is {@code @Key} of Jimmer</p>
+     */
+    @Key // (1)
     String name();
 
-    @Nullable // ❷ Null property, Java API requires this annotation, but kotlin API does not
-    @Key // ❸
-    @ManyToOne // ❹
-    @OnDissociate(DissociateAction.DELETE) // ❺
+    /**
+     * The parent of current TreeNode.
+     *
+     * <p>This property forms a unique constraint together with
+     * the {@link #name()} property, which is {@code @Key} of Jimmer</p>
+     */
+    @Nullable // (2) Null property, Java API requires this annotation, but kotlin API does not
+    @Key // (3)
+    @ManyToOne // (4)
+    @OnDissociate(DissociateAction.DELETE) // (5)
     TreeNode parent();
 
-    @OneToMany(mappedBy = "parent", orderedProps = @OrderedProp("name")) // ❻
+    @OneToMany(mappedBy = "parent", orderedProps = @OrderedProp("name")) // (6)
     List<TreeNode> childNodes();
 }
 
 /*----------------Documentation Links----------------
-❶ ❸ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/advanced/key
-❷ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/base/nullity
-❹ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/base/association/many-to-one
+(1) (3) https://babyfish-ct.github.io/jimmer-doc/docs/mapping/advanced/key
+(2) https://babyfish-ct.github.io/jimmer-doc/docs/mapping/base/nullity
+(4) https://babyfish-ct.github.io/jimmer-doc/docs/mapping/base/association/many-to-one
 
-❺ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/advanced/on-dissociate
+(5) https://babyfish-ct.github.io/jimmer-doc/docs/mapping/advanced/on-dissociate
   https://babyfish-ct.github.io/jimmer-doc/docs/mutation/save-command/dissociation
   https://babyfish-ct.github.io/jimmer-doc/docs/mutation/delete-command
 
-❻ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/base/association/one-to-many
+(6) https://babyfish-ct.github.io/jimmer-doc/docs/mapping/base/association/one-to-many
 ---------------------------------------------------*/

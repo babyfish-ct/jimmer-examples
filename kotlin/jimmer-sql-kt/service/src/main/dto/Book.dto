@@ -32,26 +32,6 @@ input BookInput {
     id(authors) as authorIds // Override default alias `authorsId`
 }
 
-input CompositeBookInput {
-
-    /*
-     * #allScalars: All scalar fields of `Book`, `TenantAware` and `BaseEntity`
-     *
-     * #allScalars(this)/#allScalars(Book): All scalar fields of `Book`, exclude `TenantAware`, `BaseEntity`
-     */
-    #allScalars(this)
-
-    store {
-        #allScalars(this) // or `#allScalars(BookStore)`
-        -id // Remove id
-    }
-
-    authors {
-        #allScalars(this) // or `#allScalars(Author)`
-        -id // Remove id
-    }
-}
-
 specification BookSpecification {
     like/i(name)
     ge(price)

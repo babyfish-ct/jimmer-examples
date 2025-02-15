@@ -7,7 +7,6 @@ import org.babyfish.jimmer.sql.example.kt.model.by
 import org.babyfish.jimmer.sql.example.kt.repository.BookRepository
 import org.babyfish.jimmer.sql.example.kt.service.dto.BookInput
 import org.babyfish.jimmer.sql.example.kt.service.dto.BookSpecification
-import org.babyfish.jimmer.sql.example.kt.service.dto.CompositeBookInput
 import org.babyfish.jimmer.sql.kt.fetcher.newFetcher
 import org.babyfish.jimmer.sql.exception.SaveException
 import org.springframework.data.domain.Page
@@ -90,11 +89,6 @@ class BookService(
     @PutMapping
     @Throws(SaveException::class) // (4)
     fun saveBook(@RequestBody input: BookInput): Book = // (5)
-        bookRepository.save(input).modifiedEntity
-
-    @PutMapping("/composite")
-    @Throws(SaveException::class) // (6)
-    fun saveBook(@RequestBody input: CompositeBookInput): Book = // (7)
         bookRepository.save(input).modifiedEntity
 
     @DeleteMapping("/{id}")

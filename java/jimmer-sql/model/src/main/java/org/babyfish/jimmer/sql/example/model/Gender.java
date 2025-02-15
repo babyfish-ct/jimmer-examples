@@ -4,10 +4,10 @@ import org.babyfish.jimmer.sql.EnumItem;
 
 public enum Gender {
 
-    @EnumItem(name = "M") // ❶
+    @EnumItem(name = "M")
     MALE,
 
-    @EnumItem(name = "F") // ❷
+    @EnumItem(name = "F")
     FEMALE
 }
 

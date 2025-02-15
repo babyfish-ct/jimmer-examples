@@ -2,9 +2,11 @@ package org.babyfish.jimmer.sql.example.kt.service
 
 import graphql.schema.DataFetchingEnvironment
 import org.babyfish.jimmer.spring.graphql.toFetcher
+import org.babyfish.jimmer.sql.ast.mutation.SaveMode
 import org.babyfish.jimmer.sql.example.kt.model.BookStore
 import org.babyfish.jimmer.sql.example.kt.repository.BookStoreRepository
 import org.babyfish.jimmer.sql.example.kt.service.dto.BookStoreInput
+import org.babyfish.jimmer.sql.example.kt.service.dto.CompositeBookStoreInput
 import org.springframework.graphql.data.method.annotation.Argument
 import org.springframework.graphql.data.method.annotation.MutationMapping
 import org.springframework.graphql.data.method.annotation.QueryMapping
@@ -44,6 +46,37 @@ class BookStoreService(
     @Transactional
     fun saveBookStore(@Argument input: BookStoreInput): BookStore =
         bookStoreRepository.save(input).modifiedEntity
+
+    @MutationMapping
+    fun createDeepBookStore(
+        @Argument input: CompositeBookStoreInput
+    ): BookStore {
+        return bookStoreRepository.save(
+            input,
+            SaveMode.INSERT_ONLY
+        ).modifiedEntity
+    }
+
+    @MutationMapping
+    fun updateDeepBookStoreById(
+        @Argument id: Long,
+        @Argument input: CompositeBookStoreInput
+    ): BookStore {
+        return bookStoreRepository.save(
+            input.toEntity { this.id = id },
+            SaveMode.UPDATE_ONLY
+        ).modifiedEntity
+    }
+
+    @MutationMapping
+    fun updateDeepBookStoreByKey(
+        @Argument input: CompositeBookStoreInput
+    ): BookStore {
+        return bookStoreRepository.save(
+            input,
+            SaveMode.UPDATE_ONLY
+        ).modifiedEntity
+    }
 
     @MutationMapping
     @Transactional

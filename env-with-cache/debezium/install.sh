@@ -1,8 +1,9 @@
+#5000 is used by MacAirPlay receiver, use 5001
 docker run \
     --restart=always \
     -d \
     --name debezium-demo-zookeeper \
-    -p 5000:2181 \
+    -p 5001:2181 \
     -v /etc/localtime:/etc/localtime \
     zookeeper
 

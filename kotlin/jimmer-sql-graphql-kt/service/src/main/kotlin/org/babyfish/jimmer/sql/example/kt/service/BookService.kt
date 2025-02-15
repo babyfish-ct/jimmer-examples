@@ -7,7 +7,6 @@ import org.babyfish.jimmer.sql.example.kt.model.Book
 import org.babyfish.jimmer.sql.example.kt.repository.BookRepository
 import org.babyfish.jimmer.sql.example.kt.service.dto.BookInput
 import org.babyfish.jimmer.sql.example.kt.service.dto.BookSpecification
-import org.babyfish.jimmer.sql.example.kt.service.dto.CompositeBookInput
 import org.springframework.graphql.data.method.annotation.Argument
 import org.springframework.graphql.data.method.annotation.MutationMapping
 import org.springframework.graphql.data.method.annotation.QueryMapping
@@ -67,17 +66,10 @@ class BookService(
     // --- Mutation ---
 
     @MutationMapping
-    @Transactional
     fun saveBook(@Argument input: BookInput): Book =
         bookRepository.save(input).modifiedEntity
 
     @MutationMapping
-    @Transactional
-    fun saveCompositeBook(@Argument input: CompositeBookInput): Book =
-        bookRepository.save(input).modifiedEntity
-
-    @MutationMapping
-    @Transactional
     fun deleteBook(@Argument id: Long): Int {
         bookRepository.deleteById(id)
         // GraphQL requires return value,

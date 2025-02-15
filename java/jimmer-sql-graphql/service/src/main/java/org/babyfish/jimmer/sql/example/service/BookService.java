@@ -3,12 +3,10 @@ package org.babyfish.jimmer.sql.example.service;
 import graphql.schema.DataFetchingEnvironment;
 import org.babyfish.jimmer.spring.graphql.DataFetchingEnvironments;
 import org.babyfish.jimmer.spring.model.SortUtils;
-import org.babyfish.jimmer.spring.repository.SpringOrders;
 import org.babyfish.jimmer.sql.example.model.Book;
 import org.babyfish.jimmer.sql.example.repository.BookRepository;
 import org.babyfish.jimmer.sql.example.service.dto.BookInput;
 import org.babyfish.jimmer.sql.example.service.dto.BookSpecification;
-import org.babyfish.jimmer.sql.example.service.dto.CompositeBookInput;
 import org.babyfish.jimmer.sql.fetcher.Fetcher;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -79,19 +77,11 @@ public class BookService {
     // --- Mutation ---
 
     @MutationMapping
-    @Transactional
     public Book saveBook(@Argument BookInput input) {
         return bookRepository.save(input).getModifiedEntity();
     }
 
     @MutationMapping
-    @Transactional
-    public Book saveCompositeBook(@Argument CompositeBookInput input) {
-        return bookRepository.save(input).getModifiedEntity();
-    }
-
-    @MutationMapping
-    @Transactional
     public int deleteBook(@Argument long id) {
         bookRepository.deleteById(id);
         // GraphQL requires return value,

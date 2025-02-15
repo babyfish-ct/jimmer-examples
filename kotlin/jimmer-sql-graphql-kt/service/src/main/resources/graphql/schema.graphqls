@@ -20,7 +20,9 @@ type Mutation {
     saveBookStore(input: BookStoreInput!): BookStore!
     deleteBookStore(id: Long): Int!
     saveBook(input: BookInput!): Book!
-    saveCompositeBook(input: CompositeBookInput!): Book!
+    createDeepBookStore(input: CompositeBookStoreInput!): BookStore!
+    updateDeepBookStoreById(id: Long!, input: CompositeBookStoreInput!): BookStore!
+    updateDeepBookStoreByKey(input: CompositeBookStoreInput!): BookStore!
     deleteBook(id: Long): Int!
     saveAuthor(input: AuthorInput!): Author!
     deleteAuthor(id: Long): Int!
@@ -71,6 +73,19 @@ input BookStoreInput {
     website: String
 }
 
+input CompositeBookStoreInput {
+    name: String!
+    website: String
+    books: [CompositeBookStoreInput_Books!]!
+}
+
+input CompositeBookStoreInput_Books {
+    name: String!
+    edition: Int!
+    price: BigDecimal!
+    authorIds: [Long!]!
+}
+
 input BookInput {
     id: Long
     name: String!
@@ -78,26 +93,6 @@ input BookInput {
     price: BigDecimal!
     storeId: Long
     authorIds: [Long!]!
-}
-
-input CompositeBookInput {
-    id: Long
-    name: String!
-    edition: Int
-    price: BigDecimal!
-    store: CompositeBookInput_StoreTarget
-    authors: [CompositeBookInput_AuthorTarget!]!
-}
-
-input CompositeBookInput_StoreTarget {
-    name: String!
-    website: String
-}
-
-input CompositeBookInput_AuthorTarget {
-    firstName: String!
-    lastName: String!
-    gender: Gender!
 }
 
 input AuthorInput {

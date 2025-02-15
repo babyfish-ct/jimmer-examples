@@ -1,12 +1,14 @@
 package org.babyfish.jimmer.sql.example.kt.service
 
 import org.babyfish.jimmer.client.FetchBy
+import org.babyfish.jimmer.sql.ast.mutation.SaveMode
 import org.babyfish.jimmer.sql.example.kt.model.BookStore
 import org.babyfish.jimmer.sql.example.kt.model.by
 import org.babyfish.jimmer.sql.example.kt.repository.BookStoreRepository
 import org.babyfish.jimmer.sql.example.kt.service.dto.BookStoreInput
-import org.babyfish.jimmer.sql.kt.fetcher.newFetcher
+import org.babyfish.jimmer.sql.example.kt.service.dto.CompositeBookStoreInput
 import org.babyfish.jimmer.sql.exception.SaveException
+import org.babyfish.jimmer.sql.kt.fetcher.newFetcher
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.*
 
@@ -62,6 +64,36 @@ class BookStoreService(
     @Throws(SaveException::class) // (6)
     fun saveBookStore(@RequestBody input: BookStoreInput): BookStore = // (7)
         bookStoreRepository.save(input).modifiedEntity
+
+    @PostMapping("/deep")
+    @Throws(SaveException::class) // (6)
+    fun createDeepBookStore(
+        @RequestBody input: CompositeBookStoreInput
+    ): BookStore = // (7)
+        bookStoreRepository.save(input) {
+            setMode(SaveMode.INSERT_ONLY)
+        }.modifiedEntity
+
+    @PutMapping("/{id}/deep")
+    @Throws(SaveException::class) // (6)
+    fun updateDeepBookStoreById(
+        @PathVariable id: Long,
+        @RequestBody input: CompositeBookStoreInput
+    ): BookStore = // (7)
+        bookStoreRepository.save(
+            input.toEntity { this.id = id }
+        ) {
+            setMode(SaveMode.UPDATE_ONLY)
+        }.modifiedEntity
+
+    @PutMapping("/deep")
+    @Throws(SaveException::class) // (6)
+    fun updateDeepBookStoreByKey(
+        @RequestBody input: CompositeBookStoreInput
+    ): BookStore = // (7)
+        bookStoreRepository.save(input) {
+            setMode(SaveMode.UPDATE_ONLY)
+        }.modifiedEntity
 
     @DeleteMapping("{id}")
     fun deleteBookStore(@PathVariable id: Long) {

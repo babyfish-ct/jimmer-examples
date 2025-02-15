@@ -17,3 +17,23 @@ input BookStoreInput {
      */
     #allScalars(this)
 }
+
+input CompositeBookStoreInput {
+
+    /*
+     * #allScalars: All scalar fields of `Book` and `BaseEntity`
+     *
+     * #allScalars(this)/#allScalars(Book): All scalar fields of `Book`, exclude `BaseEntity`
+     */
+    #allScalars(this)
+    -id // Remove id
+
+    // Long association
+    books {
+        #allScalars(this) // or `#allScalars(Book)`
+        -id // Remove id
+
+        // Short association (which is more recommended for many-to-many)
+        id(authors) as authorIds
+    }
+}

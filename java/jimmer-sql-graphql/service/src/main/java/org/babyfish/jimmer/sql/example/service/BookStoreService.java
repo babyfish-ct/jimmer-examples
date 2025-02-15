@@ -2,9 +2,11 @@ package org.babyfish.jimmer.sql.example.service;
 
 import graphql.schema.DataFetchingEnvironment;
 import org.babyfish.jimmer.spring.graphql.DataFetchingEnvironments;
+import org.babyfish.jimmer.sql.ast.mutation.SaveMode;
 import org.babyfish.jimmer.sql.example.model.BookStore;
 import org.babyfish.jimmer.sql.example.repository.BookStoreRepository;
 import org.babyfish.jimmer.sql.example.service.dto.BookStoreInput;
+import org.babyfish.jimmer.sql.example.service.dto.CompositeBookStoreInput;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
@@ -49,13 +51,42 @@ public class BookStoreService {
     // --- Mutation ---
 
     @MutationMapping
-    @Transactional
     public BookStore saveBookStore(@Argument BookStoreInput input) {
         return bookStoreRepository.save(input).getModifiedEntity();
     }
 
     @MutationMapping
-    @Transactional
+    public BookStore createDeepBookStore(
+            @Argument CompositeBookStoreInput input
+    ) {
+        return bookStoreRepository.save(
+                input,
+                SaveMode.INSERT_ONLY
+        ).getModifiedEntity();
+    }
+
+    @MutationMapping
+    public BookStore updateDeepBookStoreById(
+            @Argument long id,
+            @Argument CompositeBookStoreInput input
+    ) {
+        return bookStoreRepository.save(
+                input.toEntityById(id),
+                SaveMode.UPDATE_ONLY
+        ).getModifiedEntity();
+    }
+
+    @MutationMapping
+    public BookStore updateDeepBookStoreByKey(
+            @Argument CompositeBookStoreInput input
+    ) {
+        return bookStoreRepository.save(
+                input,
+                SaveMode.UPDATE_ONLY
+        ).getModifiedEntity();
+    }
+
+    @MutationMapping
     public int deleteBookStore(@Argument long id) {
         bookStoreRepository.deleteById(id);
         // GraphQL requires return value,

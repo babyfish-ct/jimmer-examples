@@ -6,10 +6,8 @@ import org.babyfish.jimmer.sql.example.model.*;
 import org.babyfish.jimmer.sql.example.repository.BookRepository;
 import org.babyfish.jimmer.sql.example.service.dto.BookInput;
 import org.babyfish.jimmer.sql.example.service.dto.BookSpecification;
-import org.babyfish.jimmer.sql.example.service.dto.CompositeBookInput;
 import org.babyfish.jimmer.sql.fetcher.Fetcher;
 import org.babyfish.jimmer.sql.exception.SaveException;
-import org.babyfish.jimmer.sql.fetcher.ReferenceFetchType;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -151,11 +149,6 @@ public class BookService implements Fetchers {
 
     @PutMapping
     public Book saveBook(@RequestBody BookInput input) throws SaveException {
-        return bookRepository.save(input).getModifiedEntity();
-    }
-
-    @PutMapping("/composite")
-    public Book saveCompositeBook(@RequestBody CompositeBookInput input) throws SaveException {
         return bookRepository.save(input).getModifiedEntity();
     }
 

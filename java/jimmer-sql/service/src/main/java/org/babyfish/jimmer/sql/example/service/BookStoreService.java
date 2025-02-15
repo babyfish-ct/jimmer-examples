@@ -1,9 +1,12 @@
 package org.babyfish.jimmer.sql.example.service;
 
 import org.babyfish.jimmer.client.FetchBy;
+import org.babyfish.jimmer.sql.ast.mutation.SaveMode;
 import org.babyfish.jimmer.sql.example.model.*;
 import org.babyfish.jimmer.sql.example.repository.BookStoreRepository;
 import org.babyfish.jimmer.sql.example.service.dto.BookStoreInput;
+import org.babyfish.jimmer.sql.example.service.dto.CompositeBookStoreInput;
+import org.babyfish.jimmer.sql.exception.SaveException;
 import org.babyfish.jimmer.sql.fetcher.Fetcher;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.transaction.annotation.Transactional;
@@ -135,8 +138,41 @@ public class BookStoreService implements Fetchers {
                     );
 
     @PutMapping
-    public BookStore saveBookStore(@RequestBody BookStoreInput input) {
+    public BookStore saveBookStore(
+            @RequestBody BookStoreInput input
+    ) throws SaveException {
         return bookStoreRepository.save(input).getModifiedEntity();
+    }
+
+    @PostMapping("/deep")
+    public BookStore createDeepBookStore(
+            @RequestBody CompositeBookStoreInput input
+    ) throws SaveException {
+        return bookStoreRepository.save(
+                input,
+                SaveMode.INSERT_ONLY
+        ).getModifiedEntity();
+    }
+
+    @PutMapping("/{id}/deep")
+    public BookStore updateDeepBookStoreById(
+            @PathVariable long id,
+            @RequestBody CompositeBookStoreInput input
+    ) throws SaveException {
+        return bookStoreRepository.save(
+                input.toEntityById(id),
+                SaveMode.UPDATE_ONLY
+        ).getModifiedEntity();
+    }
+
+    @PutMapping("/deep")
+    public BookStore updateDeepBookStoreByKey(
+            @RequestBody CompositeBookStoreInput input
+    ) throws SaveException {
+        return bookStoreRepository.save(
+                input,
+                SaveMode.UPDATE_ONLY
+        ).getModifiedEntity();
     }
 
     @DeleteMapping("/{id}")

@@ -8,7 +8,34 @@ import org.jetbrains.annotations.Nullable;
 import java.math.BigDecimal;
 import java.util.List;
 
+/*
+ * In this example, `@KeyConstraint` will not take effect,
+ * meaning it won't utilize the database's upsert capability.
+ * Instead, it will use a select query to determine whether
+ * the subsequent operation should be an insert or update.
+ *
+ * This is due to:
+ *
+ * 1. For the root object being saved, the use of
+ *    `DraftInterceptor` will trigger a query
+ *
+ * 2. For the associated child objects being saved, in
+ *    addition to reason #1, there's also the fact that
+ *    by default, the `Transferable` capability of child
+ *    objects is not enabled. This means that by default,
+ *    a parent object cannot take child objects from
+ *    other parent objects.
+ *
+ * However, in actual projects, it is still recommended
+ * to specify `@KeyConstraint` for each entity.
+ */
 @Entity
+@KeyUniqueConstraint(
+        // Only for mysql
+        noMoreUniqueConstraints = true,
+        // Only for postgres
+        isNullNotDistinct = true
+)
 public interface Book extends BaseEntity, TenantAware {
 
     /**
@@ -46,6 +73,7 @@ public interface Book extends BaseEntity, TenantAware {
      */
     @Nullable // (3) Null property, Java API requires this annotation, but kotlin API does not
     @ManyToOne // (4)
+    @OnDissociate(DissociateAction.SET_NULL)
     BookStore store();
 
     /**
