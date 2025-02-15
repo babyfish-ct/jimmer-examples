@@ -7,6 +7,11 @@ import java.math.BigDecimal
 @Entity
 interface BookStore : BaseEntity {
 
+    /**
+     * The surrogate id of the current object,
+     * auto-incrementing,
+     * without specific business meaning
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long
@@ -16,6 +21,10 @@ interface BookStore : BaseEntity {
     
     val website: String?
 
+    /**
+     * All books belonging to the current bookstore,
+     * representing a one-to-many association
+     */
     @OneToMany(mappedBy = "store") // (2)
     val books: List<Book>
 
@@ -27,6 +36,10 @@ interface BookStore : BaseEntity {
     // As for the simple calculated properties, you can view `Author.fullName`
     // -----------------------------
 
+    /**
+     * This is a calculated scalar property,
+     * the average price of all books in the current bookstore
+     */
     @Transient(ref = "bookStoreAvgPriceResolver") // (3)
     val avgPrice: BigDecimal
 
@@ -40,6 +53,18 @@ interface BookStore : BaseEntity {
      *
      * It is worth noting that if the calculated property returns entity object
      * or entity list, the shape can be controlled by the deeper child fetcher
+     */
+    /**
+     * This is a calculated associated property.
+     *
+     * Since books have an [Book.edition]
+     * properties, the books relationship may contain
+     * books with the same name.
+     *
+     * This collection only selects books with the highest
+     * edition to avoid naming conflicts,
+     * therefore this collection is always a subset of the
+     * [books] collection
      */
     @Transient(ref = "bookStoreNewestBooksResolver") // (4)
     val newestBooks: List<Book>

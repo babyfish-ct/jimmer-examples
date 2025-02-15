@@ -8,6 +8,11 @@ import java.math.BigDecimal
 @Entity
 interface Book : BaseEntity, TenantAware {
 
+    /**
+     * The surrogate id of the current object,
+     * auto-incrementing,
+     * without specific business meaning
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long
@@ -32,9 +37,18 @@ interface Book : BaseEntity, TenantAware {
 
     val price: BigDecimal
 
+    /**
+     * The bookstore to which the current book belongs,
+     * representing a many-to-one association
+     */
     @ManyToOne // (3)
     val store: BookStore?
 
+    /**
+     * All authors who participated in writing
+     * the current book,
+     * representing a many-to-many association
+     */
     @ManyToMany // (4)
     @JoinTable(
         name = "BOOK_AUTHOR_MAPPING",

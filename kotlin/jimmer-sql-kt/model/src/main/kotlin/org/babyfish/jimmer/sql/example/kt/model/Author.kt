@@ -8,6 +8,11 @@ import org.babyfish.jimmer.sql.example.kt.model.common.BaseEntity
 @Entity
 interface Author : BaseEntity {
 
+    /**
+     * The surrogate id of the current object,
+     * auto-incrementing,
+     * without specific business meaning
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long

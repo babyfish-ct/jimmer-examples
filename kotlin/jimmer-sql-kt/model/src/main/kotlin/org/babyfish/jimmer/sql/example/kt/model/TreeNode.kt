@@ -6,30 +6,47 @@ import org.babyfish.jimmer.sql.example.kt.model.common.BaseEntity
 @Entity
 interface TreeNode : BaseEntity {
 
+    /**
+     * The surrogate id of the current object,
+     * auto-incrementing,
+     * without specific business meaning
+     */
     @Id
     @Column(name = "NODE_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long
 
-    @Key // ❶
+    /**
+     * The name of current Book.
+     *
+     * This property forms a unique constraint together with
+     * the [parent] property, which is `@Key` of Jimmer
+     */
+    @Key // (1)
     val name: String
 
-    @Key // ❷
-    @ManyToOne // ❸
-    @OnDissociate(DissociateAction.DELETE) // ❹
+    /**
+     * The parent of current Book.
+     *
+     * This property forms a unique constraint together with
+     * the [name] property, which is `@Key` of Jimmer
+     */
+    @Key // (2)
+    @ManyToOne // (3)
+    @OnDissociate(DissociateAction.DELETE) // (4)
     val parent: TreeNode?
 
-    @OneToMany(mappedBy = "parent", orderedProps = [OrderedProp("name")]) // ❺
+    @OneToMany(mappedBy = "parent", orderedProps = [OrderedProp("name")]) // (5)
     val childNodes: List<TreeNode>
 }
 
 /*----------------Documentation Links----------------
-❶ ❷ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/advanced/key
-❸ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/base/association/many-to-one
+(1) (2) https://babyfish-ct.github.io/jimmer-doc/docs/mapping/advanced/key
+(3) https://babyfish-ct.github.io/jimmer-doc/docs/mapping/base/association/many-to-one
 
-❹ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/advanced/on-dissociate
+(4) https://babyfish-ct.github.io/jimmer-doc/docs/mapping/advanced/on-dissociate
   https://babyfish-ct.github.io/jimmer-doc/docs/mutation/save-command/dissociation
   https://babyfish-ct.github.io/jimmer-doc/docs/mutation/delete-command
 
-❺ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/base/association/one-to-many
+(5) https://babyfish-ct.github.io/jimmer-doc/docs/mapping/base/association/one-to-many
 ---------------------------------------------------*/
