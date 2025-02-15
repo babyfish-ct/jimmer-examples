@@ -11,9 +11,23 @@ import java.time.LocalDateTime;
 @MappedSuperclass // (1)
 public interface BaseEntity {
 
+    /**
+     * The time when the object was created.
+     *
+     * <p>In this example, this property is not
+     * explicitly modified by business code,
+     * but is automatically modified by {@code DraftInterceptor}</p>
+     */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime createdTime();
 
+    /**
+     * The time when the object was last modified
+     *
+     * <p>In this example, this property is not
+     * explicitly modified by business code,
+     * but is automatically modified by {@code DraftInterceptor}</p>
+     */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime modifiedTime();
 }

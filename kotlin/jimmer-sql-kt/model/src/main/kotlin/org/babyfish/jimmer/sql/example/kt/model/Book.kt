@@ -12,9 +12,21 @@ interface Book : BaseEntity, TenantAware {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long
 
+    /**
+     * The name of current Book.
+     *
+     * This property forms a unique constraint together with
+     * the `edition` property, which is `@Key` of Jimmer
+     */
     @Key // (1)
     val name: String
 
+    /**
+     * The edition of current Book.
+     *
+     * This property forms a unique constraint together with
+     * the `name` property, which is `@Key` of Jimmer
+     */
     @Key // (2)
     val edition: Int
 

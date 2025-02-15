@@ -40,7 +40,7 @@ class BookStoreService(
         }
 
     @GetMapping("/complexList")
-    fun findComplexStores(): List<BookStore> { // (3)
+    fun findComplexStores(): List<@FetchBy("WITH_ALL_BOOKS_FETCHER") BookStore> { // (3)
         return bookStoreRepository.findAll(WITH_ALL_BOOKS_FETCHER) {
             asc(BookStore::name)
         }

@@ -14,13 +14,17 @@ public interface BookStore extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id();
 
-    @Key // ❶
+    @Key // (1)
     String name();
 
-    @Nullable // ❷
+    @Nullable // (2)
     String website();
 
-    @OneToMany(mappedBy = "store", orderedProps = { // ❸
+    /**
+     * All books belonging to the current bookstore,
+     * representing a one-to-many association
+     */
+    @OneToMany(mappedBy = "store", orderedProps = { // (3)
             @OrderedProp("name"),
             @OrderedProp(value = "edition", desc = true)
     })
@@ -34,7 +38,11 @@ public interface BookStore extends BaseEntity {
     // As for the simple calculated properties, you can view `Author.fullName`
     // -----------------------------
 
-    @Transient(ref = "bookStoreAvgPriceResolver") // ❹
+    /**
+     * This is a calculated scalar property,
+     * the average price of all books in the current bookstore
+     */
+    @Transient(ref = "bookStoreAvgPriceResolver") // (4)
     BigDecimal avgPrice();
 
     /*
@@ -48,13 +56,26 @@ public interface BookStore extends BaseEntity {
      * It is worth noting that if the calculated property returns entity object
      * or entity list, the shape can be controlled by the deeper child fetcher
      */
-    @Transient(ref = "bookStoreNewestBooksResolver") // ❺
+
+    /**
+     * This is a calculated associated property.
+     *
+     * <p>Since books have an {@link Book#edition()}
+     * properties, the books relationship may contain
+     * books with the same name.</p>
+     *
+     * This collection only selects books with the highest
+     * edition to avoid naming conflicts,
+     * therefore this collection is always a subset of the
+     * {@link #books()} collection
+     */
+    @Transient(ref = "bookStoreNewestBooksResolver") // (5)
     List<Book> newestBooks();
 }
 
 /*----------------Documentation Links----------------
-❶ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/advanced/key
-❷ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/base/nullity
-❸ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/base/association/one-to-many
-❹ ❺ https://babyfish-ct.github.io/jimmer-doc/docs/mapping/advanced/calculated/transient
+(1) https://babyfish-ct.github.io/jimmer-doc/docs/mapping/advanced/key
+(2) https://babyfish-ct.github.io/jimmer-doc/docs/mapping/base/nullity
+(3) https://babyfish-ct.github.io/jimmer-doc/docs/mapping/base/association/one-to-many
+(4) (5) https://babyfish-ct.github.io/jimmer-doc/docs/mapping/advanced/calculated/transient
 ---------------------------------------------------*/
