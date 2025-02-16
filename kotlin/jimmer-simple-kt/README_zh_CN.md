@@ -18,8 +18,9 @@
 
 ## 运行方式
 
-**在确保缺失的代码被已经被生成并为Intellij所识别后**，直接运行[App.kt](./src/main/kotlin/org/babyfish/jimmer/example/kt/core/App.kt)中的`main`方法即可。
+1.   **在确保缺失的代码被已经被生成并为Intellij所识别后**，直接运行[App.kt](./src/main/kotlin/org/babyfish/jimmer/example/kt/core/App.kt)中的`main`方法即可。
 
+2.   使用浏览器访问http://localhost:8080/openapi.html
 ---
 
-[⇦ 上一个例子 ⇦] | (../jimmer-core/README.zh)[⇧ 返回上级 ⇧](../README_zh_CN.md) | [⇨ 下一个例子 ⇨](../jimmer-sql-kt/README_zh_CN.md)
+[⇦ 上一个例子 ⇦](../jimmer-core/README.zh) | [⇧ 返回上级 ⇧](../README_zh_CN.md) | [⇨ 下一个例子 ⇨](../jimmer-sql-kt/README_zh_CN.md)
