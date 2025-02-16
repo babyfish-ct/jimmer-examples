@@ -44,4 +44,4 @@ Immer完美结合了不可变对象和可变对象的优点，代码简单、功
 
 ---
 
-[⇧ 返回上级 ⇧](../README_zh_CN.md) | [⇨ 下一个例子 ⇨](../jimmer-sql/README_zh_CN.md)
+[⇧ 返回上级 ⇧](../README_zh_CN.md) | [⇨ 下一个例子 ⇨](../jimmer-simple/README_zh_CN.md)
