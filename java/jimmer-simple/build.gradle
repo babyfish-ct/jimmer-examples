@@ -41,9 +41,15 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
     runtimeOnly 'com.h2database:h2:2.1.212'
+
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
 }
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
 }
