@@ -17,9 +17,14 @@
             <td>★★★★</td>
         </tr>
         <tr>
+            <td><a href="./jimmer-simple-kt/README_zh_CN.md">kotlin/jimmer-simple-kt</a></td>
+            <td>以无条件查询为例，展示Jimmer ORM的最简单使用方法</td>
+            <td>★★★★★</td>
+        </tr>
+        <tr>
             <td><a href="./jimmer-sql-kt/README_zh_CN.md">jimmer-sql-kt</a></td>
             <td>利用Jimmer快速构建REST服务。这个例子展示了大部分Jimmer的功能，是最重要的最基础的例子</td>
-            <td>★★★★★</td>
+            <td>★★★★</td>
         </tr>
         <tr>
             <td><a href="./jimmer-sql-graphql-kt/README_zh_CN.md">jimmer-sql-graphql-kt</a></td>

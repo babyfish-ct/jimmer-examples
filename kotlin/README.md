@@ -17,9 +17,14 @@ English | [中文](./README_zh_CN.md)
             <td>★★★★</td>
         </tr>
         <tr>
+            <td><a href="./jimmer-simple-kt">kotlin/jimmer-simple-kt</a></td>
+            <td>Using unconditional queries as an example to demonstrate the simplest way to use Jimmer ORM</td>
+            <td>★★★★★</td>
+        </tr>
+        <tr>
             <td><a href="./jimmer-sql-kt">jimmer-sql-kt</a></td>
             <td>Quickly build REST services using Jimmer. This example showcases most of Jimmer's features and is the most important and fundamental example</td>
-            <td>★★★★★</td>
+            <td>★★★★</td>
         </tr>
         <tr>
             <td><a href="./jimmer-sql-graphql-kt">jimmer-sql-graphql-kt</a></td>
