@@ -1,4 +1,4 @@
-val jimmerVersion by extra { "0.9.54" }
+val jimmerVersion by extra { "0.9.55" }
 
 // Jimmer remote associations require ANTLR
 val antlrVersion by extra { "4.13.2"}
