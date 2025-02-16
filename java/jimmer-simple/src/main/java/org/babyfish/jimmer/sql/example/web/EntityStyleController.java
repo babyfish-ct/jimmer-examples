@@ -30,7 +30,7 @@ public class EntityStyleController implements Tables, Fetchers {
     ) {
         BookTable table = BOOK_TABLE;
         return sqlClient.createQuery(table)
-                .where(table.name().ilikeIf(name))
+                .where(table.name().eqIf(name))
                 .select(table.fetch(SIMPLE_BOOK))
                 .execute();
     }
@@ -41,7 +41,7 @@ public class EntityStyleController implements Tables, Fetchers {
     ) {
         BookTable table = BOOK_TABLE;
         return sqlClient.createQuery(table)
-                .where(table.name().ilikeIf(name))
+                .where(table.name().eqIf(name))
                 .select(table.fetch(COMPLEX_BOOK))
                 .execute();
     }

@@ -1,0 +1,59 @@
+[
+  {
+    "id": 10,
+    "name": "GraphQL in Action",
+    "edition": 1,
+    "price": 80,
+    "store": {
+      "id": 2,
+      "name": "MANNING",
+      "website": null
+    },
+    "authors": [
+      {
+        "id": 5,
+        "firstName": "Samer",
+        "lastName": "Buna",
+        "gender": "MALE"
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "name": "GraphQL in Action",
+    "edition": 2,
+    "price": 81,
+    "store": {
+      "id": 2,
+      "name": "MANNING",
+      "website": null
+    },
+    "authors": [
+      {
+        "id": 5,
+        "firstName": "Samer",
+        "lastName": "Buna",
+        "gender": "MALE"
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "name": "GraphQL in Action",
+    "edition": 3,
+    "price": 80,
+    "store": {
+      "id": 2,
+      "name": "MANNING",
+      "website": null
+    },
+    "authors": [
+      {
+        "id": 5,
+        "firstName": "Samer",
+        "lastName": "Buna",
+        "gender": "MALE"
+      }
+    ]
+  }
+]

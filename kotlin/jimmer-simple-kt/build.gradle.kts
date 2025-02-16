@@ -44,6 +44,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
 
     runtimeOnly("com.h2database:h2:2.1.212")
+
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
 // Without this configuration, gradle command can still run.
@@ -59,4 +61,8 @@ tasks.withType<KotlinCompile> {
 		freeCompilerArgs = listOf("-Xjsr305=strict")
 		jvmTarget = "1.8"
 	}
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
 }

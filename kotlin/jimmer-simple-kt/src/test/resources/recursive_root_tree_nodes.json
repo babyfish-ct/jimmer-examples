@@ -1,0 +1,159 @@
+[
+  {
+    "id": 1,
+    "name": "Home",
+    "childNodes": [
+      {
+        "id": 9,
+        "name": "Clothing",
+        "childNodes": [
+          {
+            "id": 18,
+            "name": "Man",
+            "childNodes": [
+              {
+                "id": 19,
+                "name": "Casual wear",
+                "childNodes": [
+                  {
+                    "id": 20,
+                    "name": "Jacket",
+                    "childNodes": [
+
+                    ]
+                  },
+                  {
+                    "id": 21,
+                    "name": "Jeans",
+                    "childNodes": [
+
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": 22,
+                "name": "Formal wear",
+                "childNodes": [
+                  {
+                    "id": 24,
+                    "name": "Shirt",
+                    "childNodes": [
+
+                    ]
+                  },
+                  {
+                    "id": 23,
+                    "name": "Suit",
+                    "childNodes": [
+
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": 10,
+            "name": "Woman",
+            "childNodes": [
+              {
+                "id": 11,
+                "name": "Casual wear",
+                "childNodes": [
+                  {
+                    "id": 12,
+                    "name": "Dress",
+                    "childNodes": [
+
+                    ]
+                  },
+                  {
+                    "id": 14,
+                    "name": "Jeans",
+                    "childNodes": [
+
+                    ]
+                  },
+                  {
+                    "id": 13,
+                    "name": "Miniskirt",
+                    "childNodes": [
+
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": 15,
+                "name": "Formal wear",
+                "childNodes": [
+                  {
+                    "id": 17,
+                    "name": "Shirt",
+                    "childNodes": [
+
+                    ]
+                  },
+                  {
+                    "id": 16,
+                    "name": "Suit",
+                    "childNodes": [
+
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "name": "Food",
+        "childNodes": [
+          {
+            "id": 6,
+            "name": "Bread",
+            "childNodes": [
+              {
+                "id": 7,
+                "name": "Baguette",
+                "childNodes": [
+
+                ]
+              },
+              {
+                "id": 8,
+                "name": "Ciabatta",
+                "childNodes": [
+
+                ]
+              }
+            ]
+          },
+          {
+            "id": 3,
+            "name": "Drinks",
+            "childNodes": [
+              {
+                "id": 4,
+                "name": "Coca Cola",
+                "childNodes": [
+
+                ]
+              },
+              {
+                "id": 5,
+                "name": "Fanta",
+                "childNodes": [
+
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

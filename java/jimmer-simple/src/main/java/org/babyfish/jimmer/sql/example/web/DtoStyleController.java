@@ -34,7 +34,7 @@ public class DtoStyleController implements Tables {
     ) {
         BookTable table = BOOK_TABLE;
         return sqlClient.createQuery(table)
-                .where(table.name().ilikeIf(name))
+                .where(table.name().eqIf(name))
                 .select(table.fetch(SimpleBookView.class))
                 .execute();
     }
@@ -45,7 +45,7 @@ public class DtoStyleController implements Tables {
     ) {
         BookTable table = BOOK_TABLE;
         return sqlClient.createQuery(table)
-                .where(table.name().ilikeIf(name))
+                .where(table.name().eqIf(name))
                 .select(table.fetch(ComplexBookView.class))
                 .execute();
     }

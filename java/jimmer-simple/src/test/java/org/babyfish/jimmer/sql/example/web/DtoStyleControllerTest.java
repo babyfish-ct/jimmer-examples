@@ -30,7 +30,7 @@ public class DtoStyleControllerTest {
         mockMvc
                 .perform(
                         get("/dto/books/simple")
-                                .param("name", "graphql in action")
+                                .param("name", "GraphQL in Action")
                 )
                 .andExpect(status().isOk())
                 .andExpect(
@@ -46,7 +46,7 @@ public class DtoStyleControllerTest {
         mockMvc
                 .perform(
                         get("/dto/books/complex")
-                                .param("name", "graphql in action")
+                                .param("name", "GraphQL in Action")
                 )
                 .andExpect(status().isOk())
                 .andExpect(

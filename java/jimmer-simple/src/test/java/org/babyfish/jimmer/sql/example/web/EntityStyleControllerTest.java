@@ -29,7 +29,7 @@ public class EntityStyleControllerTest {
         mockMvc
                 .perform(
                         get("/entity/books/simple")
-                                .param("name", "graphql in action")
+                                .param("name", "GraphQL in Action")
                 )
                 .andExpect(status().isOk())
                 .andExpect(
@@ -45,7 +45,7 @@ public class EntityStyleControllerTest {
         mockMvc
                 .perform(
                         get("/entity/books/complex")
-                                .param("name", "graphql in action")
+                                .param("name", "GraphQL in Action")
                 )
                 .andExpect(status().isOk())
                 .andExpect(
