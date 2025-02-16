@@ -35,13 +35,13 @@
             <td><a href="./java/jimmer-simple/README_zh_CN.md">java/jimmer-simple</a></td>
             <td><a href="./kotlin/jimmer-simple-kt/README_zh_CN.md">kotlin/jimmer-simple-kt</a></td>
             <td>以无条件查询为例，展示Jimmer ORM的最简单使用方法</td>
-            <td>★★★★</td>
+            <td>★★★★★</td>
         </tr>
         <tr>
             <td><a href="./java/jimmer-sql/README_zh_CN.md">java/jimmer-sql</a></td>
             <td><a href="./kotlin/jimmer-sql-kt/README_zh_CN.md">kotlin/jimmer-sql-kt</a></td>
             <td>利用Jimmer快速构建REST服务。这个例子展示了大部分Jimmer的功能，是最重要的最基础的例子</td>
-            <td>★★★★★</td>
+            <td>★★★★</td>
         </tr>
         <tr>
             <td><a href="./java/jimmer-sql-graphql/README_zh_CN.md">java/jimmer-sql-graphql</a></td>

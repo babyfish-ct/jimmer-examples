@@ -32,10 +32,16 @@ For more details, please refer to the descriptions in the respective sub-directo
             <td>★★★★</td>
         </tr>
         <tr>
+            <td><a href="./java/jimmer-simple">java/jimmer-simple</a></td>
+            <td><a href="./kotlin/jimmer-simple-kt">kotlin/jimmer-simple-kt</a></td>
+            <td>Using unconditional queries as an example to demonstrate the simplest way to use Jimmer ORM</td>
+            <td>★★★★★</td>
+        </tr>
+        <tr>
             <td><a href="./java/jimmer-sql">java/jimmer-sql</a></td>
             <td><a href="./kotlin/jimmer-sql-kt">kotlin/jimmer-sql-kt</a></td>
             <td>Quickly build REST services using Jimmer. This example showcases most of Jimmer's features and is the most important and fundamental example</td>
-            <td>★★★★★</td>
+            <td>★★★★</td>
         </tr>
         <tr>
             <td><a href="./java/jimmer-sql-graphql">java/jimmer-sql-graphql</a></td>
