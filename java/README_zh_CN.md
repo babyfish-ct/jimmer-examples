@@ -17,7 +17,7 @@
             <td>★★★★</td>
         </tr>
         <tr>
-            <td><a href="./jimmer-simple/README_zh_CN.md">java/jimmer-simple</a></td>
+            <td><a href="./jimmer-simple/README_zh_CN.md">jimmer-simple</a></td>
             <td>以无条件查询为例，展示Jimmer ORM的最简单使用方法</td>
             <td>★★★★★</td>
         </tr>
