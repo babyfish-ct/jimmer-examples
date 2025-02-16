@@ -36,4 +36,4 @@ The project depends on the [KSP](https://kotlinlang.org/docs/ksp-overview.html).
 
 ---
 
-[⇧ Back to Parent ⇧](../) | [⇨ Next Example ⇨](../jimmer-sql-kt/)
+[⇧ Back to Parent ⇧](../) | [⇨ Next Example ⇨](../jimmer-simple-kt/)

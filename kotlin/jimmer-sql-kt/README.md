@@ -143,4 +143,4 @@ In the pop-up dialog, enter `a` or `b` and confirm.
 
 ---
 
-[⇦ Previous Example ⇦](../jimmer-core-kt) | [⇧ Back to Parent ⇧](../) | [⇨ Next Example ⇨](../jimmer-sql-graphql-kt/)
+[⇦ Previous Example ⇦](../jimmer-simple-kt) | [⇧ Back to Parent ⇧](../) | [⇨ Next Example ⇨](../jimmer-sql-graphql-kt/)
