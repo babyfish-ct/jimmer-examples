@@ -27,31 +27,37 @@
     <tbody>
         <tr>
             <td><a href="./java/jimmer-core/README_zh_CN.md">java/jimmer-core</a></td>
-            <td><a href="./kotlin/jimmer-core-kt">kotlin/jimmer-core-kt</a></td>
+            <td><a href="./kotlin/jimmer-core-kt/README_zh_CN.md">kotlin/jimmer-core-kt</a></td>
             <td>ORM无关示例，展示<a href="https://github.com/immerjs/immer">immer</a>风格的不可变对象</td>
             <td>★★★★</td>
         </tr>
         <tr>
+            <td><a href="./java/jimmer-simple/README_zh_CN.md">java/jimmer-simple</a></td>
+            <td><a href="./kotlin/jimmer-simple-kt/README_zh_CN.md">kotlin/jimmer-simple-kt</a></td>
+            <td>以无条件查询为例，展示Jimmer ORM的最简单使用方法</td>
+            <td>★★★★</td>
+        </tr>
+        <tr>
             <td><a href="./java/jimmer-sql/README_zh_CN.md">java/jimmer-sql</a></td>
-            <td><a href="./kotlin/jimmer-sql-kt">kotlin/jimmer-sql-kt</a></td>
+            <td><a href="./kotlin/jimmer-sql-kt/README_zh_CN.md">kotlin/jimmer-sql-kt</a></td>
             <td>利用Jimmer快速构建REST服务。这个例子展示了大部分Jimmer的功能，是最重要的最基础的例子</td>
             <td>★★★★★</td>
         </tr>
         <tr>
             <td><a href="./java/jimmer-sql-graphql/README_zh_CN.md">java/jimmer-sql-graphql</a></td>
-            <td><a href="./kotlin/jimmer-sql-graphql-kt">kotlin/jimmer-sql-graphql-kt</a></td>
+            <td><a href="./kotlin/jimmer-sql-graphql-kt/README_zh_CN.md">kotlin/jimmer-sql-graphql-kt</a></td>
             <td>利用Jimmer快速构建GraphQL服务</td>
             <td>★★</td>
         </tr>
         <tr>
             <td><a href="./java/jimmer-cloud/README_zh_CN.md">java/jimmer-cloud</a></td>
-            <td><a href="./kotlin/jimmer-cloud-kt">kotlin/jimmer-cloud-kt</a></td>
+            <td><a href="./kotlin/jimmer-cloud-kt/README_zh_CN.md">kotlin/jimmer-cloud-kt</a></td>
             <td>基于Spring Cloud的微服务项目，展示Jimmer的远程关联</td>
             <td>★</td>
         </tr>
         <tr>
             <td><a href="./java/save-command/README_zh_CN.md">java/save-command</a></td>
-            <td><a href="./kotlin/save-command-kt">kotlin/save-command-kt</a></td>
+            <td><a href="./kotlin/save-command-kt/README_zh_CN.md">kotlin/save-command-kt</a></td>
             <td>针对保存指令的专项例子</td>
             <td>★★★</td>
         </tr>
