@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring.boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <groupId>org.babyfish.jimmer.sql.example</groupId>
+    <artifactId>jimmer-simple</artifactId>
+    <version>1.0.0</version>
+
+    <properties>
+        <jimmer.version>0.9.55</jimmer.version>
+        <spring.boot.version>2.7.0</spring.boot.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.babyfish.jimmer</groupId>
+            <artifactId>jimmer-spring-boot-starter</artifactId>
+            <version>${jimmer.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>${spring.boot.version}</version>
+        </dependency>
+        
+        <!--
+        Optional runtime dependency: jimmer-client-swagger.
+
+        Generally speaking, even if you remove the dependency,
+        the functionality is normal, that why it is optional.
+
+        Without this dependency, the `/openapi.html` uses external links:
+            'https://unpkg.com/swagger-ui-dist@${version}/swagger-ui.css' and
+            'https://unpkg.com/swagger-ui-dist@${version}/swagger-ui-bundle.js'.
+
+        However, You may be in a restricted network environment so that
+        such external links are not accessible. If you are in trouble with this,
+        please add this runtime dependency to use the embedded css and js.
+        runtimeOnly "org.babyfish.jimmer:jimmer-client-swagger:${jimmerVersion}"
+        -->
+        <dependency>
+            <groupId>org.babyfish.jimmer</groupId>
+            <artifactId>jimmer-client-swagger</artifactId>
+            <version>${jimmer.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>2.1.212</version>
+            <scope>runtime</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.10.1</version>
+                <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.babyfish.jimmer</groupId>
+                            <artifactId>jimmer-apt</artifactId>
+                            <version>${jimmer.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring.boot.version}</version>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

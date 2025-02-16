@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:jimmer-demo;database_to_upper=true
+jimmer:
+  database-validation-mode: ERROR
+  show-sql: true
+  pretty-sql: true
+  client:
+    ts:
+      path: /ts.zip
+    openapi:
+      path: /openapi.yml
+      ui-path: /openapi.html
+      properties:
+        info:
+          title: Jimmer Demo
+          description: This is the OpenAPI UI of Jimmer Demo
+          version: 0.9.55
