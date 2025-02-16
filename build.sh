@@ -2,10 +2,10 @@
 
 root_dir=$PWD
 dirs=(\
-    "java/jimmer-core" "java/jimmer-sql" "java/jimmer-sql-graphql" \
-    "java/jimmer-cloud" "java/save-command" "kotlin/jimmer-core-kt" \
-    "kotlin/jimmer-sql-kt" "kotlin/jimmer-sql-graphql-kt" \
-    "kotlin/jimmer-cloud-kt" "kotlin/save-command-kt"\
+    "java/jimmer-core" "java/jimmer-simple" "java/jimmer-sql" \
+    "java/jimmer-sql-graphql" "java/jimmer-cloud" "java/save-command" \
+    "kotlin/jimmer-core-kt" "kotlin/jimmer-simple-kt" "kotlin/jimmer-sql-kt" 
+    "kotlin/jimmer-sql-graphql-kt" "kotlin/jimmer-cloud-kt" "kotlin/save-command-kt"\
 )
 for dir in "${dirs[@]}"; do
     echo --------
