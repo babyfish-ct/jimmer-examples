@@ -44,4 +44,4 @@ If you want to switch the opening method, exit IntelliJ, delete the hidden `.ide
 
 ---
 
-[⇧ Back to Parent ⇧](../) | [⇨ Next Example ⇨](../jimmer-sql/)
+[⇧ Back to Parent ⇧](../) | [⇨ Next Example ⇨](../jimmer-simple/)

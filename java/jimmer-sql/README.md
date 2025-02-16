@@ -151,4 +151,4 @@ In the pop-up dialog, enter `a` or `b` and confirm.
 
 ---
 
-[⇦ Previous Example ⇦](../jimmer-core) | [⇧ Back to Parent ⇧](../) | [⇨ Next Example ⇨](../jimmer-sql-graphql/)
+[⇦ Previous Example ⇦](../jimmer-simple/) | [⇧ Back to Parent ⇧](../) | [⇨ Next Example ⇨](../jimmer-sql-graphql/)
