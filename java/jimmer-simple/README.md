@@ -32,4 +32,4 @@ If you want to switch the opening method, exit IntelliJ, delete the hidden .idea
 
 ---
 
-[⇦ Previous Example](../jimmer-core) | [⇧ Return to Parent ⇧](..) | [⇨ Next Example ⇨](../jimmer-sql)
+[⇦ Previous Example ⇦](../jimmer-core) | [⇧ Return to Parent ⇧](..) | [⇨ Next Example ⇨](../jimmer-sql)
