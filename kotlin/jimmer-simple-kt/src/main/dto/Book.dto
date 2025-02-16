@@ -1,0 +1,20 @@
+export org.babyfish.jimmer.sql.example.kt.model.Book
+    -> package org.babyfish.jimmer.sql.example.kt.model.dto
+
+SimpleBookView {
+    id
+    name
+}
+
+ComplexBookView {
+
+    #allScalars
+
+    store {
+        #allScalars
+    }
+
+    authors {
+        #allScalars
+    }
+}

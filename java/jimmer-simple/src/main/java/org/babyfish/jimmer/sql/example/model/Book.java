@@ -24,6 +24,7 @@ public interface Book {
 
     @Nullable
     @ManyToOne
+    @OnDissociate(DissociateAction.SET_NULL)
     BookStore store();
 
     @ManyToMany(orderedProps = {

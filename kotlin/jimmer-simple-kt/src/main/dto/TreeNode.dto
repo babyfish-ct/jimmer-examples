@@ -1,0 +1,14 @@
+export org.babyfish.jimmer.sql.example.kt.model.TreeNode
+    -> package org.babyfish.jimmer.sql.example.kt.model.dto
+
+SimpleTreeNodeView {
+    id
+    name
+}
+
+RecursiveTreeNodeView {
+
+    #allScalars
+
+    childNodes*
+}

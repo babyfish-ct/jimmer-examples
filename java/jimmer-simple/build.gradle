@@ -8,6 +8,9 @@ ext {
     jimmerVersion = "0.9.55"
 }
 
+group 'org.babyfish.jimmer.example.kt'
+version jimmerVersion
+
 repositories {
     mavenCentral()
 }
