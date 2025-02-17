@@ -9,10 +9,21 @@ import java.util.List;
 @KeyUniqueConstraint
 public interface BookStore {
 
+    /**
+     * The surrogate id of the current object,
+     * auto-incrementing,
+     * without specific business meaning
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id();
 
+    /**
+     * The name of current BookStore.
+     *
+     * <p>This property forms a unique constraint,
+     * which is {@code @Key} of Jimmer</p>
+     */
     @Key
     String name();
 

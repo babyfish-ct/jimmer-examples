@@ -64,10 +64,16 @@ public class EntityStyleController implements Tables, Fetchers {
                 .execute();
     }
 
+    /**
+     * Simple Book DTO defined by ObjectFetcher
+     */
     private static final Fetcher<Book> SIMPLE_BOOK =
             BOOK_FETCHER
                     .name();
 
+    /**
+     * Complex Book DTO defined by ObjectFetcher
+     */
     private static final Fetcher<Book> COMPLEX_BOOK =
             BOOK_FETCHER
                     .allScalarFields()
@@ -80,10 +86,16 @@ public class EntityStyleController implements Tables, Fetchers {
                                     .allScalarFields()
                     );
 
+    /**
+     * Simple TreeNode DTO defined by ObjectFetcher
+     */
     private static final Fetcher<TreeNode> SIMPLE_TREE_NODE =
             TREE_NODE_FETCHER
                     .name();
 
+    /**
+     * Recursive TreeNode defined by ObjectFetcher
+     */
     private static final Fetcher<TreeNode> RECURSIVE_TREE_NODE =
             TREE_NODE_FETCHER
                     .allScalarFields()

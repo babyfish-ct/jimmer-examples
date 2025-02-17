@@ -8,13 +8,30 @@ import java.util.List;
 @KeyUniqueConstraint
 public interface Author {
 
+    /**
+     * The surrogate id of the current object,
+     * auto-incrementing,
+     * without specific business meaning
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id();
 
+    /**
+     * The first name of current Author.
+     *
+     * <p>This property forms a unique constraint together with
+     * the {@code lastName} property, which is {@code @Key} of Jimmer</p>
+     */
     @Key
     String firstName();
 
+    /**
+     * The last name of current Book.
+     *
+     * <p>This property forms a unique constraint together with
+     * the {@code firstName} property, which is {@code @Key} of Jimmer</p>
+     */
     @Key
     String lastName();
 
