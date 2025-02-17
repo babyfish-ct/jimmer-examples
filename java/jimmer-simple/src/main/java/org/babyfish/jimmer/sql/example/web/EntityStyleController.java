@@ -24,6 +24,16 @@ public class EntityStyleController implements Tables, Fetchers {
         this.sqlClient = sqlClient;
     }
 
+    /**
+     * Find simple book objects.
+     *
+     * <p>If this parameter is specified, only books with the specified name will be queried.</p>
+     *
+     * @param name Optional query parameter,
+     *      {@code null} or {@code ""} will be ignored
+     * @return A list of Book objects, each of which
+     *      has only {@code id} and {@code name} properties
+     */
     @GetMapping("/books/simple")
     public List<@FetchBy("SIMPLE_BOOK") Book> findSimpleBooks(
             @Nullable @RequestParam(required = false) String name
@@ -35,6 +45,18 @@ public class EntityStyleController implements Tables, Fetchers {
                 .execute();
     }
 
+    /**
+     * Find complex book objects.
+     *
+     * <p>If this parameter is specified, only books with the specified name will be queried.</p>
+     *
+     * @param name Optional query parameter,
+     *      {@code null} or {@code ""} will be ignored
+     * @return A list of Book objects, each of which
+     *      has all scalar properties, associated
+     *      {@link BookStore} and associated
+     *      {@link Author} objects.
+     */
     @GetMapping("/books/complex")
     public List<@FetchBy("COMPLEX_BOOK") Book> findComplexBooks(
             @Nullable @RequestParam(required = false) String name
@@ -46,6 +68,12 @@ public class EntityStyleController implements Tables, Fetchers {
                 .execute();
     }
 
+    /**
+     * Query root tree nodes, that is, nodes whose parentId is null.
+     *
+     * @return All list of root tree nodes, each of which
+     *         has only {@code id} and {@code name} properties
+     */
     @GetMapping("/rootTreeNodes/simple")
     public List<@FetchBy("SIMPLE_TREE_NODE") TreeNode> findSimpleTreeNodes() {
         TreeNodeTable table = TREE_NODE_TABLE;
@@ -55,6 +83,15 @@ public class EntityStyleController implements Tables, Fetchers {
                 .execute();
     }
 
+    /**
+     * Query root tree nodes, that is, nodes whose parentId is null.
+     *
+     * @return All list of root tree nodes, each of which
+     *         has all scalar properties, associated child objects.
+     *         If a child node has deeper child nodes,
+     *         it will be recursively associated until
+     *         there are no deeper child nodes.
+     */
     @GetMapping("/rootTreeNodes/recursive")
     public List<@FetchBy("RECURSIVE_TREE_NODE") TreeNode> findRecursiveTreeNodes() {
         TreeNodeTable table = TREE_NODE_TABLE;
