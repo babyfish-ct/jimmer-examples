@@ -7,10 +7,21 @@ import org.babyfish.jimmer.sql.*
 @KeyUniqueConstraint
 interface BookStore {
 
+    /**
+     * The surrogate id of the current object,
+     * auto-incrementing,
+     * without specific business meaning
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long
 
+    /**
+     * The name of current BookStore.
+     *
+     * This property forms a unique constraint,
+     * which is `@Key` of Jimmer
+     */
     @Key
     val name: String
 

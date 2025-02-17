@@ -1,11 +1,17 @@
 export org.babyfish.jimmer.sql.example.kt.model.TreeNode
     -> package org.babyfish.jimmer.sql.example.kt.model.dto
 
+/**
+ * Simple TreeNode DTO defined by DTO language
+ */
 SimpleTreeNodeView {
     id
     name
 }
 
+/**
+ * Recursive TreeNode DTO defined by DTO language
+ */
 RecursiveTreeNodeView {
 
     #allScalars

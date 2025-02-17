@@ -1,11 +1,17 @@
 export org.babyfish.jimmer.sql.example.kt.model.Book
     -> package org.babyfish.jimmer.sql.example.kt.model.dto
 
+/**
+ * Simple Book DTO defined by DTO language
+ */
 SimpleBookView {
     id
     name
 }
 
+/**
+ * Complex Book DTO defined by DTO language
+ */
 ComplexBookView {
 
     #allScalars
