@@ -126,9 +126,13 @@ class BulkTest : AbstractMutationTest() {
         assertExecutedStatements(
 
             ExecutedStatement.batchOf(
-                """merge into BOOK_STORE(NAME) 
-                    |key(NAME) 
-                    |values(?)""".trimMargin(),
+                """merge into BOOK_STORE tb_1_ 
+                    |using(values(?)) tb_2_(NAME) 
+                    |--->on tb_1_.NAME = tb_2_.NAME 
+                    |when matched then 
+                    |--->update set /* fake update to return all ids */ NAME = tb_2_.NAME 
+                    |when not matched then 
+                    |--->insert(NAME) values(tb_2_.NAME)""".trimMargin(),
                 listOf("MANNING"),
                 listOf("AMAZON"),
             ),

@@ -106,14 +106,26 @@ public class RecursiveTest extends AbstractMutationTest {
 
                 // Merge level-1 associated objects
                 ExecutedStatement.batchOf(
-                        "merge into TREE_NODE(NAME, parent_id) key(NAME, parent_id) values(?, ?)",
+                        "merge into TREE_NODE tb_1_ " +
+                                "using(values(?, ?)) tb_2_(NAME, parent_id) " +
+                                "--->on tb_1_.NAME = tb_2_.NAME and tb_1_.parent_id = tb_2_.parent_id " +
+                                "when matched then " +
+                                "--->update set /* fake update to return all ids */ parent_id = tb_2_.parent_id " +
+                                "when not matched then " +
+                                "--->insert(NAME, parent_id) values(tb_2_.NAME, tb_2_.parent_id)",
                         Arrays.asList("child-1", 100L),
                         Arrays.asList("child-2", 100L)
                 ),
 
                 // Merge level-2 associated objects
                 ExecutedStatement.batchOf(
-                        "merge into TREE_NODE(NAME, parent_id) key(NAME, parent_id) values(?, ?)",
+                        "merge into TREE_NODE tb_1_ " +
+                                "using(values(?, ?)) tb_2_(NAME, parent_id) " +
+                                "--->on tb_1_.NAME = tb_2_.NAME and tb_1_.parent_id = tb_2_.parent_id " +
+                                "when matched then " +
+                                "--->update set /* fake update to return all ids */ parent_id = tb_2_.parent_id " +
+                                "when not matched then " +
+                                "--->insert(NAME, parent_id) values(tb_2_.NAME, tb_2_.parent_id)",
                         Arrays.asList("child-1-1", 101L),
                         Arrays.asList("child-1-2", 101L),
                         Arrays.asList("child-2-1", 102L),
@@ -273,17 +285,25 @@ public class RecursiveTest extends AbstractMutationTest {
 
                 // Merge level-1 associated objects
                 ExecutedStatement.of(
-                        "merge into TREE_NODE(NAME, parent_id) " +
-                                "key(NAME, parent_id) " +
-                                "values(?, ?)",
+                        "merge into TREE_NODE tb_1_ " +
+                                "using(values(?, ?)) tb_2_(NAME, parent_id) " +
+                                "--->on tb_1_.NAME = tb_2_.NAME and tb_1_.parent_id = tb_2_.parent_id " +
+                                "when matched then " +
+                                "--->update set /* fake update to return all ids */ parent_id = tb_2_.parent_id " +
+                                "when not matched then " +
+                                "--->insert(NAME, parent_id) values(tb_2_.NAME, tb_2_.parent_id)",
                         "child-1", 1L
                 ),
 
                 // Merge level-2 associated objects
                 ExecutedStatement.of(
-                        "merge into TREE_NODE(NAME, parent_id) " +
-                        "key(NAME, parent_id) " +
-                        "values(?, ?)",
+                        "merge into TREE_NODE tb_1_ " +
+                                "using(values(?, ?)) tb_2_(NAME, parent_id) " +
+                                "--->on tb_1_.NAME = tb_2_.NAME and tb_1_.parent_id = tb_2_.parent_id " +
+                                "when matched then " +
+                                "--->update set /* fake update to return all ids */ parent_id = tb_2_.parent_id " +
+                                "when not matched then " +
+                                "--->insert(NAME, parent_id) values(tb_2_.NAME, tb_2_.parent_id)",
                         "child-1-1", 2L
                 ),
 

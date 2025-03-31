@@ -52,7 +52,13 @@ class OneToManyTest() : AbstractMutationTest() {
 
             // Merge aggregate-root
             ExecutedStatement.of(
-                "merge into BOOK_STORE(NAME) key(NAME) values(?)",
+                "merge into BOOK_STORE tb_1_ " +
+                    "using(values(?)) tb_2_(NAME) " +
+                    "--->on tb_1_.NAME = tb_2_.NAME " +
+                    "when matched then " +
+                    "--->update set /* fake update to return all ids */ NAME = tb_2_.NAME " +
+                    "when not matched then " +
+                    "--->insert(NAME) values(tb_2_.NAME)",
                 "MANNING"
             ),  
 
@@ -132,7 +138,13 @@ class OneToManyTest() : AbstractMutationTest() {
 
             // Merge aggregate-root
             ExecutedStatement.of(
-                "merge into BOOK_STORE(NAME) key(NAME) values(?)",
+                "merge into BOOK_STORE tb_1_ " +
+                    "using(values(?)) tb_2_(NAME) " +
+                    "--->on tb_1_.NAME = tb_2_.NAME " +
+                    "when matched then " +
+                    "--->update set /* fake update to return all ids */ NAME = tb_2_.NAME " +
+                    "when not matched then " +
+                    "--->insert(NAME) values(tb_2_.NAME)",
                 "MANNING"
             ),
 
@@ -222,7 +234,13 @@ class OneToManyTest() : AbstractMutationTest() {
             // underlying database(i.e: `merge` of `H2`) will still cause the
             // affected row count of the table to increase.
             ExecutedStatement.of(
-                "merge into BOOK_STORE(NAME) key(NAME) values(?)",
+                "merge into BOOK_STORE tb_1_ " +
+                    "using(values(?)) tb_2_(NAME) " +
+                    "--->on tb_1_.NAME = tb_2_.NAME " +
+                    "when matched then " +
+                    "--->update set /* fake update to return all ids */ NAME = tb_2_.NAME " +
+                    "when not matched then " +
+                    "--->insert(NAME) values(tb_2_.NAME)",
                 "MANNING"
             ),
 
@@ -296,7 +314,13 @@ class OneToManyTest() : AbstractMutationTest() {
             // underlying database(i.e: `merge` of `H2`) will still cause the
             // affected row count of the table to increase.
             ExecutedStatement.of(
-                "merge into BOOK_STORE(NAME) key(NAME) values(?)",
+                "merge into BOOK_STORE tb_1_ " +
+                    "using(values(?)) tb_2_(NAME) " +
+                    "--->on tb_1_.NAME = tb_2_.NAME " +
+                    "when matched then " +
+                    "--->update set /* fake update to return all ids */ NAME = tb_2_.NAME " +
+                    "when not matched then " +
+                    "--->insert(NAME) values(tb_2_.NAME)",
                 "MANNING"
             ),
 
@@ -399,7 +423,13 @@ class OneToManyTest() : AbstractMutationTest() {
             // underlying database(i.e: `merge` of `H2`) will still cause the
             // affected row count of the table to increase.
             ExecutedStatement.of(
-                "merge into BOOK_STORE(NAME) key(NAME) values(?)",
+                "merge into BOOK_STORE tb_1_ " +
+                    "using(values(?)) tb_2_(NAME) " +
+                    "--->on tb_1_.NAME = tb_2_.NAME " +
+                    "when matched then " +
+                    "--->update set /* fake update to return all ids */ NAME = tb_2_.NAME " +
+                    "when not matched then " +
+                    "--->insert(NAME) values(tb_2_.NAME)",
                 "MANNING"
             ),
 
@@ -475,7 +505,13 @@ class OneToManyTest() : AbstractMutationTest() {
             // underlying database(i.e: `merge` of `H2`) will still cause the
             // affected row count of the table to increase.
             ExecutedStatement.of(
-                "merge into BOOK_STORE(NAME) key(NAME) values(?)",
+                "merge into BOOK_STORE tb_1_ " +
+                    "using(values(?)) tb_2_(NAME) " +
+                    "--->on tb_1_.NAME = tb_2_.NAME " +
+                    "when matched then " +
+                    "--->update set /* fake update to return all ids */ NAME = tb_2_.NAME " +
+                    "when not matched then " +
+                    "--->insert(NAME) values(tb_2_.NAME)",
                 "MANNING"
             ),
 
@@ -541,7 +577,13 @@ class OneToManyTest() : AbstractMutationTest() {
             // underlying database(i.e: `merge` of `H2`) will still cause the
             // affected row count of the table to increase.
             ExecutedStatement.of(
-                "merge into BOOK_STORE(NAME) key(NAME) values(?)",
+                "merge into BOOK_STORE tb_1_ " +
+                    "using(values(?)) tb_2_(NAME) " +
+                    "--->on tb_1_.NAME = tb_2_.NAME " +
+                    "when matched then " +
+                    "--->update set /* fake update to return all ids */ NAME = tb_2_.NAME " +
+                    "when not matched then " +
+                    "--->insert(NAME) values(tb_2_.NAME)",
                 "MANNING"
             ),
 
