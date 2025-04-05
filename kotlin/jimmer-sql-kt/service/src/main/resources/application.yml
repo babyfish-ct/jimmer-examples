@@ -54,7 +54,7 @@ jimmer:
         info:
           title: Jimmer REST Example(Kotlin)
           description: This is the OpenAPI UI of Jimmer REST Example(Kolint)
-          version: 0.8.64
+          version: 0.9.71
         securities:
           - tenantHeader: [ ]
         components:
