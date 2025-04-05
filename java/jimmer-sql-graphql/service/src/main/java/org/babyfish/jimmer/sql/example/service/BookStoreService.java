@@ -2,6 +2,7 @@ package org.babyfish.jimmer.sql.example.service;
 
 import graphql.schema.DataFetchingEnvironment;
 import org.babyfish.jimmer.spring.graphql.DataFetchingEnvironments;
+import org.babyfish.jimmer.sql.ast.mutation.AssociatedSaveMode;
 import org.babyfish.jimmer.sql.ast.mutation.SaveMode;
 import org.babyfish.jimmer.sql.example.model.BookStore;
 import org.babyfish.jimmer.sql.example.repository.BookStoreRepository;
@@ -51,39 +52,58 @@ public class BookStoreService {
     // --- Mutation ---
 
     @MutationMapping
-    public BookStore saveBookStore(@Argument BookStoreInput input) {
-        return bookStoreRepository.save(input).getModifiedEntity();
+    public BookStore saveBookStore(
+            @Argument BookStoreInput input,
+            DataFetchingEnvironment env
+    ) {
+        return bookStoreRepository
+                .save(input, DataFetchingEnvironments.createFetcher(BookStore.class, env))
+                .getModifiedEntity();
     }
 
     @MutationMapping
     public BookStore createDeepBookStore(
-            @Argument CompositeBookStoreInput input
+            @Argument CompositeBookStoreInput input,
+            DataFetchingEnvironment env
     ) {
-        return bookStoreRepository.save(
-                input,
-                SaveMode.INSERT_ONLY
-        ).getModifiedEntity();
+        return bookStoreRepository
+                .save(
+                        input,
+                        SaveMode.INSERT_ONLY,
+                        AssociatedSaveMode.REPLACE,
+                        DataFetchingEnvironments.createFetcher(BookStore.class, env)
+                )
+                .getModifiedEntity();
     }
 
     @MutationMapping
     public BookStore updateDeepBookStoreById(
             @Argument long id,
-            @Argument CompositeBookStoreInput input
+            @Argument CompositeBookStoreInput input,
+            DataFetchingEnvironment env
     ) {
-        return bookStoreRepository.save(
-                input.toEntityById(id),
-                SaveMode.UPDATE_ONLY
-        ).getModifiedEntity();
+        return bookStoreRepository
+                .save(
+                        input.toEntityById(id),
+                        SaveMode.UPDATE_ONLY,
+                        AssociatedSaveMode.REPLACE,
+                        DataFetchingEnvironments.createFetcher(BookStore.class, env)
+                ).getModifiedEntity();
     }
 
     @MutationMapping
     public BookStore updateDeepBookStoreByKey(
-            @Argument CompositeBookStoreInput input
+            @Argument CompositeBookStoreInput input,
+            DataFetchingEnvironment env
     ) {
-        return bookStoreRepository.save(
-                input,
-                SaveMode.UPDATE_ONLY
-        ).getModifiedEntity();
+        return bookStoreRepository
+                .save(
+                        input,
+                        SaveMode.UPDATE_ONLY,
+                        AssociatedSaveMode.REPLACE,
+                        DataFetchingEnvironments.createFetcher(BookStore.class, env)
+                )
+                .getModifiedEntity();
     }
 
     @MutationMapping

@@ -80,6 +80,10 @@ export type AllErrors = {
         family: 'SAVE_COMMAND', 
         code: 'ILLEGAL_TARGET_ID', 
         exportedPath: ExportedSavePath
+    } | {
+        family: 'SAVE_COMMAND', 
+        code: 'UNLOADED_FROZEN_BACK_REFERENCE', 
+        exportedPath: ExportedSavePath
     };
 export type ApiErrors = {
     'authorService': {
@@ -158,6 +162,10 @@ export type ApiErrors = {
             } | {
                 family: 'SAVE_COMMAND', 
                 code: 'ILLEGAL_TARGET_ID', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'UNLOADED_FROZEN_BACK_REFERENCE', 
                 readonly [key:string]: any
             })
     }, 
@@ -238,8 +246,14 @@ export type ApiErrors = {
                 family: 'SAVE_COMMAND', 
                 code: 'ILLEGAL_TARGET_ID', 
                 readonly [key:string]: any
-            }), 
-        'saveCompositeBook': AllErrors & ({
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'UNLOADED_FROZEN_BACK_REFERENCE', 
+                readonly [key:string]: any
+            })
+    }, 
+    'bookStoreService': {
+        'saveBookStore': AllErrors & ({
                 family: 'SAVE_COMMAND', 
                 code: 'READONLY_MIDDLE_TABLE', 
                 readonly [key:string]: any
@@ -315,9 +329,254 @@ export type ApiErrors = {
                 family: 'SAVE_COMMAND', 
                 code: 'ILLEGAL_TARGET_ID', 
                 readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'UNLOADED_FROZEN_BACK_REFERENCE', 
+                readonly [key:string]: any
+            }), 
+        'createDeepBookStore': AllErrors & ({
+                family: 'SAVE_COMMAND', 
+                code: 'READONLY_MIDDLE_TABLE', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'NULL_TARGET', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'CANNOT_DISSOCIATE_TARGETS', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'NO_ID_GENERATOR', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'ILLEGAL_ID_GENERATOR', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'ILLEGAL_GENERATED_ID', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'ILLEGAL_INTERCEPTOR_BEHAVIOR', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'NO_KEY_PROP', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'NO_VERSION', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'OPTIMISTIC_LOCK_ERROR', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'NEITHER_ID_NOR_KEY', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'REVERSED_REMOTE_ASSOCIATION', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'LONG_REMOTE_ASSOCIATION', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'FAILED_REMOTE_VALIDATION', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'UNSTRUCTURED_ASSOCIATION', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'TARGET_IS_NOT_TRANSFERABLE', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'INCOMPLETE_PROPERTY', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'NOT_UNIQUE', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'ILLEGAL_TARGET_ID', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'UNLOADED_FROZEN_BACK_REFERENCE', 
+                readonly [key:string]: any
+            }), 
+        'updateDeepBookStoreById': AllErrors & ({
+                family: 'SAVE_COMMAND', 
+                code: 'READONLY_MIDDLE_TABLE', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'NULL_TARGET', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'CANNOT_DISSOCIATE_TARGETS', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'NO_ID_GENERATOR', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'ILLEGAL_ID_GENERATOR', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'ILLEGAL_GENERATED_ID', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'ILLEGAL_INTERCEPTOR_BEHAVIOR', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'NO_KEY_PROP', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'NO_VERSION', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'OPTIMISTIC_LOCK_ERROR', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'NEITHER_ID_NOR_KEY', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'REVERSED_REMOTE_ASSOCIATION', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'LONG_REMOTE_ASSOCIATION', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'FAILED_REMOTE_VALIDATION', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'UNSTRUCTURED_ASSOCIATION', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'TARGET_IS_NOT_TRANSFERABLE', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'INCOMPLETE_PROPERTY', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'NOT_UNIQUE', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'ILLEGAL_TARGET_ID', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'UNLOADED_FROZEN_BACK_REFERENCE', 
+                readonly [key:string]: any
+            }), 
+        'updateDeepBookStoreByKey': AllErrors & ({
+                family: 'SAVE_COMMAND', 
+                code: 'READONLY_MIDDLE_TABLE', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'NULL_TARGET', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'CANNOT_DISSOCIATE_TARGETS', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'NO_ID_GENERATOR', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'ILLEGAL_ID_GENERATOR', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'ILLEGAL_GENERATED_ID', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'ILLEGAL_INTERCEPTOR_BEHAVIOR', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'NO_KEY_PROP', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'NO_VERSION', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'OPTIMISTIC_LOCK_ERROR', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'NEITHER_ID_NOR_KEY', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'REVERSED_REMOTE_ASSOCIATION', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'LONG_REMOTE_ASSOCIATION', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'FAILED_REMOTE_VALIDATION', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'UNSTRUCTURED_ASSOCIATION', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'TARGET_IS_NOT_TRANSFERABLE', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'INCOMPLETE_PROPERTY', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'NOT_UNIQUE', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'ILLEGAL_TARGET_ID', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'UNLOADED_FROZEN_BACK_REFERENCE', 
+                readonly [key:string]: any
             })
-    }, 
-    'bookStoreService': {
     }, 
     'treeService': {
         'saveTree': AllErrors & ({
@@ -395,6 +654,10 @@ export type ApiErrors = {
             } | {
                 family: 'SAVE_COMMAND', 
                 code: 'ILLEGAL_TARGET_ID', 
+                readonly [key:string]: any
+            } | {
+                family: 'SAVE_COMMAND', 
+                code: 'UNLOADED_FROZEN_BACK_REFERENCE', 
                 readonly [key:string]: any
             })
     }

@@ -1,11 +1,17 @@
 import type {Executor} from '../';
 import type {BookStoreDto} from '../model/dto/';
-import type {Dynamic_BookStore} from '../model/dynamic/';
-import type {BookStoreInput} from '../model/static/';
+import type {BookStoreInput, CompositeBookStoreInput} from '../model/static/';
 
 export class BookStoreService {
     
     constructor(private executor: Executor) {}
+    
+    readonly createDeepBookStore: (options: BookStoreServiceOptions['createDeepBookStore']) => Promise<
+        BookStoreDto['BookStoreService/WITH_ALL_BOOKS_FETCHER']
+    > = async(options) => {
+        let _uri = '/bookStore/deep';
+        return (await this.executor({uri: _uri, method: 'POST', body: options.body})) as Promise<BookStoreDto['BookStoreService/WITH_ALL_BOOKS_FETCHER']>;
+    }
     
     readonly deleteBookStore: (options: BookStoreServiceOptions['deleteBookStore']) => Promise<
         void
@@ -55,10 +61,26 @@ export class BookStoreService {
     }
     
     readonly saveBookStore: (options: BookStoreServiceOptions['saveBookStore']) => Promise<
-        Dynamic_BookStore
+        BookStoreDto['BookStoreService/DEFAULT_FETCHER']
     > = async(options) => {
         let _uri = '/bookStore';
-        return (await this.executor({uri: _uri, method: 'PUT', body: options.body})) as Promise<Dynamic_BookStore>;
+        return (await this.executor({uri: _uri, method: 'PUT', body: options.body})) as Promise<BookStoreDto['BookStoreService/DEFAULT_FETCHER']>;
+    }
+    
+    readonly updateDeepBookStoreById: (options: BookStoreServiceOptions['updateDeepBookStoreById']) => Promise<
+        BookStoreDto['BookStoreService/WITH_ALL_BOOKS_FETCHER']
+    > = async(options) => {
+        let _uri = '/bookStore/';
+        _uri += encodeURIComponent(options.id);
+        _uri += '/deep';
+        return (await this.executor({uri: _uri, method: 'PUT', body: options.body})) as Promise<BookStoreDto['BookStoreService/WITH_ALL_BOOKS_FETCHER']>;
+    }
+    
+    readonly updateDeepBookStoreByKey: (options: BookStoreServiceOptions['updateDeepBookStoreByKey']) => Promise<
+        BookStoreDto['BookStoreService/WITH_ALL_BOOKS_FETCHER']
+    > = async(options) => {
+        let _uri = '/bookStore/deep';
+        return (await this.executor({uri: _uri, method: 'PUT', body: options.body})) as Promise<BookStoreDto['BookStoreService/WITH_ALL_BOOKS_FETCHER']>;
     }
 }
 
@@ -74,6 +96,16 @@ export type BookStoreServiceOptions = {
     }, 
     'saveBookStore': {
         readonly body: BookStoreInput
+    }, 
+    'createDeepBookStore': {
+        readonly body: CompositeBookStoreInput
+    }, 
+    'updateDeepBookStoreById': {
+        readonly id: number, 
+        readonly body: CompositeBookStoreInput
+    }, 
+    'updateDeepBookStoreByKey': {
+        readonly body: CompositeBookStoreInput
     }, 
     'deleteBookStore': {
         readonly id: number

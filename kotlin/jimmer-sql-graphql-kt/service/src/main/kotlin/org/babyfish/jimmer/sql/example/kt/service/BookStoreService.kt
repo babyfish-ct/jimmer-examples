@@ -2,6 +2,7 @@ package org.babyfish.jimmer.sql.example.kt.service
 
 import graphql.schema.DataFetchingEnvironment
 import org.babyfish.jimmer.spring.graphql.toFetcher
+import org.babyfish.jimmer.sql.ast.mutation.AssociatedSaveMode
 import org.babyfish.jimmer.sql.ast.mutation.SaveMode
 import org.babyfish.jimmer.sql.example.kt.model.BookStore
 import org.babyfish.jimmer.sql.example.kt.repository.BookStoreRepository
@@ -44,37 +45,51 @@ class BookStoreService(
     // --- Mutation ---
     @MutationMapping
     @Transactional
-    fun saveBookStore(@Argument input: BookStoreInput): BookStore =
-        bookStoreRepository.save(input).modifiedEntity
+    fun saveBookStore(
+        @Argument input: BookStoreInput,
+        env: DataFetchingEnvironment
+    ): BookStore =
+        bookStoreRepository
+            .save(input, env.toFetcher())
+            .modifiedEntity
 
     @MutationMapping
     fun createDeepBookStore(
-        @Argument input: CompositeBookStoreInput
+        @Argument input: CompositeBookStoreInput,
+        env: DataFetchingEnvironment
     ): BookStore {
         return bookStoreRepository.save(
             input,
-            SaveMode.INSERT_ONLY
+            SaveMode.INSERT_ONLY,
+            AssociatedSaveMode.REPLACE,
+            env.toFetcher()
         ).modifiedEntity
     }
 
     @MutationMapping
     fun updateDeepBookStoreById(
         @Argument id: Long,
-        @Argument input: CompositeBookStoreInput
+        @Argument input: CompositeBookStoreInput,
+        env: DataFetchingEnvironment
     ): BookStore {
         return bookStoreRepository.save(
             input.toEntity { this.id = id },
-            SaveMode.UPDATE_ONLY
+            SaveMode.UPDATE_ONLY,
+            AssociatedSaveMode.REPLACE,
+            env.toFetcher()
         ).modifiedEntity
     }
 
     @MutationMapping
     fun updateDeepBookStoreByKey(
-        @Argument input: CompositeBookStoreInput
+        @Argument input: CompositeBookStoreInput,
+        env: DataFetchingEnvironment
     ): BookStore {
         return bookStoreRepository.save(
             input,
-            SaveMode.UPDATE_ONLY
+            SaveMode.UPDATE_ONLY,
+            AssociatedSaveMode.REPLACE,
+            env.toFetcher()
         ).modifiedEntity
     }
 

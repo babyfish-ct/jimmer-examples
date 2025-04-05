@@ -39,9 +39,12 @@ class AuthorService(
 
     @MutationMapping
     fun saveAuthor(
-        @Argument input: AuthorInput
+        @Argument input: AuthorInput,
+        env: DataFetchingEnvironment
     ): Author =
-        authorRepository.save(input).modifiedEntity
+        authorRepository
+            .save(input, env.toFetcher())
+            .modifiedEntity
 
     @MutationMapping
     fun deleteAuthor(@Argument id: Long): Int {

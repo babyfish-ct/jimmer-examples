@@ -1,6 +1,5 @@
 import type {Executor} from '../';
 import type {AuthorDto} from '../model/dto/';
-import type {Dynamic_Author} from '../model/dynamic/';
 import type {AuthorInput, AuthorSpecification} from '../model/static/';
 
 export class AuthorService {
@@ -32,6 +31,13 @@ export class AuthorService {
         if (_value !== undefined && _value !== null) {
             _uri += _separator
             _uri += 'lastName='
+            _uri += encodeURIComponent(_value);
+            _separator = '&';
+        }
+        _value = options.specification.gender;
+        if (_value !== undefined && _value !== null) {
+            _uri += _separator
+            _uri += 'gender='
             _uri += encodeURIComponent(_value);
             _separator = '&';
         }
@@ -75,10 +81,10 @@ export class AuthorService {
     }
     
     readonly saveAuthor: (options: AuthorServiceOptions['saveAuthor']) => Promise<
-        Dynamic_Author
+        AuthorDto['AuthorService/DEFAULT_FETCHER']
     > = async(options) => {
         let _uri = '/author';
-        return (await this.executor({uri: _uri, method: 'PUT', body: options.body})) as Promise<Dynamic_Author>;
+        return (await this.executor({uri: _uri, method: 'PUT', body: options.body})) as Promise<AuthorDto['AuthorService/DEFAULT_FETCHER']>;
     }
 }
 

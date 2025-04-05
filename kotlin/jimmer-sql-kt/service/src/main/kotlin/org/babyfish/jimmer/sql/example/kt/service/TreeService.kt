@@ -51,7 +51,7 @@ class TreeService(
     @Throws(SaveException::class)
     fun saveTree(
         @RequestBody input: RecursiveTreeInput // (2)
-    ): TreeNode {
+    ): @FetchBy("RECURSIVE_FETCHER") TreeNode {
         val treeNode = new(TreeNode::class).by(
             input.toEntity()
         ) {
@@ -70,7 +70,9 @@ class TreeService(
              */
             parent = null
         }
-        return treeNodeRepository.save(treeNode).modifiedEntity
+        return treeNodeRepository
+            .save(treeNode, RECURSIVE_FETCHER)
+            .modifiedEntity
     }
 
     @DeleteMapping("/tree/{id}")

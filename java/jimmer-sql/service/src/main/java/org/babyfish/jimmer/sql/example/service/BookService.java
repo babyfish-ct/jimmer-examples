@@ -148,8 +148,12 @@ public class BookService implements Fetchers {
                     );
 
     @PutMapping
-    public Book saveBook(@RequestBody BookInput input) throws SaveException {
-        return bookRepository.save(input).getModifiedEntity();
+    public @FetchBy("DEFAULT_FETCHER") Book saveBook(
+            @RequestBody BookInput input
+    ) throws SaveException {
+        return bookRepository
+                .save(input, DEFAULT_FETCHER)
+                .getModifiedEntity();
     }
 
     @DeleteMapping("/{id}")

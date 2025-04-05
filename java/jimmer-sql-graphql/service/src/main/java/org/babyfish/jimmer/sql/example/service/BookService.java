@@ -77,8 +77,10 @@ public class BookService {
     // --- Mutation ---
 
     @MutationMapping
-    public Book saveBook(@Argument BookInput input) {
-        return bookRepository.save(input).getModifiedEntity();
+    public Book saveBook(@Argument BookInput input, DataFetchingEnvironment env) {
+        return bookRepository
+                .save(input, DataFetchingEnvironments.createFetcher(Book.class, env))
+                .getModifiedEntity();
     }
 
     @MutationMapping

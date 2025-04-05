@@ -1,12 +1,6 @@
 import type {Executor} from '../';
 import type {BookDto} from '../model/dto/';
-import type {Dynamic_Book} from '../model/dynamic/';
-import type {
-    BookInput, 
-    BookSpecification, 
-    CompositeBookInput, 
-    Page
-} from '../model/static/';
+import type {BookInput, BookSpecification, Page} from '../model/static/';
 
 export class BookService {
     
@@ -174,17 +168,10 @@ export class BookService {
     }
     
     readonly saveBook: (options: BookServiceOptions['saveBook']) => Promise<
-        Dynamic_Book
+        BookDto['BookService/DEFAULT_FETCHER']
     > = async(options) => {
         let _uri = '/book';
-        return (await this.executor({uri: _uri, method: 'PUT', body: options.body})) as Promise<Dynamic_Book>;
-    }
-    
-    readonly saveCompositeBook: (options: BookServiceOptions['saveCompositeBook']) => Promise<
-        Dynamic_Book
-    > = async(options) => {
-        let _uri = '/book/composite';
-        return (await this.executor({uri: _uri, method: 'PUT', body: options.body})) as Promise<Dynamic_Book>;
+        return (await this.executor({uri: _uri, method: 'PUT', body: options.body})) as Promise<BookDto['BookService/DEFAULT_FETCHER']>;
     }
 }
 
@@ -211,9 +198,6 @@ export type BookServiceOptions = {
     }, 
     'saveBook': {
         readonly body: BookInput
-    }, 
-    'saveCompositeBook': {
-        readonly body: CompositeBookInput
     }, 
     'deleteBook': {
         readonly id: number

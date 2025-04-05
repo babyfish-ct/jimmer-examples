@@ -62,26 +62,32 @@ class BookStoreService(
 
     @PutMapping
     @Throws(SaveException::class) // (6)
-    fun saveBookStore(@RequestBody input: BookStoreInput): BookStore = // (7)
-        bookStoreRepository.save(input).modifiedEntity
+    fun saveBookStore(
+        @RequestBody input: BookStoreInput
+    ): @FetchBy("DEFAULT_FETCHER") BookStore = // (7)
+        bookStoreRepository
+            .save(input, DEFAULT_FETCHER)
+            .modifiedEntity
 
     @PostMapping("/deep")
     @Throws(SaveException::class) // (6)
     fun createDeepBookStore(
         @RequestBody input: CompositeBookStoreInput
-    ): BookStore = // (7)
-        bookStoreRepository.save(input) {
-            setMode(SaveMode.INSERT_ONLY)
-        }.modifiedEntity
+    ): @FetchBy("WITH_ALL_BOOKS_FETCHER") BookStore = // (7)
+        bookStoreRepository
+            .save(input, WITH_ALL_BOOKS_FETCHER) {
+                setMode(SaveMode.INSERT_ONLY)
+            }.modifiedEntity
 
     @PutMapping("/{id}/deep")
     @Throws(SaveException::class) // (6)
     fun updateDeepBookStoreById(
         @PathVariable id: Long,
         @RequestBody input: CompositeBookStoreInput
-    ): BookStore = // (7)
+    ): @FetchBy("WITH_ALL_BOOKS_FETCHER") BookStore = // (7)
         bookStoreRepository.save(
-            input.toEntity { this.id = id }
+            input.toEntity { this.id = id },
+            WITH_ALL_BOOKS_FETCHER
         ) {
             setMode(SaveMode.UPDATE_ONLY)
         }.modifiedEntity
@@ -90,8 +96,8 @@ class BookStoreService(
     @Throws(SaveException::class) // (6)
     fun updateDeepBookStoreByKey(
         @RequestBody input: CompositeBookStoreInput
-    ): BookStore = // (7)
-        bookStoreRepository.save(input) {
+    ): @FetchBy("WITH_ALL_BOOKS_FETCHER") BookStore = // (7)
+        bookStoreRepository.save(input, WITH_ALL_BOOKS_FETCHER) {
             setMode(SaveMode.UPDATE_ONLY)
         }.modifiedEntity
 

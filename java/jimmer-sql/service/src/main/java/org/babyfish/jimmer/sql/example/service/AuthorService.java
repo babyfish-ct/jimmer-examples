@@ -84,8 +84,12 @@ public class AuthorService implements Fetchers {
                     );
 
     @PutMapping
-    public Author saveAuthor(@RequestBody AuthorInput input) throws SaveException {
-        return authorRepository.save(input).getModifiedEntity();
+    public @FetchBy("DEFAULT_FETCHER") Author saveAuthor(
+            @RequestBody AuthorInput input
+    ) throws SaveException {
+        return authorRepository
+                .save(input, DEFAULT_FETCHER)
+                .getModifiedEntity();
     }
 
     @DeleteMapping("/{id}")

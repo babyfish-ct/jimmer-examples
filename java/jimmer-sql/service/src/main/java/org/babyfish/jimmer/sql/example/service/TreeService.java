@@ -67,7 +67,7 @@ public class TreeService implements Fetchers {
     }
 
     @PutMapping("/root/recursive")
-    public TreeNode saveTree(@RequestBody RecursiveTreeInput input) throws SaveException {
+    public @FetchBy("RECURSIVE_FETCHER") TreeNode saveTree(@RequestBody RecursiveTreeInput input) throws SaveException {
         TreeNode rootNode = Immutables.createTreeNode(
 
                 input.toEntity(),
@@ -87,7 +87,9 @@ public class TreeService implements Fetchers {
                  */
                 draft -> draft.setParent(null)
         );
-        return treeNodeRepository.save(rootNode).getModifiedEntity();
+        return treeNodeRepository
+                .save(rootNode, RECURSIVE_FETCHER)
+                .getModifiedEntity();
     }
 
     @DeleteMapping("/{id}")

@@ -66,8 +66,13 @@ class BookService(
     // --- Mutation ---
 
     @MutationMapping
-    fun saveBook(@Argument input: BookInput): Book =
-        bookRepository.save(input).modifiedEntity
+    fun saveBook(
+        @Argument input: BookInput,
+        env: DataFetchingEnvironment
+    ): Book =
+        bookRepository
+            .save(input, env.toFetcher())
+            .modifiedEntity
 
     @MutationMapping
     fun deleteBook(@Argument id: Long): Int {

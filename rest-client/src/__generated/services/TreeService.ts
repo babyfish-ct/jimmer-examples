@@ -1,6 +1,5 @@
 import type {Executor} from '../';
 import type {TreeNodeDto} from '../model/dto/';
-import type {Dynamic_TreeNode} from '../model/dynamic/';
 import type {FlatTreeNodeView, RecursiveTreeInput} from '../model/static/';
 
 export class TreeService {
@@ -56,10 +55,10 @@ export class TreeService {
     }
     
     readonly saveTree: (options: TreeServiceOptions['saveTree']) => Promise<
-        Dynamic_TreeNode
+        TreeNodeDto['TreeService/RECURSIVE_FETCHER']
     > = async(options) => {
         let _uri = '/tree/root/recursive';
-        return (await this.executor({uri: _uri, method: 'PUT', body: options.body})) as Promise<Dynamic_TreeNode>;
+        return (await this.executor({uri: _uri, method: 'PUT', body: options.body})) as Promise<TreeNodeDto['TreeService/RECURSIVE_FETCHER']>;
     }
 }
 

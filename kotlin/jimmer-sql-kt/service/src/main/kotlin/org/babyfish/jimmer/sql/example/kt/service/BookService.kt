@@ -88,8 +88,10 @@ class BookService(
 
     @PutMapping
     @Throws(SaveException::class) // (4)
-    fun saveBook(@RequestBody input: BookInput): Book = // (5)
-        bookRepository.save(input).modifiedEntity
+    fun saveBook(
+        @RequestBody input: BookInput
+    ): @FetchBy("DEFAULT_FETCHER") Book = // (5)
+        bookRepository.save(input, DEFAULT_FETCHER).modifiedEntity
 
     @DeleteMapping("/{id}")
     fun deleteBook(@PathVariable id: Long) {

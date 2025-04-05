@@ -1,6 +1,7 @@
 package org.babyfish.jimmer.sql.example.service;
 
 import org.babyfish.jimmer.client.FetchBy;
+import org.babyfish.jimmer.sql.ast.mutation.AssociatedSaveMode;
 import org.babyfish.jimmer.sql.ast.mutation.SaveMode;
 import org.babyfish.jimmer.sql.example.model.*;
 import org.babyfish.jimmer.sql.example.repository.BookStoreRepository;
@@ -138,40 +139,48 @@ public class BookStoreService implements Fetchers {
                     );
 
     @PutMapping
-    public BookStore saveBookStore(
+    public @FetchBy("DEFAULT_FETCHER") BookStore saveBookStore(
             @RequestBody BookStoreInput input
     ) throws SaveException {
-        return bookStoreRepository.save(input).getModifiedEntity();
+        return bookStoreRepository
+                .save(input, DEFAULT_FETCHER)
+                .getModifiedEntity();
     }
 
     @PostMapping("/deep")
-    public BookStore createDeepBookStore(
+    public @FetchBy("WITH_ALL_BOOKS_FETCHER") BookStore createDeepBookStore(
             @RequestBody CompositeBookStoreInput input
     ) throws SaveException {
         return bookStoreRepository.save(
                 input,
-                SaveMode.INSERT_ONLY
+                SaveMode.INSERT_ONLY,
+                AssociatedSaveMode.REPLACE,
+                WITH_ALL_BOOKS_FETCHER
         ).getModifiedEntity();
     }
 
     @PutMapping("/{id}/deep")
-    public BookStore updateDeepBookStoreById(
+    public @FetchBy("WITH_ALL_BOOKS_FETCHER") BookStore updateDeepBookStoreById(
             @PathVariable long id,
             @RequestBody CompositeBookStoreInput input
     ) throws SaveException {
         return bookStoreRepository.save(
                 input.toEntityById(id),
-                SaveMode.UPDATE_ONLY
+                SaveMode.UPDATE_ONLY,
+                AssociatedSaveMode.REPLACE,
+                WITH_ALL_BOOKS_FETCHER
         ).getModifiedEntity();
     }
 
     @PutMapping("/deep")
-    public BookStore updateDeepBookStoreByKey(
+    public @FetchBy("WITH_ALL_BOOKS_FETCHER") BookStore updateDeepBookStoreByKey(
             @RequestBody CompositeBookStoreInput input
     ) throws SaveException {
         return bookStoreRepository.save(
                 input,
-                SaveMode.UPDATE_ONLY
+                SaveMode.UPDATE_ONLY,
+                AssociatedSaveMode.REPLACE,
+                WITH_ALL_BOOKS_FETCHER
         ).getModifiedEntity();
     }
 

@@ -21,6 +21,7 @@ export const SaveErrorCode_CONSTANTS = [
     'TARGET_IS_NOT_TRANSFERABLE', 
     'INCOMPLETE_PROPERTY', 
     'NOT_UNIQUE', 
-    'ILLEGAL_TARGET_ID'
+    'ILLEGAL_TARGET_ID', 
+    'UNLOADED_FROZEN_BACK_REFERENCE'
 ] as const;
 export type SaveErrorCode = typeof SaveErrorCode_CONSTANTS[number];
