@@ -152,7 +152,8 @@ public class BookService implements Fetchers {
             @RequestBody BookInput input
     ) throws SaveException {
         return bookRepository
-                .save(input, DEFAULT_FETCHER)
+                .saveCommand(input)
+                .execute(DEFAULT_FETCHER)
                 .getModifiedEntity();
     }
 

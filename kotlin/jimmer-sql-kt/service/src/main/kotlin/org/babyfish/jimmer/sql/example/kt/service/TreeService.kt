@@ -71,7 +71,8 @@ class TreeService(
             parent = null
         }
         return treeNodeRepository
-            .save(treeNode, RECURSIVE_FETCHER)
+            .saveCommand(treeNode)
+            .execute(RECURSIVE_FETCHER)
             .modifiedEntity
     }
 

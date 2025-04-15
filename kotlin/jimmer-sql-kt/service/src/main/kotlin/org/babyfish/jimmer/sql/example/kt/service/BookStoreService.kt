@@ -66,7 +66,8 @@ class BookStoreService(
         @RequestBody input: BookStoreInput
     ): @FetchBy("DEFAULT_FETCHER") BookStore = // (7)
         bookStoreRepository
-            .save(input, DEFAULT_FETCHER)
+            .saveCommand(input)
+            .execute(DEFAULT_FETCHER)
             .modifiedEntity
 
     @PostMapping("/deep")
@@ -75,9 +76,9 @@ class BookStoreService(
         @RequestBody input: CompositeBookStoreInput
     ): @FetchBy("WITH_ALL_BOOKS_FETCHER") BookStore = // (7)
         bookStoreRepository
-            .save(input, WITH_ALL_BOOKS_FETCHER) {
-                setMode(SaveMode.INSERT_ONLY)
-            }.modifiedEntity
+            .saveCommand(input, SaveMode.INSERT_ONLY)
+            .execute(WITH_ALL_BOOKS_FETCHER)
+            .modifiedEntity
 
     @PutMapping("/{id}/deep")
     @Throws(SaveException::class) // (6)
@@ -85,21 +86,25 @@ class BookStoreService(
         @PathVariable id: Long,
         @RequestBody input: CompositeBookStoreInput
     ): @FetchBy("WITH_ALL_BOOKS_FETCHER") BookStore = // (7)
-        bookStoreRepository.save(
-            input.toEntity { this.id = id },
-            WITH_ALL_BOOKS_FETCHER
-        ) {
-            setMode(SaveMode.UPDATE_ONLY)
-        }.modifiedEntity
+        // Update by id
+        bookStoreRepository
+            .saveCommand(
+                input.toEntity { this.id = id },
+                SaveMode.UPDATE_ONLY
+            )
+            .execute(WITH_ALL_BOOKS_FETCHER)
+            .modifiedEntity
 
     @PutMapping("/deep")
     @Throws(SaveException::class) // (6)
     fun updateDeepBookStoreByKey(
         @RequestBody input: CompositeBookStoreInput
     ): @FetchBy("WITH_ALL_BOOKS_FETCHER") BookStore = // (7)
-        bookStoreRepository.save(input, WITH_ALL_BOOKS_FETCHER) {
-            setMode(SaveMode.UPDATE_ONLY)
-        }.modifiedEntity
+        // Update by key(name)
+        bookStoreRepository
+            .saveCommand(input, SaveMode.UPDATE_ONLY)
+            .execute(WITH_ALL_BOOKS_FETCHER)
+            .modifiedEntity
 
     @DeleteMapping("{id}")
     fun deleteBookStore(@PathVariable id: Long) {

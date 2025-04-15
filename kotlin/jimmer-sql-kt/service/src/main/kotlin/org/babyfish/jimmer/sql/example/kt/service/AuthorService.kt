@@ -59,7 +59,10 @@ class AuthorService(
     fun saveAuthor(
         @RequestBody input: AuthorInput
     ): @FetchBy("DEFAULT_FETCHER") Author =
-        authorRepository.save(input, DEFAULT_FETCHER).modifiedEntity
+        authorRepository
+            .saveCommand(input)
+            .execute(DEFAULT_FETCHER)
+            .modifiedEntity
 
     @DeleteMapping("/{id}")
     fun deleteAuthor(@PathVariable id: Long) {

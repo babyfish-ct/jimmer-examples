@@ -88,7 +88,8 @@ public class AuthorService implements Fetchers {
             @RequestBody AuthorInput input
     ) throws SaveException {
         return authorRepository
-                .save(input, DEFAULT_FETCHER)
+                .saveCommand(input)
+                .execute(DEFAULT_FETCHER)
                 .getModifiedEntity();
     }
 

@@ -91,7 +91,10 @@ class BookService(
     fun saveBook(
         @RequestBody input: BookInput
     ): @FetchBy("DEFAULT_FETCHER") Book = // (5)
-        bookRepository.save(input, DEFAULT_FETCHER).modifiedEntity
+        bookRepository
+            .saveCommand(input)
+            .execute(DEFAULT_FETCHER)
+            .modifiedEntity
 
     @DeleteMapping("/{id}")
     fun deleteBook(@PathVariable id: Long) {

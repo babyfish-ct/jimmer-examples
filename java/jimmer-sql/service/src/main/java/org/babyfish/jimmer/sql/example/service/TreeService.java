@@ -88,7 +88,8 @@ public class TreeService implements Fetchers {
                 draft -> draft.setParent(null)
         );
         return treeNodeRepository
-                .save(rootNode, RECURSIVE_FETCHER)
+                .saveCommand(rootNode)
+                .execute(RECURSIVE_FETCHER)
                 .getModifiedEntity();
     }
 

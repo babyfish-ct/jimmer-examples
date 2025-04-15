@@ -143,7 +143,8 @@ public class BookStoreService implements Fetchers {
             @RequestBody BookStoreInput input
     ) throws SaveException {
         return bookStoreRepository
-                .save(input, DEFAULT_FETCHER)
+                .saveCommand(input)
+                .execute(DEFAULT_FETCHER)
                 .getModifiedEntity();
     }
 
@@ -151,12 +152,11 @@ public class BookStoreService implements Fetchers {
     public @FetchBy("WITH_ALL_BOOKS_FETCHER") BookStore createDeepBookStore(
             @RequestBody CompositeBookStoreInput input
     ) throws SaveException {
-        return bookStoreRepository.save(
-                input,
-                SaveMode.INSERT_ONLY,
-                AssociatedSaveMode.REPLACE,
-                WITH_ALL_BOOKS_FETCHER
-        ).getModifiedEntity();
+        return bookStoreRepository
+                .saveCommand(input)
+                .setMode(SaveMode.INSERT_ONLY)
+                .execute(WITH_ALL_BOOKS_FETCHER)
+                .getModifiedEntity();
     }
 
     @PutMapping("/{id}/deep")
@@ -164,24 +164,24 @@ public class BookStoreService implements Fetchers {
             @PathVariable long id,
             @RequestBody CompositeBookStoreInput input
     ) throws SaveException {
-        return bookStoreRepository.save(
-                input.toEntityById(id),
-                SaveMode.UPDATE_ONLY,
-                AssociatedSaveMode.REPLACE,
-                WITH_ALL_BOOKS_FETCHER
-        ).getModifiedEntity();
+        // Update by id
+        return bookStoreRepository
+                .saveCommand(input.toEntityById(id))
+                .setMode(SaveMode.UPDATE_ONLY)
+                .execute(WITH_ALL_BOOKS_FETCHER)
+                .getModifiedEntity();
     }
 
     @PutMapping("/deep")
     public @FetchBy("WITH_ALL_BOOKS_FETCHER") BookStore updateDeepBookStoreByKey(
             @RequestBody CompositeBookStoreInput input
     ) throws SaveException {
-        return bookStoreRepository.save(
-                input,
-                SaveMode.UPDATE_ONLY,
-                AssociatedSaveMode.REPLACE,
-                WITH_ALL_BOOKS_FETCHER
-        ).getModifiedEntity();
+        // Update by key(name)
+        return bookStoreRepository
+                .saveCommand(input)
+                .setMode(SaveMode.UPDATE_ONLY)
+                .execute(WITH_ALL_BOOKS_FETCHER)
+                .getModifiedEntity();
     }
 
     @DeleteMapping("/{id}")
