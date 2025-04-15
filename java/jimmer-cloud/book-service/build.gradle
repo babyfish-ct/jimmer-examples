@@ -17,6 +17,10 @@ dependencyManagement {
 dependencies {
 
     implementation "org.babyfish.jimmer:jimmer-spring-boot-starter:$jimmerVersion"
+
+    // If Jimmer's remote association is used,
+    // please manually add the ANTLR runtime dependency.
+    // Otherwise, it is unnecessary
     implementation "org.antlr:antlr4-runtime:$antlrVersion"
 
     implementation 'org.springframework.boot:spring-boot-starter-web'

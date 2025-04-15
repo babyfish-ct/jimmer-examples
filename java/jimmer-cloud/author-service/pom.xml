@@ -27,11 +27,18 @@
             <artifactId>jimmer-spring-boot-starter</artifactId>
             <version>${jimmer.version}</version>
         </dependency>
+
+        <!--
+        If Jimmer's remote association is used,
+        please manually add the ANTLR runtime dependency.
+        Otherwise, it is unnecessary
+        -->
         <dependency>
             <groupId>org.antlr</groupId>
             <artifactId>antlr4-runtime</artifactId>
             <version>${antlr.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>

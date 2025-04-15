@@ -30,7 +30,12 @@ dependencies {
     ksp("org.babyfish.jimmer:jimmer-ksp:${jimmerVersion}")
 
     implementation("org.babyfish.jimmer:jimmer-spring-boot-starter:$jimmerVersion")
+
+    // If Jimmer's remote association is used,
+    // please manually add the ANTLR runtime dependency.
+    // Otherwise, it is unnecessary
     runtimeOnly("org.antlr:antlr4-runtime:$antlrVersion")
+
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
     implementation("org.springframework.cloud:spring-cloud-starter-loadbalancer")
