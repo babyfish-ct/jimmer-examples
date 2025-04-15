@@ -67,12 +67,9 @@ public class BookStoreService {
             DataFetchingEnvironment env
     ) {
         return bookStoreRepository
-                .save(
-                        input,
-                        SaveMode.INSERT_ONLY,
-                        AssociatedSaveMode.REPLACE,
-                        DataFetchingEnvironments.createFetcher(BookStore.class, env)
-                )
+                .saveCommand(input)
+                .setMode(SaveMode.INSERT_ONLY)
+                .execute(DataFetchingEnvironments.createFetcher(BookStore.class, env))
                 .getModifiedEntity();
     }
 
@@ -83,12 +80,10 @@ public class BookStoreService {
             DataFetchingEnvironment env
     ) {
         return bookStoreRepository
-                .save(
-                        input.toEntityById(id),
-                        SaveMode.UPDATE_ONLY,
-                        AssociatedSaveMode.REPLACE,
-                        DataFetchingEnvironments.createFetcher(BookStore.class, env)
-                ).getModifiedEntity();
+                .saveCommand(input.toEntityById(id))
+                .setMode(SaveMode.UPDATE_ONLY)
+                .execute(DataFetchingEnvironments.createFetcher(BookStore.class, env))
+                .getModifiedEntity();
     }
 
     @MutationMapping
@@ -97,12 +92,9 @@ public class BookStoreService {
             DataFetchingEnvironment env
     ) {
         return bookStoreRepository
-                .save(
-                        input,
-                        SaveMode.UPDATE_ONLY,
-                        AssociatedSaveMode.REPLACE,
-                        DataFetchingEnvironments.createFetcher(BookStore.class, env)
-                )
+                .saveCommand(input)
+                .setMode(SaveMode.UPDATE_ONLY)
+                .execute(DataFetchingEnvironments.createFetcher(BookStore.class, env))
                 .getModifiedEntity();
     }
 

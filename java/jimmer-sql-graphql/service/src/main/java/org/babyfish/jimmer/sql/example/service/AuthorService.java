@@ -49,7 +49,8 @@ public class AuthorService {
     @MutationMapping
     public Author saveAuthor(@Argument AuthorInput input, DataFetchingEnvironment env) {
         return authorRepository
-                .save(input, DataFetchingEnvironments.createFetcher(Author.class, env))
+                .saveCommand(input)
+                .execute(DataFetchingEnvironments.createFetcher(Author.class, env))
                 .getModifiedEntity();
     }
 

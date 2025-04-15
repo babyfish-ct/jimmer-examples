@@ -50,7 +50,8 @@ class BookStoreService(
         env: DataFetchingEnvironment
     ): BookStore =
         bookStoreRepository
-            .save(input, env.toFetcher())
+            .saveCommand(input)
+            .execute(env.toFetcher())
             .modifiedEntity
 
     @MutationMapping
@@ -58,12 +59,10 @@ class BookStoreService(
         @Argument input: CompositeBookStoreInput,
         env: DataFetchingEnvironment
     ): BookStore {
-        return bookStoreRepository.save(
-            input,
-            SaveMode.INSERT_ONLY,
-            AssociatedSaveMode.REPLACE,
-            env.toFetcher()
-        ).modifiedEntity
+        return bookStoreRepository
+            .saveCommand(input, SaveMode.INSERT_ONLY)
+            .execute(env.toFetcher())
+            .modifiedEntity
     }
 
     @MutationMapping
@@ -72,12 +71,13 @@ class BookStoreService(
         @Argument input: CompositeBookStoreInput,
         env: DataFetchingEnvironment
     ): BookStore {
-        return bookStoreRepository.save(
-            input.toEntity { this.id = id },
-            SaveMode.UPDATE_ONLY,
-            AssociatedSaveMode.REPLACE,
-            env.toFetcher()
-        ).modifiedEntity
+        return bookStoreRepository
+            .saveCommand(
+                input.toEntity { this.id = id },
+                SaveMode.UPDATE_ONLY,
+            )
+            .execute(env.toFetcher())
+            .modifiedEntity
     }
 
     @MutationMapping
@@ -85,12 +85,10 @@ class BookStoreService(
         @Argument input: CompositeBookStoreInput,
         env: DataFetchingEnvironment
     ): BookStore {
-        return bookStoreRepository.save(
-            input,
-            SaveMode.UPDATE_ONLY,
-            AssociatedSaveMode.REPLACE,
-            env.toFetcher()
-        ).modifiedEntity
+        return bookStoreRepository
+            .saveCommand(input, SaveMode.UPDATE_ONLY)
+            .execute(env.toFetcher())
+            .modifiedEntity
     }
 
     @MutationMapping

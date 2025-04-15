@@ -79,7 +79,8 @@ public class BookService {
     @MutationMapping
     public Book saveBook(@Argument BookInput input, DataFetchingEnvironment env) {
         return bookRepository
-                .save(input, DataFetchingEnvironments.createFetcher(Book.class, env))
+                .saveCommand(input)
+                .execute(DataFetchingEnvironments.createFetcher(Book.class, env))
                 .getModifiedEntity();
     }
 
