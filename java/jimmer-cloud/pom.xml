@@ -6,7 +6,7 @@
 
     <groupId>org.babyfish.jimmer.sql.example.cloud</groupId>
     <artifactId>jimmer-sql-cloud</artifactId>
-    <version>0.9.74</version>
+    <version>0.9.75</version>
 
     <packaging>pom</packaging>
 
@@ -19,7 +19,7 @@
     </modules>
 
     <properties>
-        <jimmer.version>0.9.74</jimmer.version>
+        <jimmer.version>0.9.75</jimmer.version>
 
         <!--Jimmer remote associations require ANTLR-->
         <antlr.version>4.13.1</antlr.version>

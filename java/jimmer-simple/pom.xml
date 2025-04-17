@@ -18,10 +18,10 @@
 
     <groupId>org.babyfish.jimmer.sql.example</groupId>
     <artifactId>jimmer-simple</artifactId>
-    <version>0.9.74</version>
+    <version>0.9.75</version>
 
     <properties>
-        <jimmer.version>0.9.74</jimmer.version>
+        <jimmer.version>0.9.75</jimmer.version>
         <spring.boot.version>2.7.0</spring.boot.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
