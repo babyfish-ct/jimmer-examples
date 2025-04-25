@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.babyfish.jimmer.sql.example</groupId>
         <artifactId>jimmer-sql</artifactId>
-        <version>0.9.76</version>
+        <version>0.9.77</version>
     </parent>
 
     <artifactId>repository</artifactId>
