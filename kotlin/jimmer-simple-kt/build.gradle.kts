@@ -1,14 +1,14 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.9.21"
-    kotlin("plugin.spring") version "1.9.21"
-    id("com.google.devtools.ksp") version "1.9.21-1.0.15"
+    kotlin("jvm") version "2.1.20"
+    kotlin("plugin.spring") version "2.1.20"
+    id("com.google.devtools.ksp") version "2.1.20-2.0.0"
     id("org.springframework.boot") version "2.7.0"
     id("io.spring.dependency-management") version "1.0.12.RELEASE"
 }
 
-val jimmerVersion = "0.9.77"
+val jimmerVersion = "0.9.78"
 group = "org.babyfish.jimmer.example.kt"
 version = jimmerVersion
 

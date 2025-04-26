@@ -1,9 +1,9 @@
 plugins {
-    kotlin("jvm") version "1.9.21"
-    id("com.google.devtools.ksp") version "1.9.21-1.0.15"
+    kotlin("jvm") version "2.1.20"
+    id("com.google.devtools.ksp") version "2.1.20-2.0.0"
 }
 
-val jimmerVersion = "0.9.77"
+val jimmerVersion = "0.9.78"
 
 group = "org.babyfish.jimmer.example.save"
 version = jimmerVersion
