@@ -1,5 +1,5 @@
 ext {
-    jimmerVersion = "0.9.78"
+    jimmerVersion = "0.9.79"
 
     // Jimmer remote associations require ANTLR
     antlrVersion = "4.13.1"
