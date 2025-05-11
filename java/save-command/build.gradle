@@ -3,7 +3,7 @@ plugins {
 }
 
 ext {
-    jimmerVersion = "0.9.81"
+    jimmerVersion = "0.9.82"
 }
 
 group 'org.example'
