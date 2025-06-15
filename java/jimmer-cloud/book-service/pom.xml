@@ -6,13 +6,13 @@
     <parent>
         <groupId>org.babyfish.jimmer.sql.example.cloud</groupId>
         <artifactId>jimmer-sql-cloud</artifactId>
-        <version>0.9.92</version>
+        <version>0.9.93</version>
     </parent>
 
     <artifactId>book-service</artifactId>
 
     <properties>
-        <jimmer.version>0.9.92</jimmer.version>
+        <jimmer.version>0.9.93</jimmer.version>
         <spring.boot.version>2.7.0</spring.boot.version>
     </properties>
 
