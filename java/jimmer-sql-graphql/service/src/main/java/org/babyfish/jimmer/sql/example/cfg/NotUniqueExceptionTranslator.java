@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class NotUniqueExceptionTranslator implements ExceptionTranslator<SaveException.NotUnique> {
 
     @Override
-    public @Nullable Exception translate(@NotNull SaveException.NotUnique ex, @NotNull Args args) {
+    public @Nullable Exception translate(@NotNull SaveException.NotUnique ex, @Nullable Args args) {
         if (ex.isMatched(BookStoreProps.NAME)) {
             throw new IllegalArgumentException(
                     "The book store with name \"" +

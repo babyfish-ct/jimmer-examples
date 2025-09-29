@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class NotUniqueExceptionTranslator() : ExceptionTranslator<SaveException.NotUnique> {
-    override fun translate(ex: SaveException.NotUnique, args: ExceptionTranslator.Args): Exception? {
+    override fun translate(ex: SaveException.NotUnique, args: ExceptionTranslator.Args?): Exception? {
         if (ex.isMatched(BookStore::name)) {
             throw IllegalArgumentException(
                 "The book store with name \"" +

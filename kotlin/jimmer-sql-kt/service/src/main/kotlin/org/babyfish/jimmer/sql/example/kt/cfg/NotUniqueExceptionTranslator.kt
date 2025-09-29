@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class NotUniqueExceptionTranslator() : ExceptionTranslator<NotUnique> {
-    override fun translate(ex: NotUnique, args: ExceptionTranslator.Args): Exception? {
+    override fun translate(ex: NotUnique, args: ExceptionTranslator.Args?): Exception? {
         if (ex.isMatched(TreeNode::parent, TreeNode::name)) {
             throw IllegalArgumentException(
                 "The tree node with parent id \"" +
