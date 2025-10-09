@@ -3,9 +3,9 @@ package org.babyfish.jimmer.sql.example.kt.runtime.cache
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.babyfish.jimmer.meta.ImmutableProp
 import org.babyfish.jimmer.meta.ImmutableType
+import org.babyfish.jimmer.spring.cache.RedisCacheCreator
 import org.babyfish.jimmer.sql.cache.Cache
 import org.babyfish.jimmer.sql.cache.CacheFactory
-import org.babyfish.jimmer.sql.cache.redis.spring.RedisCacheCreator
 import org.babyfish.jimmer.sql.cache.redisson.RedissonCacheLocker
 import org.babyfish.jimmer.sql.cache.redisson.RedissonCacheTracker
 import org.babyfish.jimmer.sql.kt.cache.AbstractKCacheFactory
