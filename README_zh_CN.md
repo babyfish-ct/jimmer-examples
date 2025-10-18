@@ -8,7 +8,7 @@
 
 然而，Java25需要更高版本的gradle，这会因spring-gradle插件问题而进一步影响spring boot的版本，最终影响到实际能采纳的Java语言的版本。因此，涉及spring的例子已经无法实现从Java8到Java25的全面兼顾。
 
-因为保证使用Java25的用户可以正确执行这些例子，所有和spring-boot有关的例子采用spring-boot 3.x, 必须要求java17.
+为保证使用Java25的用户可以正确执行这些例子，所有和spring-boot有关的例子采用spring-boot 3.x, 必须要求java17.
 
 ## 子目录
 
