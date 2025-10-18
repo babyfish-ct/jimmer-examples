@@ -15,6 +15,10 @@ spring:
   redis:
     host: localhost
     port: 4400
+    redisson:
+      config: |
+        singleServerConfig:
+          address: "redis://${spring.redis.host}:${spring.redis.port}"
   kafka:
     consumer:
       bootstrap-servers: localhost:4100

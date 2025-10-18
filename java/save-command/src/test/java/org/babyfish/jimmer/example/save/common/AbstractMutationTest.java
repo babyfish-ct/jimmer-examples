@@ -246,4 +246,14 @@ public abstract class AbstractMutationTest {
             raw.close();
         }
     }
+
+    protected static void assertContent(
+            String expected,
+            Object obj
+    ) {
+        Assertions.assertEquals(
+                expected.replace("--->", "").replace("\r", "").replace("\n", ""),
+                obj.toString()
+        );
+    }
 }

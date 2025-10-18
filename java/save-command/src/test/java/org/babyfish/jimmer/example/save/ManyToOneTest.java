@@ -19,7 +19,7 @@ import java.math.BigDecimal;
  *
  *
  * SaveModeTest -> IncompleteObjectTest -> [current: ManyToOneTest] ->
- * OneToManyTest -> ManyToManyTest -> RecursiveTest -> TriggerTest
+ * OneToManyTest -> ManyToManyTest -> BulkTest -> RecursiveTest -> TriggerTest
  */
 public class ManyToOneTest extends AbstractMutationTest {
 

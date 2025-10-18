@@ -1,6 +1,6 @@
 ext {
-    jimmerVersion = "0.9.111"
-    springBootVersion = "2.7.0"
+    jimmerVersion = "0.9.112"
+    springBootVersion = "3.5.6"
 }
 
 allprojects {

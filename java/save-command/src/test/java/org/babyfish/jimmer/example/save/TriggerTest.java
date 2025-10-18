@@ -7,11 +7,11 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 
 /**
- * Recommended learning sequence: 7
+ * Recommended learning sequence: 8
  *
  *
  * SaveModeTest -> IncompleteObjectTest -> ManyToOneTest ->
- * OneToManyTest -> ManyToManyTest -> RecursiveTest -> [Current: TriggerTest]
+ * OneToManyTest -> ManyToManyTest -> BulkTest -> RecursiveTest -> [Current: TriggerTest]
  */
 public class TriggerTest extends AbstractMutationWithTriggerTest {
 

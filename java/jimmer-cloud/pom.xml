@@ -6,7 +6,7 @@
 
     <groupId>org.babyfish.jimmer.sql.example.cloud</groupId>
     <artifactId>jimmer-sql-cloud</artifactId>
-    <version>0.9.111</version>
+    <version>0.9.112</version>
 
     <packaging>pom</packaging>
 
@@ -19,15 +19,15 @@
     </modules>
 
     <properties>
-        <jimmer.version>0.9.111</jimmer.version>
+        <jimmer.version>0.9.112</jimmer.version>
 
         <!--Jimmer remote associations require ANTLR-->
         <antlr.version>4.13.1</antlr.version>
 
-        <spring.boot.version>2.7.0</spring.boot.version>
-        <spring.cloud.version>2021.0.3</spring.cloud.version>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <spring.boot.version>3.4.0</spring.boot.version>
+        <spring.cloud.version>2024.0.0</spring.cloud.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 

@@ -19,12 +19,12 @@ dependencies {
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.9.3'
 }
 
 java {
-    toolchain { 
-        languageVersion = JavaLanguageVersion.of(8)
-    }
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
 }
 
 test {

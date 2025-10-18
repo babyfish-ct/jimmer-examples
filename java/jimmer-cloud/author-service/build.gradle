@@ -1,7 +1,7 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '2.7.0'
-    id 'io.spring.dependency-management' version '1.1.0'
+    id 'org.springframework.boot' version "$springBootVersion"
+    id 'io.spring.dependency-management' version '1.1.7'
 }
 
 repositories {
@@ -17,6 +17,7 @@ dependencyManagement {
 dependencies {
 
     implementation "org.babyfish.jimmer:jimmer-spring-boot-starter:$jimmerVersion"
+    annotationProcessor "org.babyfish.jimmer:jimmer-apt:${jimmerVersion}"
 
     // If Jimmer's remote association is used,
     // please manually add the ANTLR runtime dependency.
@@ -33,12 +34,12 @@ dependencies {
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.9.3'
 }
 
 java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(8)
-    }
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
 }
 
 test {

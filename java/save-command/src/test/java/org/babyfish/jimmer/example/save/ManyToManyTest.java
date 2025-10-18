@@ -16,7 +16,7 @@ import java.util.Arrays;
  *
  *
  * SaveModeTest -> IncompleteObjectTest -> ManyToOneTest ->
- * OneToManyTest -> [Current: ManyToManyTest] -> RecursiveTest -> TriggerTest
+ * OneToManyTest -> [Current: ManyToManyTest] -> BulkTest -> RecursiveTest -> TriggerTest
  */
 public class ManyToManyTest extends AbstractMutationTest {
 

@@ -32,14 +32,14 @@ Fortunately, all services that depend on a database use the H2 embedded database
 
 Start Class | Priority | Access Method
 |---|---|---|
-|[registry-center/.../RegistryCenterApp.kt](./registry-center/src/main/kotlin/org/babyfish/jimmer/example/cloud/kt/RegistryCenterApp.kt) | Start first | `http://localhost:7000`|
-|[store-service/.../StoreServiceApp.kt](./store-service/src/main/kotlin/org/babyfish/jimmer/example/cloud/kt/store/StoreServiceApp.kt) | Start after the registry center is up | `http://localhost:7001/openapi.html`|
-|[book-service/.../BookServiceApp.kt](./book-service/src/main/kotlin/org/babyfish/jimmer/example/cloud/kt/book/BookServiceApp.kt) | Start after the registry center is up | `http://localhost:7002/openapi.html`|
-|[author-service/.../AuthorServiceApp.kt](./author-service/src/main/kotlin/org/babyfish/jimmer/example/cloud/kt/author/AuthorServiceApp.kt) | Start after the registry center is up | `http://localhost:7003/openapi.html`|
+|[registry-center/.../RegistryCenterApp.kt](./registry-center/src/main/kotlin/org/babyfish/jimmer/example/cloud/kt/RegistryCenterApp.kt) | Start first | `http://localhost:7100`|
+|[store-service/.../StoreServiceApp.kt](./store-service/src/main/kotlin/org/babyfish/jimmer/example/cloud/kt/store/StoreServiceApp.kt) | Start after the registry center is up | `http://localhost:7101/openapi.html`|
+|[book-service/.../BookServiceApp.kt](./book-service/src/main/kotlin/org/babyfish/jimmer/example/cloud/kt/book/BookServiceApp.kt) | Start after the registry center is up | `http://localhost:7102/openapi.html`|
+|[author-service/.../AuthorServiceApp.kt](./author-service/src/main/kotlin/org/babyfish/jimmer/example/cloud/kt/author/AuthorServiceApp.kt) | Start after the registry center is up | `http://localhost:7103/openapi.html`|
 
 After starting, you can access the OpenAPI of the last three services in the table above.
 
-Taking `http://localhost:7001/openapi.html` as an example, this service supports two `GET` requests:
+Taking `http://localhost:7101/openapi.html` as an example, this service supports two `GET` requests:
 
 - `/store/{id}`
 
@@ -51,7 +51,7 @@ Taking `http://localhost:7001/openapi.html` as an example, this service supports
 
     > If the communication between microservices fails, it may be due to accessing too early. Wait a few seconds.
     >
-    > If the communication between microservices still fails after waiting, you can visit `http://localhost:7000` to view the machine names of each service in the registry center and configure this name in your local hosts file.
+    > If the communication between microservices still fails after waiting, you can visit `http://localhost:7100` to view the machine names of each service in the registry center and configure this name in your local hosts file.
 
 The usage of other services is similar, so it will not be elaborated here.
 

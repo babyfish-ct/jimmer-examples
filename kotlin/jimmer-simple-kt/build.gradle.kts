@@ -4,15 +4,15 @@ plugins {
     kotlin("jvm") version "2.1.20"
     kotlin("plugin.spring") version "2.1.20"
     id("com.google.devtools.ksp") version "2.1.20-2.0.0"
-    id("org.springframework.boot") version "2.7.0"
-    id("io.spring.dependency-management") version "1.0.12.RELEASE"
+    id("org.springframework.boot") version "3.5.6"
+    id("io.spring.dependency-management") version "1.1.7"
 }
 
-val jimmerVersion = "0.9.111"
+val jimmerVersion = "0.9.112"
 group = "org.babyfish.jimmer.example.kt"
 version = jimmerVersion
 
-java.sourceCompatibility = JavaVersion.VERSION_1_8
+java.sourceCompatibility = JavaVersion.VERSION_17
 
 repositories {
     mavenCentral()
@@ -46,6 +46,8 @@ dependencies {
     runtimeOnly("com.h2database:h2:2.1.212")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.12.2")
 }
 
 // Without this configuration, gradle command can still run.
@@ -57,10 +59,10 @@ kotlin {
 }
 
 tasks.withType<KotlinCompile> {
-	kotlinOptions {
-		freeCompilerArgs = listOf("-Xjsr305=strict")
-		jvmTarget = "1.8"
-	}
+    kotlinOptions {
+        freeCompilerArgs = listOf("-Xjsr305=strict")
+        jvmTarget = "17"
+    }
 }
 
 tasks.withType<Test> {

@@ -1,5 +1,5 @@
-val jimmerVersion by extra { "0.9.111" }
-val springBootVersion by extra { "2.7.0" }
+val jimmerVersion by extra { "0.9.112" }
+val springBootVersion by extra { "3.5.6" }
 
 allprojects {
 	group = "org.babyfish.jimmer.example.kt"

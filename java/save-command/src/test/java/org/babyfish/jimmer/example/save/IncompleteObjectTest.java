@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
  *
  *
  * SaveModeTest -> [Current: IncompleteObjectTest] -> ManyToOneTest ->
- * OneToManyTest -> ManyToManyTest -> RecursiveTest -> TriggerTest
+ * OneToManyTest -> ManyToManyTest -> BulkTest -> RecursiveTest -> TriggerTest
  */
 public class IncompleteObjectTest extends AbstractMutationTest {
 

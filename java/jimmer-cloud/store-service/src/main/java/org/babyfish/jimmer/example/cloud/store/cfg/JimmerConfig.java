@@ -16,8 +16,8 @@ public class JimmerConfig {
     @Bean
     public RestTemplate restTemplate() {
         return new RestTemplateBuilder()
-                .setConnectTimeout(Duration.ofSeconds(1))
-                .setReadTimeout(Duration.ofSeconds(2))
+                .connectTimeout(Duration.ofSeconds(1))
+                .readTimeout(Duration.ofSeconds(2))
                 .build();
     }
 }

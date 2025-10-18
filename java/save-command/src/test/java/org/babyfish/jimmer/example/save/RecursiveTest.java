@@ -12,11 +12,11 @@ import java.util.Collections;
 
 
 /**
- * Recommended learning sequence: 6
+ * Recommended learning sequence: 7
  *
  *
  * SaveModeTest -> IncompleteObjectTest -> ManyToOneTest ->
- * OneToManyTest -> ManyToManyTest -> [current: RecursiveTest] -> TriggerTest
+ * OneToManyTest -> ManyToManyTest -> BulkTest -> [current: RecursiveTest] -> TriggerTest
  */
 public class RecursiveTest extends AbstractMutationTest {
 

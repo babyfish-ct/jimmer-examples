@@ -6,7 +6,7 @@
 
     <groupId>org.babyfish.jimmer.sql.example</groupId>
     <artifactId>jimmer-sql</artifactId>
-    <version>0.9.111</version>
+    <version>0.9.112</version>
 
     <packaging>pom</packaging>
 
@@ -18,10 +18,10 @@
     </modules>
 
     <properties>
-        <jimmer.version>0.9.111</jimmer.version>
-        <spring.boot.version>2.7.0</spring.boot.version>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <jimmer.version>0.9.112</jimmer.version>
+        <spring.boot.version>3.4.0</spring.boot.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 </project>

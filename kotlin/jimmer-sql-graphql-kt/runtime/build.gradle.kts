@@ -8,7 +8,7 @@ plugins {
 val jimmerVersion: String by rootProject.extra
 val springBootVersion: String by rootProject.extra
 
-java.sourceCompatibility = JavaVersion.VERSION_1_8
+java.sourceCompatibility = JavaVersion.VERSION_17
 
 repositories {
 	mavenCentral()
@@ -23,15 +23,15 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
 	implementation("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
-	implementation("org.redisson:redisson-spring-boot-starter:3.17.4")
-	implementation("org.springframework.kafka:spring-kafka:${springBootVersion}")
+	implementation("org.redisson:redisson-spring-boot-starter:3.52.0")
+	implementation("org.springframework.kafka:spring-kafka:3.3.4")
 	implementation("org.apache.kafka:connect-api:0.10.0.0")
 }
 
 tasks.withType<KotlinCompile> {
 	kotlinOptions {
 		freeCompilerArgs = listOf("-Xjsr305=strict")
-		jvmTarget = "1.8"
+		jvmTarget = "17"
 	}
 }
 

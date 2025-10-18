@@ -196,9 +196,17 @@ class BulkTest : AbstractMutationTest() {
             select(
                 table.fetchBy {
                     allScalarFields()
-                    books {
+                    books({
+                        filter {
+                            orderBy(table.id)
+                        }
+                    }) {
                         allScalarFields()
-                        authors {
+                        authors({
+                            filter {
+                                orderBy(table.id)
+                            }
+                        }) {
                             allScalarFields()
                         }
                     }

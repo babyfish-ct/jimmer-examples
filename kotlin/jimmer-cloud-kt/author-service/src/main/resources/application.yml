@@ -26,9 +26,9 @@ jimmer:
           version: "0.9.37"
 
 server:
-  port: 7003
+  port: 7103
 
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:7000/eureka
+      defaultZone: http://localhost:7100/eureka

@@ -67,7 +67,7 @@ docker run \
     -e BOOTSTRAP_SERVERS=kafka:9092 \
     --link debezium-demo-kafka:kafka \
     --link debezium-demo-postgres:postgres \
-    debezium/connect
+    debezium/connect:3.0.0.Final
 
 docker run \
 	--restart=always \

@@ -12,19 +12,19 @@ dependencies {
     implementation project(":repository")
 
     // For RedisConnectionFactory & Redisson
-    implementation 'org.redisson:redisson-spring-boot-starter:3.17.4'
+    implementation 'org.redisson:redisson-spring-boot-starter:3.52.0'
 
     // For HttpServletRequest(javax or jakatra)
     implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
 
     // For @KafkaListener
-    implementation "org.springframework.kafka:spring-kafka:${springBootVersion}"
+    implementation 'org.springframework.kafka:spring-kafka:3.3.4'
 
     implementation 'org.apache.kafka:connect-api:0.10.0.0'
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 

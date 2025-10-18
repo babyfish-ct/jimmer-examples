@@ -47,11 +47,11 @@ class BookService(
         @RequestParam(defaultValue = "5") pageSize: Int,
         // The `sortCode` also support implicit join, like `store.name asc`
         @RequestParam(defaultValue = "name asc, edition desc") sortCode: String,
-        @RequestParam name: String?,
-        @RequestParam minPrice: BigDecimal?,
-        @RequestParam maxPrice: BigDecimal?,
-        @RequestParam storeName: String?,
-        @RequestParam authorName: String?,
+        @RequestParam(required = false) name: String?,
+        @RequestParam(required = false) minPrice: BigDecimal?,
+        @RequestParam(required = false) maxPrice: BigDecimal?,
+        @RequestParam(required = false) storeName: String?,
+        @RequestParam(required = false) authorName: String?,
     ): Page<@FetchBy("DEFAULT_FETCHER") Book> = // (2)
         bookRepository.findBooks(
             PageRequest.of(pageIndex, pageSize, SortUtils.toSort(sortCode)),
