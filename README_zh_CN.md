@@ -2,6 +2,14 @@
 
 [English](./) | 中文
 
+## 注意
+
+理论上讲，Jimmer的运行时只需要Java8 *(如果使用了REST服务的文档或TypeScript自动生成功能并使用了@FetchBy注解，则需要用Java11编译代码)*。
+
+然而，Java25需要更高版本的gradle，这会因spring-gradle插件问题而进一步影响spring的版本，最终影响到实际能采纳的Java语言的版本。因此，涉及spring的例子已经无法实现从Java8到Java25的全面兼顾。
+
+因为保证使用Java25的用户可以正确执行这些例子，所有和spring有关的例子采用spring3.x, 必须要求java17.
+
 ## 子目录
 
 这是[Jimmer](https://github.com/babyfish-ct/jimmer)的例子合集，存在如下4个子目录：

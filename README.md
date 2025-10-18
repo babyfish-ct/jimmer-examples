@@ -2,6 +2,14 @@
 
 English | [中文](./README_zh_CN.md)
 
+## Note
+
+In theory, Jimmer's runtime only requires Java 8 *(if REST service documentation or TypeScript auto-generation features are used and the `@FetchBy` annotation is used, then Java 11 is needed to compile the code)*.
+
+However, Java 25 requires a higher version of Gradle, which further affects the Spring version due to spring-gradle plugin issues, ultimately impacting the actual Java language version that can be adopted. Therefore, examples involving Spring can no longer comprehensively support the full range from Java 8 to Java 25.
+
+To ensure that users with Java 25 can correctly execute these examples, all Spring-related examples use Spring 3.x and must require Java 17.
+
 ## Sub-directories
 
 This is a collection of examples for [Jimmer](https://github.com/babyfish-ct/jimmer), containing the following 4 sub-directories:
