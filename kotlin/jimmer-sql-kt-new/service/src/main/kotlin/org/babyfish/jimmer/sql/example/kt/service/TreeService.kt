@@ -1,0 +1,105 @@
+package org.babyfish.jimmer.sql.example.kt.service
+
+import org.babyfish.jimmer.client.FetchBy
+import org.babyfish.jimmer.sql.example.kt.repository.TreeNodeRepository
+import org.babyfish.jimmer.kt.new
+import org.babyfish.jimmer.sql.example.kt.model.TreeNode
+import org.babyfish.jimmer.sql.example.kt.model.by
+import org.babyfish.jimmer.sql.example.kt.service.dto.FlatTreeNodeView
+import org.babyfish.jimmer.sql.example.kt.service.dto.RecursiveTreeInput
+import org.babyfish.jimmer.sql.kt.fetcher.newFetcher
+import org.babyfish.jimmer.sql.exception.SaveException
+import org.springframework.transaction.annotation.Transactional
+import org.springframework.web.bind.annotation.*
+
+/*
+ * Why add spring web annotations to the service class?
+ *
+ * The success and popularity of rich client technologies represented by React, Vue and Angular
+ * have greatly reduced the significance of the Controller layer on the spring server side.
+ *
+ * Moreover, over-bloated code structures are not conducive to demonstrating the capabilities
+ * of the framework with small examples. Therefore, this example project no longer adheres to
+ * dogmatism and directly adds spring web annotations to the service class.
+ */
+@RestController
+@RequestMapping("/tree")
+@Transactional
+class TreeService(
+    private val treeNodeRepository: TreeNodeRepository
+) {
+
+    @GetMapping("/flatNodes")
+    fun findFlatNodes(
+        @RequestParam(required = false) name: String?
+    ): List<FlatTreeNodeView> =
+        treeNodeRepository.findByNameLikeIgnoreCase(name, FlatTreeNodeView::class)
+
+    @GetMapping("/roots/recursive")
+    fun findRootTrees(
+        @RequestParam(required = false) rootName: String?
+    ): List<@FetchBy("RECURSIVE_FETCHER") TreeNode> = // (1)
+        treeNodeRepository.findByParentIsNullAndName(rootName, RECURSIVE_FETCHER)
+
+    @GetMapping("/node/{id}")
+    fun findNodeById(
+        @PathVariable id: Long
+    ): @FetchBy("DETAIL_FETCHER") TreeNode? =
+        treeNodeRepository.findById(id, DETAIL_FETCHER)
+
+    @PutMapping("/root/recursive")
+    @Throws(SaveException::class)
+    fun saveTree(
+        @RequestBody input: RecursiveTreeInput // (2)
+    ): @FetchBy("RECURSIVE_FETCHER") TreeNode {
+        val treeNode = new(TreeNode::class).by(
+            input.toEntity()
+        ) {
+            /*
+             * `TreeNode` has two key properties: `name` and `parent`,
+             * this means `name` and `parent` must be specified when `id` is missing.
+             *
+             * One-to-many association is special, parent object can specify the
+             * many-to-one association of its child objects implicitly.
+             * In this demo, Associations named `childNodes` specify `parent`
+             * for child objects implicitly so that all child objects do not require
+             * the `parent`.
+             *
+             * However, the `parent` of ROOT cannot be specified implicitly,
+             * so that it must be specified manually
+             */
+            parent = null
+        }
+        return treeNodeRepository
+            .saveCommand(treeNode)
+            .execute(RECURSIVE_FETCHER)
+            .modifiedEntity
+    }
+
+    @DeleteMapping("/tree/{id}")
+    fun deleteTree(@PathVariable id: Long) {
+        treeNodeRepository.deleteById(id)
+    }
+
+    companion object {
+
+        private val RECURSIVE_FETCHER = newFetcher(TreeNode::class).by {
+            allScalarFields()
+            `childNodes*`() // `*` means recursive
+        }
+
+        private val DETAIL_FETCHER = newFetcher(TreeNode::class).by {
+            allScalarFields()
+            `parent*`()
+            `childNodes*`()
+        }
+    }
+}
+
+/*----------------Documentation Links----------------
+(1) https://babyfish-ct.github.io/jimmer-doc/docs/spring/client/api#declare-fetchby
+  https://babyfish-ct.github.io/jimmer/docs/query/object-fetcher/recursive
+
+(2) https://babyfish-ct.github.io/jimmer-doc/docs/mutation/save-command/input-dto/
+  https://babyfish-ct.github.io/jimmer/docs/object/view/dto-language#92-recursive-association
+---------------------------------------------------*/
