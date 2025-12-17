@@ -6,10 +6,10 @@
 
     <groupId>org.babyfish.jimmer.example</groupId>
     <artifactId>save-command</artifactId>
-    <version>0.9.117</version>
+    <version>0.9.119</version>
 
     <properties>
-        <jimmer.version>0.9.117</jimmer.version>
+        <jimmer.version>0.9.119</jimmer.version>
         <junit.version>5.8.1</junit.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
