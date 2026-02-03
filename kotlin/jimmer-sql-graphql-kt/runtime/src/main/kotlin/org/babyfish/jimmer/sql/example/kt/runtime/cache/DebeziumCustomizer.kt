@@ -28,7 +28,7 @@ class DebeziumCustomizer : KCustomizer {
             LocalDateTime::class
         ) { _, jsonNode ->
             Instant.ofEpochMilli(
-                jsonNode.asLong() / 1000
+                jsonNode.castTo(Long::class.java) / 1000
             ).atZone(ZoneId.systemDefault()).toLocalDateTime()
         }
 
@@ -37,7 +37,7 @@ class DebeziumCustomizer : KCustomizer {
         ) { _, jsonNode ->
             Decimal.toLogical(
                 BOOK_PRICE_SCHEMA,
-                Base64.getDecoder().decode(jsonNode.asText())
+                Base64.getDecoder().decode(jsonNode.castTo(String::class.java))
             )
         }
     }

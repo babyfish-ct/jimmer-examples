@@ -1,8 +1,7 @@
 package org.babyfish.jimmer.sql.example.runtime.cache;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.babyfish.jimmer.jackson.codec.JsonCodec;
+import org.babyfish.jimmer.jackson.codec.Node;
 import org.babyfish.jimmer.sql.JSqlClient;
 import org.babyfish.jimmer.sql.event.binlog.BinLog;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -21,7 +20,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MaxwellListener {
 
-    private static final ObjectMapper MAPPER = new ObjectMapper();
+    private static final JsonCodec<?> JSON_CODEC = JsonCodec.jsonCodec();
 
     private final BinLog binLog;
 
@@ -33,11 +32,11 @@ public class MaxwellListener {
     public void onMaxwellEvent(
             String json,
             Acknowledgment acknowledgment
-    ) throws JsonProcessingException {
-        JsonNode node = MAPPER.readTree(json);
-        String tableName = node.get("table").asText();
-        String type = node.get("type").asText();
-        JsonNode data = node.get("data");
+    ) throws Exception {
+        Node node = JSON_CODEC.treeReader().read(json);
+        String tableName = node.get("table").castTo(String.class);
+        String type = node.get("type").castTo(String.class);
+        Node data = node.get("data");
         switch (type) {
             case "insert":
                 binLog.accept(tableName, null, data);

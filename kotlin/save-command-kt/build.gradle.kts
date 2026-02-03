@@ -3,7 +3,7 @@ plugins {
     id("com.google.devtools.ksp") version "2.1.20-2.0.0"
 }
 
-val jimmerVersion = "0.9.120"
+val jimmerVersion = "0.10.6"
 
 group = "org.babyfish.jimmer.example.save"
 version = jimmerVersion
@@ -18,6 +18,7 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation(kotlin("stdlib-jdk8"))
     implementation("org.babyfish.jimmer:jimmer-sql-kotlin:${jimmerVersion}")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.21.0")
     ksp("org.babyfish.jimmer:jimmer-ksp:${jimmerVersion}")
     testImplementation("com.h2database:h2:2.1.212")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")

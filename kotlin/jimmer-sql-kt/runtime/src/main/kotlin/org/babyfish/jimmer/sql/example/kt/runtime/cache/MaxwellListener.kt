@@ -1,6 +1,6 @@
 package org.babyfish.jimmer.sql.example.kt.runtime.cache
 
-import com.fasterxml.jackson.databind.ObjectMapper
+import org.babyfish.jimmer.jackson.codec.JsonCodec
 import org.babyfish.jimmer.sql.event.binlog.BinLog
 import org.babyfish.jimmer.sql.kt.KSqlClient
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
@@ -26,9 +26,9 @@ class MaxwellListener(sqlClient: KSqlClient) {
         json: String,
         acknowledgment: Acknowledgment
     ) {
-        val node = MAPPER.readTree(json)
-        val tableName = node["table"].asText()
-        val type = node["type"].asText()
+        val node = JSON_CODEC.treeReader().read(json)
+        val tableName = node["table"].castTo(String::class.java)
+        val type = node["type"].castTo(String::class.java)
         val data = node["data"]
         when (type) {
             "insert" ->
@@ -42,7 +42,7 @@ class MaxwellListener(sqlClient: KSqlClient) {
     }
 
     companion object {
-        private val MAPPER = ObjectMapper()
+        private val JSON_CODEC = JsonCodec.jsonCodec()
     }
 }
 

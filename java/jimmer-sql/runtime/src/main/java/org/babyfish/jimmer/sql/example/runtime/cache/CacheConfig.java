@@ -1,6 +1,6 @@
 package org.babyfish.jimmer.sql.example.runtime.cache;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.babyfish.jimmer.jackson.codec.JsonCodec;
 import org.babyfish.jimmer.meta.ImmutableProp;
 import org.babyfish.jimmer.meta.ImmutableType;
 import org.babyfish.jimmer.sql.cache.*;
@@ -27,10 +27,9 @@ public class CacheConfig {
     @Bean
     public CacheFactory cacheFactory(
             RedissonClient redissonClient,
-            RedisConnectionFactory connectionFactory,
-            ObjectMapper objectMapper
+            RedisConnectionFactory connectionFactory
     ) {
-        CacheCreator creator = new RedisCacheCreator(connectionFactory, objectMapper)
+        CacheCreator creator = new RedisCacheCreator(connectionFactory, JsonCodec.jsonCodec())
                 .withRemoteDuration(Duration.ofHours(1))
                 .withLocalCache(100, Duration.ofMinutes(5))
                 .withMultiViewProperties(40, Duration.ofMinutes(2), Duration.ofMinutes(24))

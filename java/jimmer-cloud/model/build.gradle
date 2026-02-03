@@ -14,6 +14,9 @@ dependencies {
     // For generated code
     compileOnly "org.babyfish.jimmer:jimmer-sql:$jimmerVersion"
 
+    // For generated code
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.21.0")
+
     // Code generator
     annotationProcessor "org.babyfish.jimmer:jimmer-apt:$jimmerVersion"
 

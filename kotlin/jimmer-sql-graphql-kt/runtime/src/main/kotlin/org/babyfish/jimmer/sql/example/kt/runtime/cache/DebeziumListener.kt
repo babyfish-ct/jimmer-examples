@@ -1,7 +1,6 @@
 package org.babyfish.jimmer.sql.example.kt.runtime.cache
 
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.ObjectMapper
+import org.babyfish.jimmer.jackson.codec.JsonCodec
 import org.babyfish.jimmer.sql.event.binlog.BinLog
 import org.babyfish.jimmer.sql.kt.KSqlClient
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
@@ -30,8 +29,8 @@ class DebeziumListener(sqlClient: KSqlClient) {
         acknowledgment: Acknowledgment
     ) {
         if (json !== null) { // Debezium sends an empty message after deleting a message
-            val node: JsonNode = MAPPER.readTree(json)
-            val tableName: String = node["source"]["table"].asText()
+            val node = JSON_CODEC.treeReader().read(json)
+            val tableName: String = node["source"]["table"].castTo(String::class.java)
             binLog.accept(
                 tableName,
                 node["before"],
@@ -42,7 +41,7 @@ class DebeziumListener(sqlClient: KSqlClient) {
     }
 
     companion object {
-        private val MAPPER = ObjectMapper()
+        private val JSON_CODEC = JsonCodec.jsonCodec()
     }
 }
 

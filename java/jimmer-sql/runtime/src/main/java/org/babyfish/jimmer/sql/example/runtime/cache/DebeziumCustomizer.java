@@ -34,14 +34,14 @@ public class DebeziumCustomizer implements Customizer {
                 LocalDateTime.class,
                 (prop, jsonNode) -> {
                     return Instant.ofEpochMilli(
-                            jsonNode.asLong() / 1000
+                            jsonNode.castTo(Long.class) / 1000
                     ).atZone(ZoneId.systemDefault()).toLocalDateTime();
                 }
         );
         builder.setBinLogPropReader(
                 BookProps.PRICE,
                 (prop, jsonNode) -> {
-                    byte[] bytes = Base64.getDecoder().decode(jsonNode.asText());
+                    byte[] bytes = Base64.getDecoder().decode(jsonNode.castTo(String.class));
                     return Decimal.toLogical(BOOK_PRICE_SCHEMA, bytes);
                 }
         );

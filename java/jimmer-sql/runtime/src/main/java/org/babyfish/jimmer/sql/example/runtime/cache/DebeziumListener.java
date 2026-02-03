@@ -1,8 +1,7 @@
 package org.babyfish.jimmer.sql.example.runtime.cache;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.babyfish.jimmer.jackson.codec.JsonCodec;
+import org.babyfish.jimmer.jackson.codec.Node;
 import org.babyfish.jimmer.sql.JSqlClient;
 import org.babyfish.jimmer.sql.event.binlog.BinLog;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -22,7 +21,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class DebeziumListener {
 
-    private static final ObjectMapper MAPPER = new ObjectMapper();
+    private static final JsonCodec<?> CODEC =
+            JsonCodec.jsonCodec();
 
     private final BinLog binLog;
 
@@ -34,10 +34,10 @@ public class DebeziumListener {
     public void onDebeziumEvent(
             @Payload(required = false) String json,
             Acknowledgment acknowledgment
-    ) throws JsonProcessingException {
+    ) throws Exception {
         if (json != null) { // Debezium sends an empty message after deleting a message
-            JsonNode node = MAPPER.readTree(json);
-            String tableName = node.get("source").get("table").asText();
+            Node node = CODEC.treeReader().read(json);
+            String tableName = node.get("source").get("table").castTo(String.class);
             binLog.accept(
                     tableName,
                     node.get("before"),

@@ -31,6 +31,9 @@ dependencies {
     implementation("org.babyfish.jimmer:jimmer-core:${jimmerVersion}")
 
     // For generated code
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.21.0")
+
+    // For generated code
     compileOnly("org.babyfish.jimmer:jimmer-sql-kotlin:${jimmerVersion}")
 
     // Code generator

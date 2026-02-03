@@ -10,6 +10,7 @@ dependencies {
     implementation ("org.babyfish.jimmer:jimmer-sql:${jimmerVersion}") {
         exclude group:"org.antlr", module: "antlr4-runtime"
     }
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.21.0'
     annotationProcessor "org.babyfish.jimmer:jimmer-apt:${jimmerVersion}"
 
     implementation 'com.github.ben-manes.caffeine:caffeine:2.9.1'

@@ -5,7 +5,7 @@ plugins {
     id("com.google.devtools.ksp") version "2.1.20-2.0.0"
 }
 
-val jimmerVersion = "0.9.120"
+val jimmerVersion = "0.10.6"
 
 group = "org.babyfish.jimmer.example.kt"
 version = jimmerVersion
@@ -18,6 +18,8 @@ dependencies {
     implementation(kotlin("stdlib"))
 
     implementation("org.babyfish.jimmer:jimmer-core-kotlin:${jimmerVersion}")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.21.0")
+
     ksp("org.babyfish.jimmer:jimmer-ksp:${jimmerVersion}")
 }
 

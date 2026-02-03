@@ -16,6 +16,7 @@ repositories {
 dependencies {
 
 	implementation("org.babyfish.jimmer:jimmer-sql-kotlin:${jimmerVersion}")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.21.0")
 	ksp("org.babyfish.jimmer:jimmer-ksp:${jimmerVersion}")
 
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
