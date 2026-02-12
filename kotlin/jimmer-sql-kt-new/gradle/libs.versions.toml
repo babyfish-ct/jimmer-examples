@@ -1,0 +1,113 @@
+[versions]
+
+### 基础
+
+java = "21"
+kotlin = "2.2.21-RC"
+# https://central.sonatype.com/artifact/com.google.devtools.ksp/com.google.devtools.ksp.gradle.plugin
+ksp = "2.2.21-RC-2.0.4"
+# https://central.sonatype.com/artifact/org.springframework.boot/org.springframework.boot.gradle.plugin
+springboot = "3.5.6"
+# https://central.sonatype.com/artifact/io.spring.gradle/dependency-management-plugin
+spring-dependency-management = "1.1.7"
+
+### 数据库
+
+# https://central.sonatype.com/artifact/org.babyfish.jimmer/jimmer-spring-boot-starter
+jimmer = "0.9.111"
+# https://central.sonatype.com/artifact/org.flywaydb/flyway-core
+flyway = "11.13.2"
+# https://central.sonatype.com/artifact/org.postgresql/postgresql
+postgresql = "42.7.8"
+# https://central.sonatype.com/artifact/mysql/mysql-connector-java
+mysql = "8.0.33"
+# https://central.sonatype.com/artifact/com.h2database/h2
+h2 = "2.4.240"
+
+### 单元测试
+
+# https://central.sonatype.com/artifact/io.mockk/mockk
+mockk = "1.14.6"
+# https://central.sonatype.com/artifact/org.testcontainers/testcontainers
+testcontainers = "1.21.3"
+
+### 组件
+
+# https://central.sonatype.com/artifact/org.redisson/redisson-spring-boot-starter
+redisson = "3.52.0"
+# https://central.sonatype.com/artifact/io.minio/minio
+minio = "8.6.0"
+# https://central.sonatype.com/artifact/cn.idev.excel/fastexcel
+fastexcel = "1.3.0"
+# https://central.sonatype.com/artifact/io.github.oshai/kotlin-logging
+logging = "7.0.13"
+# https://central.sonatype.com/artifact/com.squareup.okhttp3/okhttp
+okhttp3 = "5.1.0"
+# https://central.sonatype.com/artifact/com.auth0/java-jwt
+jwt = "4.5.0"
+# https://central.sonatype.com/artifact/com.fasterxml.jackson.module/jackson-module-kotlin
+jackson-kotlin = "2.20.0"
+# https://central.sonatype.com/artifact/org.casbin/jcasbin
+jcasbin = "1.84.0"
+# https://central.sonatype.com/artifact/org.springframework.kafka/spring-kafka/3.3.10
+kafak = "3.3.10"
+# https://central.sonatype.com/artifact/org.apache.kafka/connect-api
+kafak-connet-api = "4.1.0"
+# https://central.sonatype.com/artifact/com.github.ben-manes.caffeine/caffeine
+caffeine = "3.2.2"
+# https://central.sonatype.com/artifact/io.lettuce/lettuce-core/6.8.1.RELEASE
+lettuce-core = "6.8.1.RELEASE"
+
+[libraries]
+
+# jimmer
+jimmer-spring-boot-starter = { module = "org.babyfish.jimmer:jimmer-spring-boot-starter", version.ref = "jimmer" }
+jimmer-sql-kotlin = { module = "org.babyfish.jimmer:jimmer-sql-kotlin", version.ref = "jimmer" }
+jimmer-ksp = { module = "org.babyfish.jimmer:jimmer-ksp", version.ref = "jimmer" }
+
+# spring
+web = { module = "org.springframework.boot:spring-boot-starter-web" }
+ampq = { module = "org.springframework.boot:spring-boot-starter-amqp" }
+validation = { module = "org.springframework.boot:spring-boot-starter-validation" }
+mail = { module = "org.springframework.boot:spring-boot-starter-mail" }
+aspectj = { module = "org.springframework.boot:spring-boot-starter-aspectj" }
+security = { module = "org.springframework.boot:spring-boot-starter-security" }
+
+# 组件
+redisson = { module = "org.redisson:redisson-spring-boot-starter", version.ref = "redisson" }
+minio = { module = "io.minio:minio", version.ref = "minio" }
+logging = { module = "io.github.oshai:kotlin-logging", version.ref = "logging" }
+fastexcel = { module = "cn.idev.excel:fastexcel", version.ref = "fastexcel" }
+okhttp3 = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp3" }
+jwt = { module = "com.auth0:java-jwt", version.ref = "jwt" }
+jackson-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson-kotlin" }
+jcasbin = { module = "org.casbin:jcasbin", version.ref = "jcasbin" }
+kafak = { module = "org.springframework.kafka:spring-kafka", version.ref = "kafak" }
+kafak-connet-api = { module = "org.apache.kafka:connect-api", version.ref = "kafak-connet-api" }
+caffeine = { module = "com.github.ben-manes.caffeine:caffeine", version.ref = "caffeine" }
+lettuce-core = { module = "io.lettuce:lettuce-core", version.ref = "lettuce-core" }
+# 数据库
+postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
+mysql = { module = "mysql:mysql-connector-java", version.ref = "mysql" }
+h2 = { module = "com.h2database:h2", version.ref = "h2" }
+flyway = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
+flyway-database-postgresql = { module = "org.flywaydb:flyway-database-postgresql", version.ref = "flyway" }
+
+# 单元测试
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+testcontainers-pgsql = { module = "org.testcontainers:postgresql", version.ref = "testcontainers" }
+testcontainers-junit-jupiter = { module = "org.testcontainers:junit-jupiter", version.ref = "testcontainers" }
+testcontainers-bom = { module = "org.testcontainers:testcontainers-bom", version.ref = "testcontainers" }
+
+[bundles]
+spring-boot = ["web", "ampq", "aspectj", "validation", "mail", "security"]
+flyway = ["flyway", "flyway-database-postgresql"]
+unit-test = ["mockk", "testcontainers-bom", "testcontainers-pgsql", "testcontainers-junit-jupiter"]
+jimmer = ["jimmer-sql-kotlin", "jimmer-spring-boot-starter"]
+kafak = ["kafak", "kafak-connet-api"]
+
+[plugins]
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+springboot = { id = "org.springframework.boot", version.ref = "springboot" }
+spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management" }
+allopen = { id = "org.jetbrains.kotlin.plugin.allopen", version.ref = "kotlin" }
