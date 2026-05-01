@@ -8,7 +8,7 @@ plugins {
     id("io.spring.dependency-management") version "1.1.7"
 }
 
-val jimmerVersion = "0.10.6"
+val jimmerVersion = "0.10.7"
 group = "org.babyfish.jimmer.example.kt"
 version = jimmerVersion
 
