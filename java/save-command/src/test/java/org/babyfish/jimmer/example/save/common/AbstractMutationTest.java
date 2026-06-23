@@ -158,14 +158,16 @@ public abstract class AbstractMutationTest {
                 String sql,
                 @Nullable ImmutableProp generatedIdProp,
                 @NotNull ExecutionPurpose purpose,
-                @NotNull JSqlClientImplementor sqlClient
+                @NotNull JSqlClientImplementor sqlClient,
+                boolean constraintViolationTranslatable
         ) {
             BatchContext raw = DefaultExecutor.INSTANCE.executeBatch(
                     con,
                     sql,
                     generatedIdProp,
                     purpose,
-                    sqlClient
+                    sqlClient,
+                    constraintViolationTranslatable
             );
             return new BatchContextWrapper(raw, sql, executedStatements);
         }

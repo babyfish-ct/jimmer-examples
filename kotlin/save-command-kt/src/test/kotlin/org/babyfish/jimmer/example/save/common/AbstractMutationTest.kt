@@ -55,7 +55,8 @@ abstract class AbstractMutationTest {
                         sql: String,
                         generatedIdProp: ImmutableProp?,
                         purpose: ExecutionPurpose,
-                        sqlClient: JSqlClientImplementor
+                        sqlClient: JSqlClientImplementor,
+                        constraintViolationTranslatable: Boolean
                     ): BatchContext {
                         val variableLists = mutableListOf<List<Any>>()
                         val raw = DefaultExecutor.INSTANCE.executeBatch(
@@ -63,7 +64,8 @@ abstract class AbstractMutationTest {
                             sql,
                             generatedIdProp,
                             purpose,
-                            sqlClient
+                            sqlClient,
+                            constraintViolationTranslatable
                         )
                         return object : BatchContext by (raw) {
                             override fun add(variables: List<Any>) {
