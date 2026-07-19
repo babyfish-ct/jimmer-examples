@@ -58,7 +58,7 @@ public class OneToManyTest extends AbstractMutationTest {
                                 "using(values(?)) tb_2_(NAME) " +
                                 "--->on tb_1_.NAME = tb_2_.NAME " +
                                 "when matched then " +
-                                "--->update set /* fake update to return all ids */ NAME = tb_2_.NAME " +
+                                "--->update set /* fake update to return all ids */ WEBSITE = tb_1_.WEBSITE " +
                                 "when not matched then " +
                                 "--->insert(NAME) values(tb_2_.NAME)",
                         "MANNING"
@@ -144,7 +144,7 @@ public class OneToManyTest extends AbstractMutationTest {
                                 "using(values(?)) tb_2_(NAME) " +
                                 "--->on tb_1_.NAME = tb_2_.NAME " +
                                 "when matched then " +
-                                "--->update set /* fake update to return all ids */ NAME = tb_2_.NAME " +
+                                "--->update set /* fake update to return all ids */ WEBSITE = tb_1_.WEBSITE " +
                                 "when not matched then " +
                                 "--->insert(NAME) values(tb_2_.NAME)",
                         "MANNING"
@@ -240,7 +240,7 @@ public class OneToManyTest extends AbstractMutationTest {
                                 "using(values(?)) tb_2_(NAME) " +
                                 "--->on tb_1_.NAME = tb_2_.NAME " +
                                 "when matched then " +
-                                "--->update set /* fake update to return all ids */ NAME = tb_2_.NAME " +
+                                "--->update set /* fake update to return all ids */ WEBSITE = tb_1_.WEBSITE " +
                                 "when not matched then " +
                                 "--->insert(NAME) values(tb_2_.NAME)",
                         "MANNING"
@@ -320,7 +320,7 @@ public class OneToManyTest extends AbstractMutationTest {
                                 "using(values(?)) tb_2_(NAME) " +
                                 "--->on tb_1_.NAME = tb_2_.NAME " +
                                 "when matched then " +
-                                "--->update set /* fake update to return all ids */ NAME = tb_2_.NAME " +
+                                "--->update set /* fake update to return all ids */ WEBSITE = tb_1_.WEBSITE " +
                                 "when not matched then " +
                                 "--->insert(NAME) values(tb_2_.NAME)",
                         "MANNING"
@@ -428,7 +428,7 @@ public class OneToManyTest extends AbstractMutationTest {
                                 "using(values(?)) tb_2_(NAME) " +
                                 "--->on tb_1_.NAME = tb_2_.NAME " +
                                 "when matched then " +
-                                "--->update set /* fake update to return all ids */ NAME = tb_2_.NAME " +
+                                "--->update set /* fake update to return all ids */ WEBSITE = tb_1_.WEBSITE " +
                                 "when not matched then " +
                                 "--->insert(NAME) values(tb_2_.NAME)",
                         "MANNING"
@@ -512,7 +512,7 @@ public class OneToManyTest extends AbstractMutationTest {
                                 "using(values(?)) tb_2_(NAME) " +
                                 "--->on tb_1_.NAME = tb_2_.NAME " +
                                 "when matched then " +
-                                "--->update set /* fake update to return all ids */ NAME = tb_2_.NAME " +
+                                "--->update set /* fake update to return all ids */ WEBSITE = tb_1_.WEBSITE " +
                                 "when not matched then " +
                                 "--->insert(NAME) values(tb_2_.NAME)",
                         "MANNING"
@@ -586,7 +586,7 @@ public class OneToManyTest extends AbstractMutationTest {
                                 "using(values(?)) tb_2_(NAME) " +
                                 "--->on tb_1_.NAME = tb_2_.NAME " +
                                 "when matched then " +
-                                "--->update set /* fake update to return all ids */ NAME = tb_2_.NAME " +
+                                "--->update set /* fake update to return all ids */ WEBSITE = tb_1_.WEBSITE " +
                                 "when not matched then " +
                                 "--->insert(NAME) values(tb_2_.NAME)",
                         "MANNING"

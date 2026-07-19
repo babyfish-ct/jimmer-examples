@@ -110,7 +110,7 @@ public class RecursiveTest extends AbstractMutationTest {
                                 "using(values(?, ?)) tb_2_(NAME, parent_id) " +
                                 "--->on tb_1_.NAME = tb_2_.NAME and tb_1_.parent_id = tb_2_.parent_id " +
                                 "when matched then " +
-                                "--->update set /* fake update to return all ids */ parent_id = tb_2_.parent_id " +
+                                "--->update set /* fake update to return all ids */ parent_id = tb_1_.parent_id " +
                                 "when not matched then " +
                                 "--->insert(NAME, parent_id) values(tb_2_.NAME, tb_2_.parent_id)",
                         Arrays.asList("child-1", 100L),
@@ -123,7 +123,7 @@ public class RecursiveTest extends AbstractMutationTest {
                                 "using(values(?, ?)) tb_2_(NAME, parent_id) " +
                                 "--->on tb_1_.NAME = tb_2_.NAME and tb_1_.parent_id = tb_2_.parent_id " +
                                 "when matched then " +
-                                "--->update set /* fake update to return all ids */ parent_id = tb_2_.parent_id " +
+                                "--->update set /* fake update to return all ids */ parent_id = tb_1_.parent_id " +
                                 "when not matched then " +
                                 "--->insert(NAME, parent_id) values(tb_2_.NAME, tb_2_.parent_id)",
                         Arrays.asList("child-1-1", 101L),
@@ -289,7 +289,7 @@ public class RecursiveTest extends AbstractMutationTest {
                                 "using(values(?, ?)) tb_2_(NAME, parent_id) " +
                                 "--->on tb_1_.NAME = tb_2_.NAME and tb_1_.parent_id = tb_2_.parent_id " +
                                 "when matched then " +
-                                "--->update set /* fake update to return all ids */ parent_id = tb_2_.parent_id " +
+                                "--->update set /* fake update to return all ids */ parent_id = tb_1_.parent_id " +
                                 "when not matched then " +
                                 "--->insert(NAME, parent_id) values(tb_2_.NAME, tb_2_.parent_id)",
                         "child-1", 1L
@@ -301,7 +301,7 @@ public class RecursiveTest extends AbstractMutationTest {
                                 "using(values(?, ?)) tb_2_(NAME, parent_id) " +
                                 "--->on tb_1_.NAME = tb_2_.NAME and tb_1_.parent_id = tb_2_.parent_id " +
                                 "when matched then " +
-                                "--->update set /* fake update to return all ids */ parent_id = tb_2_.parent_id " +
+                                "--->update set /* fake update to return all ids */ parent_id = tb_1_.parent_id " +
                                 "when not matched then " +
                                 "--->insert(NAME, parent_id) values(tb_2_.NAME, tb_2_.parent_id)",
                         "child-1-1", 2L
