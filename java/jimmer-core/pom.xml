@@ -6,10 +6,10 @@
 
     <groupId>org.babyfish.jimmer.example</groupId>
     <artifactId>jimmer-core</artifactId>
-    <version>0.11.1</version>
+    <version>0.11.2</version>
 
     <properties>
-        <jimmer.version>0.11.1</jimmer.version>
+        <jimmer.version>0.11.2</jimmer.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
